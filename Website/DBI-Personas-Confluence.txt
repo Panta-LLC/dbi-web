@@ -1,0 +1,36 @@
+h1. Delta Bay Impact Website Personas
+
+This document captures priority personas for the Delta Bay Impact (DBI) website. It aligns to DBI's mission to educate, advocate, and elevate African American youth and families in Contra Costa communities.
+
+h2. Personas Table
+
+|| Persona || Goals || Needs || Pain Points || Motivations || Content That Helps || Key Messages || Primary CTA ||
+| Student Participant (Jamal, 13) | Feel safe and included; homework/test support; find mentors and role models | Clear program descriptions; easy way to join; student success stories | Feels isolated; unsure where to go for help; limited family time | Belonging, encouragement, confidence; fun activities | Student spotlights; simple "How we help"; photos/videos of safe spaces | You belong here. We help you succeed in school and life. | Join a DBI program |
+| Parent or Guardian (Monique, 37) | Safe, trusted after-school support; student confidence and success; stay informed | Trust signals; schedules/locations; family engagement events | Limited time; schools not meeting student needs | Trusted village; culturally responsive mentorship | Family engagement details; safety/schedule FAQs; inquiry form | We partner with families to help students thrive. Safe spaces and real results. | Request program info |
+| School Administrator or Educator (Mr. Rivera, 46) | Improve engagement/attendance; culturally responsive mentorship; strengthen family ties | Evidence of impact; partnership model; alignment with school priorities | Limited resources; difficulty reaching families | Reliable community partner with trust | Outcomes and pilot results; partner testimonials; service menu | DBI bridges the gap between school and families. Mentorship and wrap-around supports. | Start a school partnership |
+| Donor/Foundation/Partner (Elena, 52) | Fund measurable impact; support scalable, community-rooted programs; sustainability | Mission clarity; outcomes; funding needs/budget | Many orgs claim impact without evidence | Long-term change in education equity | Impact metrics; success stories; sustainability highlights; partner list | Your support creates pathways to belonging and success. Sustainable community-led change. | Donate or partner |
+
+h2. Content Priorities by Persona
+
+* *Students:* Stories, photos, program benefits, easy sign-up
+* *Parents/Guardians:* Trust, safety, schedules, contact, FAQs
+* *School Leaders:* Outcomes, partnership model, references
+* *Donors/Partners:* Impact data, budget, sustainability, ways to help
+
+h2. Site-Wide Voice and Tone
+
+* Warm and affirming: emphasize belonging and community
+* Clear and practical: simple next steps and easy contact
+* Credible and transparent: show outcomes, partners, and plans
+
+h2. Core CTAs for Navigation
+
+* Join a DBI program
+* Request program info
+* Start a school partnership
+* Donate or partner
+* Contact DBI
+
+h2. Supporting References
+
+* John Muir Health student programs: https://www.johnmuirhealth.com/about-john-muir-health/community-commitment/our-programs/student-programs.html
