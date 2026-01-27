@@ -15,44 +15,91 @@ export const homePage = defineType({
     defineField({
       name: "hero",
       title: "Hero",
-      type: "hero",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "subtitle", title: "Subtitle", type: "text", rows: 3 }),
+        defineField({ name: "primaryCta", title: "Primary CTA", type: "cta" }),
+        defineField({ name: "secondaryCta", title: "Secondary CTA", type: "cta" }),
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "whatWeDoHeading",
-      title: "What We Do Heading",
-      type: "sectionHeading",
+      name: "intro",
+      title: "Intro",
+      type: "text",
+      rows: 3,
     }),
     defineField({
-      name: "whatWeDoItems",
-      title: "What We Do Items",
-      type: "array",
-      of: [{ type: "tabItem" }],
-      validation: (Rule) => Rule.required().min(1),
+      name: "serve",
+      title: "Serve Section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+        defineField({ name: "cta", title: "CTA", type: "cta" }),
+        defineField({
+          name: "items",
+          title: "Items",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({ name: "title", title: "Title", type: "string" }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+              ],
+            },
+          ],
+        }),
+      ],
     }),
     defineField({
-      name: "impactHeading",
-      title: "Impact Heading",
-      type: "sectionHeading",
+      name: "latest",
+      title: "Latest",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({
+          name: "items",
+          title: "Items",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({ name: "title", title: "Title", type: "string" }),
+                defineField({ name: "date", title: "Date", type: "string" }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+              ],
+            },
+          ],
+        }),
+      ],
     }),
     defineField({
-      name: "impactCards",
-      title: "Impact Cards",
-      type: "array",
-      of: [{ type: "impactCard" }],
-      validation: (Rule) => Rule.required().min(1),
+      name: "partners",
+      title: "Partners",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({
+          name: "items",
+          title: "Partners",
+          type: "array",
+          of: [{ type: "string" }],
+        }),
+      ],
     }),
     defineField({
-      name: "sponsorsHeading",
-      title: "Sponsors Heading",
-      type: "sectionHeading",
-    }),
-    defineField({
-      name: "sponsors",
-      title: "Sponsors",
-      type: "array",
-      of: [{ type: "string" }],
-      validation: (Rule) => Rule.required().min(1),
+      name: "contact",
+      title: "Contact Section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+        defineField({ name: "cta", title: "CTA", type: "cta" }),
+      ],
     }),
   ],
   preview: {

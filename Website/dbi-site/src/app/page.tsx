@@ -1,77 +1,64 @@
-import { ActionCard } from "@/components/ActionCard";
-import { Container } from "@/components/Container";
-import { Hero } from "@/components/Hero";
-import { ImpactStatCard } from "@/components/ImpactStatCard";
-import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
-import { SiteLayout } from "@/components/SiteLayout";
-import { SlantedImageReveal } from "@/components/SlantedImageReveal";
-import { SponsorBadge } from "@/components/SponsorBadge";
 import { Button } from "@/components/Button";
-import {
-  heroContent,
-  homeContact,
-  homeImpactHeading,
-  homeIntro,
-  homeSponsorsHeading,
-  homeWhatWeDo,
-  impactCards,
-  sponsors,
-  whatWeDoItems,
-} from "@/data/siteContent";
+import { ContactBand } from "@/components/ContactBand";
+import { Container } from "@/components/Container";
+import { ContentCard } from "@/components/ContentCard";
+import { LogoGrid } from "@/components/LogoGrid";
+import { Section } from "@/components/Section";
+import { SiteLayout } from "@/components/SiteLayout";
+import { sanityClient } from "@/sanity/client";
+import { homePageQuery } from "@/sanity/queries";
 
-const heroImage =
-  "https://cdn.sanity.io/images/39057kga/production/ea4366aa341b8c2ffcd0e2efe7fe99cbd7820fa5-6742x2446.png";
+export default async function Home() {
+  const data = await sanityClient.fetch(homePageQuery);
 
-export default function Home() {
+  if (!data) {
+    return null;
+  }
+
   return (
     <SiteLayout>
-      <Hero
-        title={heroContent.title}
-        subtitle={heroContent.subtitle}
-        primaryCta={heroContent.primaryCta}
-        secondaryCta={heroContent.secondaryCta}
-        imageSrc={heroImage}
-        imageAlt="DBI student program"
-      />
-
-      <Section className="bg-white">
-        <div className="py-20">
-          <Container>
-            <h2 className="display-m text-center">{homeIntro}</h2>
-          </Container>
-        </div>
+      <Section className="bg-white pt-10">
+        <Container className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div className="border border-border bg-muted h-[320px] w-full" />
+          <div>
+            <h1 className="heading-1">{data.hero?.title}</h1>
+            <p className="body-md mt-4 text-slate-600">{data.hero?.subtitle}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button href={data.hero?.primaryCta?.href}>
+                {data.hero?.primaryCta?.label}
+              </Button>
+              <Button href={data.hero?.secondaryCta?.href} variant="secondary">
+                {data.hero?.secondaryCta?.label}
+              </Button>
+            </div>
+          </div>
+        </Container>
       </Section>
 
       <Section className="bg-white">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start pt-40">
+          <div className="rounded-md border border-border bg-white p-8 text-center">
+            <p className="body-md text-slate-700">{data.intro}</p>
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="bg-white">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-start">
             <div>
-              <SectionHeading title={homeWhatWeDo.title} />
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {whatWeDoItems.map((item) => (
-                  <ActionCard
-                    key={item.title}
-                    title={item.title}
-                    description={item.description}
-                    ctaLabel={homeWhatWeDo.ctaLabel}
-                    ctaHref={homeWhatWeDo.ctaHref}
-                  />
-                ))}
-              </div>
+              <h2 className="heading-2">{data.serve?.title}</h2>
+              <p className="body-md mt-4 text-slate-600">{data.serve?.description}</p>
             </div>
-            <div className="flex h-full flex-col justify-between gap-6">
-              <SlantedImageReveal
-                src={heroImage}
-                alt="DBI mentorship program"
-                className="h-[300px] w-full lg:h-[500px]"
-                direction="right"
-                trigger="scroll"
-                tall={false}
-                long={true}
-                variant="mask"
-              />
-              <p className="heading-3">{homeWhatWeDo.description}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {data.serve?.items?.map((item: { title: string; description: string }) => (
+                <ContentCard
+                  key={item.title}
+                  title={item.title}
+                  description={item.description}
+                  cta={data.serve?.cta}
+                />
+              ))}
             </div>
           </div>
         </Container>
@@ -79,40 +66,46 @@ export default function Home() {
 
       <Section className="bg-white">
         <Container>
-          <SectionHeading
-            title={homeImpactHeading.title}
-            description={homeImpactHeading.description}
-          />
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {impactCards.map((impact) => (
-              <ImpactStatCard key={impact.value} value={impact.value} label={impact.label} />
-            ))}
+          <h2 className="heading-2">{data.latest?.title}</h2>
+          <div className="mt-6 grid gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-center">
+            <button
+              type="button"
+              className="hidden h-10 w-10 items-center justify-center rounded-full border border-border text-sm text-slate-500 lg:flex"
+            >
+              ←
+            </button>
+            <div className="rounded-md border border-border bg-white p-6">
+              <div className="h-32 w-full bg-muted" />
+              <p className="mt-4 text-sm font-semibold text-slate-900">
+                {data.latest?.items?.[0]?.title}
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                {data.latest?.items?.[0]?.date}
+              </p>
+              <p className="mt-3 text-sm text-slate-600">
+                {data.latest?.items?.[0]?.description}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="hidden h-10 w-10 items-center justify-center rounded-full border border-border text-sm text-slate-500 lg:flex"
+            >
+              →
+            </button>
           </div>
         </Container>
       </Section>
 
       <Section className="bg-white">
         <Container>
-          <SectionHeading
-            title={homeSponsorsHeading.title}
-            description={homeSponsorsHeading.description}
-          />
-          <div className="mt-6 grid gap-6 sm:grid-cols-3 lg:grid-cols-4">
-            {sponsors.map((sponsor) => (
-              <SponsorBadge key={sponsor} name={sponsor} />
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      <Section className="bg-white">
-        <Container>
-          <SectionHeading title={homeContact.title} description={homeContact.description} />
+          <h2 className="heading-2 text-center">{data.partners?.title}</h2>
           <div className="mt-6">
-            <Button href={homeContact.cta.href}>{homeContact.cta.label}</Button>
+            <LogoGrid items={data.partners?.items ?? []} />
           </div>
         </Container>
       </Section>
+
+      <ContactBand title={data.contact?.title} />
     </SiteLayout>
   );
 }

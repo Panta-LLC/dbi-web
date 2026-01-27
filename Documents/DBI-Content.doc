@@ -1,0 +1,477 @@
+Date: Tue, 27 Jan 2026 07:19:08 +0000 (UTC)
+Message-ID: <182791814.55.1769498348789@03134eb5f202>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_54_1521175887.1769498348789"
+
+------=_Part_54_1521175887.1769498348789
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>DBI</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>DBI</h1>
+    <div class=3D"Section1">
+        <h2 id=3D"DBI-Description">Description</h2>
+<div class=3D"panel" style=3D"background-color: #F4F5F7;border-width: 1px;"=
+>
+<div class=3D"panelContent" style=3D"background-color: #F4F5F7;">
+<p>In a sentence or two, describe the purpose of this space.</p>
+</div>
+</div>
+<h2 id=3D"DBI-ProjectTracker">Project Tracker</h2>
+<p>Project linker extension</p>
+<h2 id=3D"DBI-Recentlyupdatedcontent">Recently updated content</h2>
+<div class=3D"confluence-information-macro confluence-information-macro-inf=
+ormation">
+<span class=3D"aui-icon aui-icon-small aui-iconfont-info confluence-informa=
+tion-macro-icon"></span>
+<div class=3D"confluence-information-macro-body">
+<p>This list below will automatically update each time somebody in your spa=
+ce creates or updates content.</p>
+</div>
+</div>
+<div class=3D"recently-updated recently-updated-concise">
+<div class=3D"hidden parameters">
+<input type=3D"hidden" id=3D"changesUrl" value=3D"/wiki/plugins/recently-up=
+dated/changes.action?theme=3Dconcise&amp;pageSize=3D10&amp;spaceKeys=3DDBI&=
+amp;contentType=3Dpage,whiteboard,database,blog">
+</div>
+<div class=3D"results-container">
+<ul>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21790728/C=
+ontact" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resource=
+-version=3D"null" data-linked-resource-type=3D"page">Contact</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21594121/D=
+onate" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resource-=
+version=3D"null" data-linked-resource-type=3D"page">Donate</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21430606/R=
+esources" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resour=
+ce-version=3D"null" data-linked-resource-type=3D"page">Resources</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21725185/G=
+et+Involved" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-res=
+ource-version=3D"null" data-linked-resource-type=3D"page">Get Involved</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21692424/I=
+mpact" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resource-=
+version=3D"null" data-linked-resource-type=3D"page">Impact</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21200898/O=
+ur+Programs" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-res=
+ource-version=3D"null" data-linked-resource-type=3D"page">Our Programs</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21299201/H=
+ome" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resource-ve=
+rsion=3D"null" data-linked-resource-type=3D"page">Home</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21594114/A=
+bout" title=3D"DBI" data-linked-resource-id=3D"null" data-linked-resource-v=
+ersion=3D"null" data-linked-resource-type=3D"page">About</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21102593/C=
+ontent+Strategy" title=3D"DBI" data-linked-resource-id=3D"null" data-linked=
+-resource-version=3D"null" data-linked-resource-type=3D"page">Content Strat=
+egy</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+<li class=3D"update-item">
+<div class=3D"update-item-icon">
+<span class=3D"icon content-type-page"></span>
+</div>
+<div class=3D"update-item-content">
+<a href=3D"https://panta-llc.atlassian.net/wiki/spaces/DBI/pages/21430588/T=
+emplate+-+Meeting+notes" title=3D"DBI" data-linked-resource-id=3D"null" dat=
+a-linked-resource-version=3D"null" data-linked-resource-type=3D"page">Templ=
+ate - Meeting notes</a>
+<div class=3D"update-item-meta">
+Jan 19, 2026<span class=3D"separator"> =E2=80=A2 </span>contributed by <a c=
+lass=3D"confluence-userlink url fn" data-account-id=3D"712020:7b962028-224e=
+-4aac-8776-328277ffaad3" href=3D"https://panta-llc.atlassian.net/wiki/displ=
+ay/~712020%3A7b962028-224e-4aac-8776-328277ffaad3">Damon Hastings</a>
+</div>
+</div></li>
+</ul>
+<div class=3D"more-link-container">
+<a class=3D"more-link" href=3D"https://panta-llc.atlassian.net/wiki/plugins=
+/recently-updated/changes.action?theme=3Dconcise&amp;pageSize=3D10&amp;star=
+tIndex=3D10&amp;searchToken=3D1&amp;spaceKeys=3DDBI&amp;contentType=3Dpage,=
+whiteboard,database,blog&amp;cursor=3D_t_WzE3Njg4NzgyMjMwMDAsIlx0MjE0MzA1OD=
+ggMERqV081P2dHc00kS1Y9Oi5hTEkgY3AiXQ%3D%3D_h_W10%3D">Show More</a> <img cla=
+ss=3D"waiting-image" alt=3D"Please wait" src=3D"d217f574ea63a7cf78759899e11=
+7557d2b617853b1a5c10ec967af602c918296" width=3D"16" height=3D"16">
+</div>
+</div>
+</div>
+<h2 id=3D"DBI-Contributors">Contributors</h2>
+<div class=3D"confluence-information-macro confluence-information-macro-inf=
+ormation">
+<span class=3D"aui-icon aui-icon-small aui-iconfont-info confluence-informa=
+tion-macro-icon"></span>
+<div class=3D"confluence-information-macro-body">
+<p>This list below will automatically update each time somebody in your spa=
+ce creates or updates content.</p>
+</div>
+</div>
+<div class=3D"plugin-contributors">
+<div class=3D"plugin-contributors">
+<span><span><a href=3D"https://panta-llc.atlassian.net/wiki/display/~712020=
+%3A7b962028-224e-4aac-8776-328277ffaad3" class=3D"url fn">Damon Hastings</a=
+></span></span>
+</div>
+</div>
+    </div>
+</body>
+</html>
+------=_Part_54_1521175887.1769498348789
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: file:///C:/d217f574ea63a7cf78759899e117557d2b617853b1a5c10ec967af602c918296
+
+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
+fySDhGYQdDWGQyUhADs=
+------=_Part_54_1521175887.1769498348789--

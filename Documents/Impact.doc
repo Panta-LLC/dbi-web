@@ -1,0 +1,281 @@
+Date: Tue, 27 Jan 2026 07:23:03 +0000 (UTC)
+Message-ID: <1262325003.13.1769498583798@a82c2c56f309>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_12_19746160.1769498583798"
+
+------=_Part_12_19746160.1769498583798
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>Impact</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>Impact</h1>
+    <div class=3D"Section1">
+        <h3 local-id=3D"23533a7b-b33a-4da4-8731-60d306601b0e" id=3D"Impact-=
+OurApproachtoImpact">Our Approach to Impact</h3>
+<p local-id=3D"7cba7801-a1a1-4f1d-b440-1c4ada6a3511">We measure success by =
+listening to students and families, partnering with schools, and tracking i=
+ndicators that reflect engagement, belonging, and academic participation.</=
+p>
+<hr local-id=3D"eef71bef-46b0-4daf-a270-3e2194b3dc95">
+<h3 local-id=3D"4849559d-ba9e-4207-b3d3-888476eadeb1" id=3D"Impact-Outcomes=
+WeTrack">Outcomes We Track</h3>
+<ul local-id=3D"9d0a6f22-0cb8-468b-8373-71e7285da9ac">
+<li local-id=3D"d376d8ca-4bd6-403c-99d3-8fda67a4df23">
+<p local-id=3D"59cd384d-7b41-4802-bfc4-f0ef18da78a2">Student engagement and=
+ sense of belonging</p></li>
+<li local-id=3D"d5736fb4-6fed-4649-8174-bd9fbf51b19b">
+<p local-id=3D"2dab5415-85e5-439f-ab13-1754399c0c3c">Attendance and partici=
+pation</p></li>
+<li local-id=3D"d0298d04-14fd-4ace-b1df-7c1cba66cb6d">
+<p local-id=3D"6a2eee51-caa7-4275-ae17-02b88e6f8ac5">Family engagement and =
+communication</p></li>
+<li local-id=3D"351f9692-16de-4613-a347-88201345d2c6">
+<p local-id=3D"c97b5079-9b98-49b4-8471-63b4880060d4">School partnership eff=
+ectiveness</p></li>
+</ul>
+<hr local-id=3D"1417ad32-67bf-4966-b3f6-5b5bdb0354a4">
+<h3 local-id=3D"78eb6ca4-9cca-4cad-a996-ba36ecf3cfda" id=3D"Impact-WhereWeS=
+erve">Where We Serve</h3>
+<ul local-id=3D"7b9439b3-3d21-49ea-8fcc-d63aa770c5c9">
+<li local-id=3D"40a820c0-9058-4669-ab3d-d0d15a9a68d5">
+<p local-id=3D"6c57307a-67d2-41c2-ad0a-860a50c6faed">Riverview Middle Schoo=
+l</p></li>
+<li local-id=3D"3f430258-4dc6-4c14-bf03-2501db0eb4f7">
+<p local-id=3D"ecc801eb-4ce7-4816-ae1e-06f93c2b4bbb">Olympic High School</p=
+></li>
+<li local-id=3D"7b42c532-a2ec-403a-bf9f-036fc1d22b40">
+<p local-id=3D"0308a3ae-bea9-4c6d-8094-e8c2e9079105">Wren Elementary School=
+</p></li>
+</ul>
+<hr local-id=3D"61948da7-0ac6-4db4-a2d4-04a7b730c2a1">
+<h3 local-id=3D"a8373941-72ed-4160-b41c-769727767371" id=3D"Impact-WhatWe=
+=E2=80=99reLearning">What We=E2=80=99re Learning</h3>
+<p local-id=3D"29c06a33-af87-4c06-904e-4507c9c593d0">Students report strong=
+er relationships with mentors, greater engagement in school, and a clearer =
+sense of belonging within their school communities.</p>
+<p local-id=3D"a63c9708-2446-4dc3-9650-04e07103aa3a"><strong>CTA:</strong> =
+View Our Reports =E2=86=92</p>
+    </div>
+</body>
+</html>
+------=_Part_12_19746160.1769498583798--

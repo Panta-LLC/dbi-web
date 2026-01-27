@@ -1,9 +1,10 @@
-import { CTASection } from "@/components/CTASection";
+import { Button } from "@/components/Button";
+import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
-import { InfoCard } from "@/components/InfoCard";
-import { PageHeader } from "@/components/PageHeader";
+import { ContentCard } from "@/components/ContentCard";
+import { ImageCard } from "@/components/ImageCard";
+import { PageIntro } from "@/components/PageIntro";
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { impactPageQuery } from "@/sanity/queries";
@@ -17,58 +18,46 @@ export default async function ImpactPage() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        title={data.pageHeader?.title}
-        subtitle={data.pageHeader?.subtitle}
-      />
+      <PageIntro title={data.title} lead={data.lead} />
 
-      <Section>
+      <Section className="bg-white">
         <Container>
-          <SectionHeading
-            eyebrow={data.highlightsHeading?.eyebrow}
-            title={data.highlightsHeading?.title}
-            description={data.highlightsHeading?.description}
-            align="center"
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {data.impactHighlights?.map(
-              (impact: { title: string; description: string }) => (
-                <InfoCard
-                  key={impact.title}
-                  title={impact.title}
-                  description={impact.description}
-                />
-              ),
-            )}
+          <h2 className="heading-2 text-center">{data.outcomes?.title}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {data.outcomes?.items?.map((outcome: string) => (
+              <ContentCard key={outcome} title={outcome} />
+            ))}
           </div>
         </Container>
       </Section>
 
-      <Section>
+      <Section className="bg-white">
         <Container>
-          <SectionHeading
-            eyebrow={data.outcomesHeading?.eyebrow}
-            title={data.outcomesHeading?.title}
-            description={data.outcomesHeading?.description}
-            align="center"
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {data.outcomes?.map((outcome: { title: string; description: string }) => (
-              <InfoCard
-                key={outcome.title}
-                title={outcome.title}
-                description={outcome.description}
+          <h2 className="heading-2 text-center">{data.locations?.title}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {data.locations?.items?.map((location: { name: string; location: string }) => (
+              <ImageCard
+                key={location.name}
+                title={location.name}
+                subtitle={location.location}
               />
             ))}
           </div>
         </Container>
       </Section>
 
-      <CTASection
-        title={data.cta?.title}
-        description={data.cta?.description}
-        primaryCta={data.cta?.primaryCta}
-      />
+      <Section className="bg-white">
+        <Container className="text-center">
+          <p className="body-md text-slate-600">{data.learning?.description}</p>
+          <div className="mt-6 flex justify-center">
+            <Button href={data.learning?.cta?.href} variant="secondary">
+              {data.learning?.cta?.label}
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      <ContactBand />
     </SiteLayout>
   );
 }

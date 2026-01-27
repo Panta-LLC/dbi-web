@@ -1,9 +1,8 @@
-import { CTASection } from "@/components/CTASection";
+import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
-import { InfoCard } from "@/components/InfoCard";
-import { PageHeader } from "@/components/PageHeader";
+import { ContentCard } from "@/components/ContentCard";
+import { PageIntro } from "@/components/PageIntro";
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { resourcesPageQuery } from "@/sanity/queries";
@@ -17,36 +16,24 @@ export default async function ResourcesPage() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        title={data.pageHeader?.title}
-        subtitle={data.pageHeader?.subtitle}
+      <PageIntro
+        title={data.title}
+        lead={data.lead}
+        description={data.description}
       />
 
-      <Section>
+      <Section className="bg-white">
         <Container>
-          <SectionHeading
-            eyebrow={data.resourcesHeading?.eyebrow}
-            title={data.resourcesHeading?.title}
-            description={data.resourcesHeading?.description}
-            align="center"
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {data.resources?.map((resource: { title: string; description: string }) => (
-              <InfoCard
-                key={resource.title}
-                title={resource.title}
-                description={resource.description}
-              />
+          <h2 className="heading-2 text-center">{data.items?.title}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {data.items?.items?.map((item: string) => (
+              <ContentCard key={item} title={item} />
             ))}
           </div>
         </Container>
       </Section>
 
-      <CTASection
-        title={data.cta?.title}
-        description={data.cta?.description}
-        primaryCta={data.cta?.primaryCta}
-      />
+      <ContactBand />
     </SiteLayout>
   );
 }

@@ -1,178 +1,247 @@
-export const heroContent = {
-  title:
-    "Building Belonging, Opportunity, and Academic Success for African American Youth",
-  subtitle:
-    "We partner with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
-  primaryCta: { label: "Learn how we support students", href: "/programs" },
-  secondaryCta: { label: "Partner with us", href: "/contact" },
-};
-
-export const whatWeDoItems = [
-  {
-    title: "School-Based Mentorship & Advocacy",
-    description:
-      "Trusted mentors support students academically and personally while advocating for their needs within school systems.",
+export const homePage = {
+  hero: {
+    title:
+      "Building Belonging, Opportunity, and Academic Success for African American Youth",
+    subtitle:
+      "Delta Bay Impact partners with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
+    primaryCta: { label: "Learn how we support students", href: "/programs" },
+    secondaryCta: { label: "Partner with us", href: "/contact" },
   },
-  {
-    title: "Academic Support Connections",
-    description:
-      "Tutoring, enrichment, and progress monitoring designed for student growth.",
-  },
-  {
-    title: "Family Engagement",
-    description:
-      "Partnerships that strengthen family-school relationships and shared success.",
-  },
-  {
-    title: "Mental Health Awareness & Referrals",
-    description:
-      "Supportive pathways to counseling, wellness, and community resources.",
-  },
-];
-
-export const homeIntro =
-  "We create pathways for African American youth in Contra Costa County to thrive through dedicated mentorship, guidance, and unwavering support.";
-
-export const homeWhatWeDo = {
-  title: "What We Do",
-  description:
+  intro:
     "African American students and families in Contra Costa County face long-standing barriers to educational equity, connection, and access to resources. Delta Bay Impact exists to change that narrative by creating safe spaces, trusted relationships, and pathways to opportunity rooted in belonging.",
-  summary:
-    "Our programs are designed with schools and families to remove barriers, build community, and strengthen academic confidence through culturally responsive mentorship and advocacy.",
-  ctaLabel: "Partner with us",
-  ctaHref: "/contact",
+  serve: {
+    title: "How we serve our community",
+    description:
+      "We partner with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
+    cta: { label: "Learn more", href: "/programs" },
+    items: [
+      {
+        title: "School-Based Mentorship and Advocacy",
+        description:
+          "Trusted mentors support students academically and personally while advocating for their needs within school systems.",
+      },
+      {
+        title: "Academic Support Connections",
+        description:
+          "We connect students to tutoring and skill-building resources that reinforce classroom learning.",
+      },
+      {
+        title: "Family Engagement",
+        description:
+          "We strengthen communication and partnership between schools and families through events and consistent outreach.",
+      },
+      {
+        title: "Mental Health Awareness and Referrals",
+        description:
+          "We promote mental wellness and connect families to culturally responsive resources.",
+      },
+    ],
+  },
+  latest: {
+    title: "The Latest",
+    items: [
+      {
+        title: "School Supply Drive",
+        date: "February 14, 2026",
+        description:
+          "African American students and families in Contra Costa County face long-standing barriers to educational equity, connection, and access to resources.",
+      },
+    ],
+  },
+  partners: {
+    title: "Our Partners",
+    items: [
+      "Community Health Fund",
+      "Keller Canyon Mitigation Fund",
+      "Antioch Community Foundation",
+    ],
+  },
+  contact: {
+    title: "Contact",
+    description:
+      "Questions about partnership, programs, or support? Reach out to our team and we will follow up quickly.",
+    cta: { label: "Get in touch", href: "/contact" },
+  },
 };
 
-export const impactCards = [
-  {
-    value: "65 - 75",
-    label: "Students Served in 2024-25",
+export const aboutPage = {
+  title: "About Us",
+  lead:
+    "Delta Bay Impact empowers African American youth and families by addressing educational inequity through mentorship, advocacy, and culturally responsive support systems.",
+  description:
+    "Communities where African American students feel safe, supported, and confident, thriving academically, socially, and emotionally, with clear pathways to college, careers, and income mobility.",
+  values: {
+    title: "Our Values",
+    items: [
+      {
+        title: "Youth-Centeredness",
+        description: "Students' voices and experiences guide our work.",
+      },
+      {
+        title: "Belonging and Empowerment",
+        description: "Identity, culture, and connection matter.",
+      },
+      {
+        title: "Collaboration",
+        description: "Schools, families, and communities work best together.",
+      },
+      {
+        title: "Equity and Inclusion",
+        description: "Addressing systemic barriers at their roots.",
+      },
+      {
+        title: "Accountability",
+        description: "Measuring impact and learning continuously.",
+      },
+    ],
   },
-  {
-    value: "Increased",
-    label: "Student Engagement and Sense of Belonging",
+  story: {
+    title: "Our Story",
+    description:
+      "Founded in 2023, Delta Bay Impact grew from deep listening within local schools and communities. Our early pilot demonstrated that when students feel seen, supported, and connected, engagement and confidence improve. DBI was created to build on that success at scale and in partnership with schools and families.",
   },
-  {
-    value: "Strong, trusted",
-    label: "Partnerships with school administrators and staff",
+  leadership: {
+    title: "Our Leadership",
+    members: [
+      { name: "Tiffany Francies", role: "Executive Director" },
+      { name: "Tiffany Francies", role: "Executive Director" },
+      { name: "Tiffany Francies", role: "Executive Director" },
+      { name: "Tiffany Francies", role: "Executive Director" },
+    ],
   },
-];
-
-export const homeImpactHeading = {
-  title: "Our Impact",
-  description: "Latest outcomes from student and school partner feedback.",
+  partners: {
+    title: "Our Partners",
+    items: [
+      "Community Health Fund",
+      "Keller Canyon Mitigation Fund",
+      "Antioch Community Foundation",
+    ],
+  },
+  support: {
+    title: "Help DBI support your child, school, or community",
+    description:
+      "Our goal is to support all African-American youth in Contra Costa County. If your school or community could benefit from our services, please reach out.",
+    primaryCta: { label: "Learn more", href: "/programs" },
+    secondaryCta: { label: "Partner with us", href: "/contact" },
+  },
 };
 
-export const sponsors = [
-  "Community Health Fund",
-  "Keller Canyon Mitigation Fund",
-  "Antioch Community Foundation",
-];
-
-export const homeSponsorsHeading = {
-  title: "Our Sponsors",
-  description: "Partner organizations supporting DBI programs across Contra Costa County.",
+export const impactPage = {
+  title: "Our Impact Approach",
+  lead:
+    "We measure success by listening to students and families, partnering with schools, and tracking indicators that reflect engagement, belonging, and academic participation.",
+  outcomes: {
+    title: "Outcomes",
+    items: [
+      "Student engagement and sense of belonging",
+      "Attendance and participation",
+      "Family engagement and communication",
+      "School partnership effectiveness",
+    ],
+  },
+  locations: {
+    title: "Where We Serve",
+    items: [
+      { name: "Riverview Middle School", location: "Bay Point, CA" },
+      { name: "Olympic High School", location: "Concord, CA" },
+      { name: "Wren Elementary School", location: "Pittsburg, CA" },
+    ],
+  },
+  learning: {
+    description:
+      "Students report stronger relationships with mentors, greater engagement in school, and a clearer sense of belonging within their school communities.",
+    cta: { label: "View our reports", href: "/resources" },
+  },
 };
 
-export const homeContact = {
-  title: "Contact Us",
+export const donatePage = {
+  title: "Donate",
+  lead: "Invest in Belonging and Opportunity",
+  description:
+    "Your support helps create safe spaces, trusted mentorship relationships, and pathways to academic success for African American youth and families.",
+  support: {
+    title: "How Your Gift Helps",
+    items: [
+      "Expands mentorship and academic support",
+      "Strengthens family engagement",
+      "Connects students to wellness resources",
+      "Sustains school and community partnerships",
+    ],
+    cta: { label: "Support our work", href: "/donate" },
+  },
+};
+
+export const getInvolvedPage = {
+  title: "Get Involved",
+  lead: "Partner With Us",
+  description:
+    "We collaborate with schools, districts, community organizations, and funders to expand access to mentorship and support for African American youth.",
+  pathways: {
+    title: "Ways to Engage",
+    items: [
+      "School and district partnerships",
+      "Community and nonprofit partnerships",
+      "Board and advisory involvement",
+      "Corporate sponsorships and in-kind support",
+    ],
+    cta: { label: "Start a conversation", href: "/contact" },
+  },
+};
+
+export const programsPage = {
+  title: "Our Programs",
+  lead: "Overview",
+  description:
+    "Delta Bay Impact delivers integrated, school-based programs that address academic success, well-being, and belonging.",
+  programs: {
+    title: "Programs",
+    items: [
+      {
+        title: "School-Based Mentorship and Advocacy",
+        description:
+          "DBI mentors build trusted relationships with students, providing academic support, goal-setting, and personal development while advocating for students' educational needs.",
+      },
+      {
+        title: "Academic Support and Tutoring Connections",
+        description:
+          "We connect students to tutoring, homework help, and skill-building resources that reinforce learning and confidence.",
+      },
+      {
+        title: "Family Engagement",
+        description:
+          "DBI strengthens school-family partnerships through regular communication, family engagement nights, and community-based events that create shared understanding and support.",
+      },
+      {
+        title: "Mental Health Awareness and Referrals",
+        description:
+          "We provide mental health education and connect students and families to culturally responsive school-based and community resources.",
+      },
+    ],
+    cta: { label: "Partner with Delta Bay Impact", href: "/contact" },
+  },
+};
+
+export const resourcesPage = {
+  title: "Resources",
+  lead: "Purpose",
+  description:
+    "This space shares updates, learning, and tools that support transparency, collaboration, and community connection.",
+  items: {
+    title: "What You'll Find",
+    items: [
+      "Program updates and announcements",
+      "Family and student resources",
+      "Partner spotlights",
+      "Educational equity insights",
+      "Annual impact and sustainability reports",
+    ],
+  },
+};
+
+export const contactPage = {
+  title: "Contact",
+  lead: "Let's connect",
   description:
     "Questions about partnership, programs, or support? Reach out to our team and we will follow up quickly.",
-  cta: { label: "Get in touch", href: "/contact" },
+  cta: { label: "Email us", href: "mailto:info@deltabayimpact.org" },
 };
-
-export const missionPillars = [
-  {
-    title: "Educate",
-    description:
-      "Academic support, tutoring, and enrichment that build confidence and belonging.",
-  },
-  {
-    title: "Advocate",
-    description:
-      "Culturally responsive mentorship and school partnerships that elevate student voice.",
-  },
-  {
-    title: "Elevate",
-    description:
-      "Wrap-around family supports and community programs that create pathways to success.",
-  },
-];
-
-export const programs = [
-  {
-    eyebrow: "Students",
-    title: "Student Mentorship Circles",
-    description:
-      "Weekly small-group sessions that build leadership, academic skills, and peer connection.",
-  },
-  {
-    eyebrow: "Families",
-    title: "Family Engagement Nights",
-    description:
-      "Trusted spaces for parents and guardians to connect with DBI staff and school partners.",
-  },
-  {
-    eyebrow: "Schools",
-    title: "School Partnership Model",
-    description:
-      "Collaborative program design, coaching, and campus support tailored to school needs.",
-  },
-];
-
-export const impactHighlights = [
-  {
-    title: "Stronger attendance and engagement",
-    description:
-      "Students report higher confidence and improved school attendance after DBI support.",
-  },
-  {
-    title: "Culturally responsive mentorship",
-    description:
-      "Mentors reflect the lived experiences of students and provide consistent encouragement.",
-  },
-  {
-    title: "Family-school connection",
-    description:
-      "Families gain access to resources, advocacy, and school communication channels.",
-  },
-];
-
-export const getInvolvedOptions = [
-  {
-    eyebrow: "Students",
-    title: "Join a DBI program",
-    description:
-      "Explore mentorship, after-school programs, and leadership development for youth.",
-  },
-  {
-    eyebrow: "Schools",
-    title: "Start a partnership",
-    description:
-      "Collaborate with DBI to launch culturally responsive programming in your school.",
-  },
-  {
-    eyebrow: "Partners",
-    title: "Donate or sponsor",
-    description:
-      "Invest in sustainable, community-led change for African American youth.",
-  },
-];
-
-export const resources = [
-  {
-    title: "Family resources",
-    description:
-      "Guides for navigating school systems, advocacy tips, and community contacts.",
-  },
-  {
-    title: "Student pathways",
-    description:
-      "Enrichment opportunities, scholarships, and partner programs for students.",
-  },
-  {
-    title: "Partner toolkit",
-    description:
-      "Collaboration overview, outcomes highlights, and DBI service menu.",
-  },
-];

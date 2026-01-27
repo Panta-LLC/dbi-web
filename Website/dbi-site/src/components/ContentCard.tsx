@@ -1,0 +1,26 @@
+import { Button } from "./Button";
+
+type ContentCardProps = {
+  title: string;
+  description?: string;
+  cta?: { label: string; href: string };
+  className?: string;
+};
+
+export function ContentCard({ title, description, cta, className = "" }: ContentCardProps) {
+  return (
+    <div className={`rounded-md border border-border bg-white p-5 ${className}`}>
+      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      {description ? (
+        <p className="mt-3 text-sm text-slate-600">{description}</p>
+      ) : null}
+      {cta ? (
+        <div className="mt-4">
+          <Button href={cta.href} variant="secondary" className="px-4 py-2 text-xs">
+            {cta.label}
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  );
+}

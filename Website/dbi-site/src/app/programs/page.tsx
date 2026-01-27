@@ -1,9 +1,9 @@
-import { CTASection } from "@/components/CTASection";
+import { Button } from "@/components/Button";
+import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
-import { InfoCard } from "@/components/InfoCard";
-import { PageHeader } from "@/components/PageHeader";
+import { ContentCard } from "@/components/ContentCard";
+import { PageIntro } from "@/components/PageIntro";
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { programsPageQuery } from "@/sanity/queries";
@@ -17,50 +17,33 @@ export default async function ProgramsPage() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        title={data.pageHeader?.title}
-        subtitle={data.pageHeader?.subtitle}
+      <PageIntro
+        title={data.title}
+        lead={data.lead}
+        description={data.description}
       />
 
-      <Section>
+      <Section className="bg-white">
         <Container>
-          <SectionHeading
-            eyebrow={data.programsHeading?.eyebrow}
-            title={data.programsHeading?.title}
-            description={data.programsHeading?.description}
-            align="center"
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {data.programs?.map(
-              (program: { title: string; description: string; eyebrow?: string }) => (
-                <InfoCard
-                  key={program.title}
-                  title={program.title}
-                  description={program.description}
-                  eyebrow={program.eyebrow}
-                />
-              ),
-            )}
+          <h2 className="heading-2 text-center">{data.programs?.title}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {data.programs?.items?.map((program: { title: string; description: string }) => (
+              <ContentCard
+                key={program.title}
+                title={program.title}
+                description={program.description}
+              />
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Button href={data.programs?.cta?.href}>
+              {data.programs?.cta?.label}
+            </Button>
           </div>
         </Container>
       </Section>
 
-      <Section>
-        <Container>
-          <SectionHeading
-            eyebrow={data.accessHeading?.eyebrow}
-            title={data.accessHeading?.title}
-            description={data.accessHeading?.description}
-            align="center"
-          />
-        </Container>
-      </Section>
-
-      <CTASection
-        title={data.cta?.title}
-        description={data.cta?.description}
-        primaryCta={data.cta?.primaryCta}
-      />
+      <ContactBand />
     </SiteLayout>
   );
 }

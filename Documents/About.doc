@@ -1,0 +1,282 @@
+Date: Tue, 27 Jan 2026 07:22:41 +0000 (UTC)
+Message-ID: <1552295143.55.1769498561450@faecaa3b98ed>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_54_1286687364.1769498561449"
+
+------=_Part_54_1286687364.1769498561449
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>About</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>About</h1>
+    <div class=3D"Section1">
+        <h3 local-id=3D"20519d45-a85e-4541-97bc-d62c426ba60a" id=3D"About-O=
+urMission">Our Mission</h3>
+<p local-id=3D"7a57b580-5e0a-4fab-b07e-c9ce35b2b88c">Delta Bay Impact empow=
+ers African American youth and families by addressing educational inequity =
+through mentorship, advocacy, and culturally responsive support systems.</p=
+>
+<hr local-id=3D"1626407d-95be-4983-8e0b-fc61695d9da1">
+<h3 local-id=3D"815f359d-c679-4489-8481-84d979c80038" id=3D"About-OurVision=
+">Our Vision</h3>
+<p local-id=3D"a59f000e-652c-423f-983f-d4bbe33f3eee">Communities where Afri=
+can American students feel safe, supported, and confident=E2=80=94thriving =
+academically, socially, and emotionally, with clear pathways to college, ca=
+reers, and income mobility.</p>
+<hr local-id=3D"0f881af7-f1bf-4a8d-aeb5-63f128bae765">
+<h3 local-id=3D"cb7ef65c-72e6-42dd-8a19-ec614c2bc069" id=3D"About-OurValues=
+">Our Values</h3>
+<ul local-id=3D"ae530039-1d9a-4432-9b38-058543d47c9b">
+<li local-id=3D"db595648-c09f-4daa-aac8-51f92301e1d3">
+<p local-id=3D"4cc2637c-8319-4f14-84fd-3ebef1475ae1"><strong>Youth-Centered=
+ness</strong> =E2=80=94 Students=E2=80=99 voices and experiences guide our =
+work</p></li>
+<li local-id=3D"2d37801a-3365-4a86-a091-ad6457418d13">
+<p local-id=3D"a0f5a2e8-2300-46d8-952a-79eba1ebf3d7"><strong>Belonging &amp=
+; Empowerment</strong> =E2=80=94 Identity, culture, and connection matter</=
+p></li>
+<li local-id=3D"424720bd-53d7-41f6-b244-00efac6b59d0">
+<p local-id=3D"71d75322-ba37-4bf6-9e2b-58c078e6208e"><strong>Collaboration<=
+/strong> =E2=80=94 Schools, families, and communities work best together</p=
+></li>
+<li local-id=3D"ec5ea183-80df-4eca-9d45-0d220fde0e0a">
+<p local-id=3D"0f9e4fc0-37f5-4725-9fd4-61e0bb8ebbc2"><strong>Equity &amp; I=
+nclusion</strong> =E2=80=94 Addressing systemic barriers at their roots</p>=
+</li>
+<li local-id=3D"c01bec7f-4023-47f0-9bb7-81fe9cab388a">
+<p local-id=3D"fe915117-b85f-4d11-a43e-452585c10e4c"><strong>Accountability=
+</strong> =E2=80=94 Measuring impact and learning continuously</p></li>
+</ul>
+<hr local-id=3D"178df821-2c46-4122-baa7-9e4500e84059">
+<h3 local-id=3D"3ff04534-622b-42f1-9e11-968754cc6e4a" id=3D"About-OurStory"=
+>Our Story</h3>
+<p local-id=3D"b66d1686-9fbc-4623-af80-35869b907166">Founded in 2023, Delta=
+ Bay Impact grew from deep listening within local schools and communities. =
+Our early pilot demonstrated that when students feel seen, supported, and c=
+onnected, engagement and confidence improve. DBI was created to build on th=
+at success=E2=80=94at scale and in partnership with schools and families.</=
+p>
+    </div>
+</body>
+</html>
+------=_Part_54_1286687364.1769498561449--

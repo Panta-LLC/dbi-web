@@ -1,0 +1,272 @@
+Date: Tue, 27 Jan 2026 07:22:52 +0000 (UTC)
+Message-ID: <285876014.49.1769498572784@dfc49a7bd95f>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_48_41270429.1769498572784"
+
+------=_Part_48_41270429.1769498572784
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>Our Programs</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>Our Programs</h1>
+    <div class=3D"Section1">
+        <h3 local-id=3D"edd8cbd3-493d-4c29-8390-89b4fd09dbde" id=3D"OurProg=
+rams-Overview">Overview</h3>
+<p local-id=3D"9b94d608-86ab-491c-9b20-facd7aaee777">Delta Bay Impact deliv=
+ers integrated, school-based programs that address academic success, well-b=
+eing, and belonging.</p>
+<hr local-id=3D"e0f5f23e-1d00-4ec3-9d65-28fb5598804e">
+<h3 local-id=3D"5ed3315c-5825-4638-a11b-353bf6594561" id=3D"OurPrograms-Sch=
+ool-BasedMentorship&amp;Advocacy">School-Based Mentorship &amp; Advocacy</h=
+3>
+<p local-id=3D"9080713c-babd-48af-b4c7-3f789a3cd32e">DBI mentors build trus=
+ted relationships with students, providing academic support, goal-setting, =
+and personal development while advocating for students=E2=80=99 educational=
+ needs.</p>
+<hr local-id=3D"3d510f15-0204-4fde-8362-e64c9099d1fe">
+<h3 local-id=3D"f8594ad9-2c48-42c7-8224-f05f8147f56a" id=3D"OurPrograms-Aca=
+demicSupport&amp;TutoringConnections">Academic Support &amp; Tutoring Conne=
+ctions</h3>
+<p local-id=3D"cebaca37-67e2-467d-a843-c9980fcd17c5">We connect students to=
+ tutoring, homework help, and skill-building resources that reinforce learn=
+ing and confidence.</p>
+<hr local-id=3D"7c4753e3-de2e-4c77-95b5-322efc3b70c8">
+<h3 local-id=3D"9e78699a-709e-4e6c-815d-1299372182a7" id=3D"OurPrograms-Fam=
+ilyEngagement">Family Engagement</h3>
+<p local-id=3D"fd12b52c-b9cc-4191-b971-dacdada4a17a">DBI strengthens school=
+-family partnerships through regular communication, family engagement night=
+s, and community-based events that create shared understanding and support.=
+</p>
+<hr local-id=3D"fe6ad0e3-9bae-45f7-b2f7-22e1ddb36fdc">
+<h3 local-id=3D"0bc8d990-f0a2-424a-af28-d8394d5435bc" id=3D"OurPrograms-Men=
+talHealthAwareness&amp;Referrals">Mental Health Awareness &amp; Referrals</=
+h3>
+<p local-id=3D"a69d18a3-f9f7-4229-a1c2-8e4299856ee2">We provide mental heal=
+th education and connect students and families to culturally responsive sch=
+ool-based and community resources.</p>
+<p local-id=3D"af7b3aac-d9dd-4697-9801-e842a23057bb"><strong>CTA:</strong> =
+Partner With Delta Bay Impact =E2=86=92</p>
+    </div>
+</body>
+</html>
+------=_Part_48_41270429.1769498572784--

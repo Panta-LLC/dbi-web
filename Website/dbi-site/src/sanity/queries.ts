@@ -11,164 +11,127 @@ export const homePageQuery = groq`
       title,
       subtitle,
       primaryCta{${ctaFields}},
-      secondaryCta{${ctaFields}},
-      "imageSrc": image.asset->url,
-      "imageAlt": imageAlt
+      secondaryCta{${ctaFields}}
     },
-    whatWeDoHeading{
-      eyebrow,
+    intro,
+    serve{
       title,
-      description
+      description,
+      cta{${ctaFields}},
+      items[]{ title, description }
     },
-    whatWeDoItems[]{ title, description },
-    impactHeading{
-      eyebrow,
+    latest{
       title,
-      description
+      items[]{ title, date, description }
     },
-    impactCards[]{ value, label },
-    sponsorsHeading{
-      eyebrow,
+    partners{
       title,
-      description
+      items
     },
-    sponsors
+    contact{
+      title,
+      description,
+      cta{${ctaFields}}
+    }
   }
 `;
 
 export const aboutPageQuery = groq`
   *[_type == "aboutPage"][0]{
-    pageHeader{
+    title,
+    lead,
+    description,
+    values{
       title,
-      subtitle
+      items[]{ title, description }
     },
-    storyHeading{
-      eyebrow,
-      title,
-      description
-    },
-    missionPillars[]{ eyebrow, title, description },
-    valuesHeading{
-      eyebrow,
+    story{
       title,
       description
     },
-    values[]{ eyebrow, title, description },
-    cta{
+    leadership{
+      title,
+      members[]{ name, role }
+    },
+    partners{
+      title,
+      items
+    },
+    support{
       title,
       description,
-      primaryCta{${ctaFields}}
+      primaryCta{${ctaFields}},
+      secondaryCta{${ctaFields}}
     }
   }
 `;
 
 export const programsPageQuery = groq`
   *[_type == "programsPage"][0]{
-    pageHeader{
+    title,
+    lead,
+    description,
+    programs{
       title,
-      subtitle
-    },
-    programsHeading{
-      eyebrow,
-      title,
-      description
-    },
-    programs[]{ eyebrow, title, description },
-    accessHeading{
-      eyebrow,
-      title,
-      description
-    },
-    cta{
-      title,
-      description,
-      primaryCta{${ctaFields}}
+      items[]{ title, description },
+      cta{${ctaFields}}
     }
   }
 `;
 
 export const impactPageQuery = groq`
   *[_type == "impactPage"][0]{
-    pageHeader{
+    title,
+    lead,
+    outcomes{
       title,
-      subtitle
+      items
     },
-    highlightsHeading{
-      eyebrow,
+    locations{
       title,
-      description
+      items[]{ name, location }
     },
-    impactHighlights[]{ eyebrow, title, description },
-    outcomesHeading{
-      eyebrow,
-      title,
-      description
-    },
-    outcomes[]{ eyebrow, title, description },
-    cta{
-      title,
+    learning{
       description,
-      primaryCta{${ctaFields}}
+      cta{${ctaFields}}
     }
   }
 `;
 
 export const getInvolvedPageQuery = groq`
   *[_type == "getInvolvedPage"][0]{
-    pageHeader{
+    title,
+    lead,
+    description,
+    pathways{
       title,
-      subtitle
-    },
-    pathwaysHeading{
-      eyebrow,
-      title,
-      description
-    },
-    options[]{ eyebrow, title, description },
-    cta{
-      title,
-      description,
-      primaryCta{${ctaFields}}
+      items,
+      cta{${ctaFields}}
     }
   }
 `;
 
 export const resourcesPageQuery = groq`
   *[_type == "resourcesPage"][0]{
-    pageHeader{
+    title,
+    lead,
+    description,
+    items{
       title,
-      subtitle
-    },
-    resourcesHeading{
-      eyebrow,
-      title,
-      description
-    },
-    resources[]{ eyebrow, title, description },
-    cta{
-      title,
-      description,
-      primaryCta{${ctaFields}}
+      items
     }
   }
 `;
 
 export const donatePageQuery = groq`
   *[_type == "donatePage"][0]{
-    pageHeader{
+    title,
+    lead,
+    description,
+    support{
       title,
-      subtitle
-    },
-    supportHeading{
-      eyebrow,
-      title,
-      description
-    },
-    supportOptions[]{ eyebrow, title, description },
-    cta{
-      title,
-      description,
-      primaryCta{${ctaFields}}
+      items,
+      cta{${ctaFields}}
     }
   }
 `;

@@ -1,9 +1,9 @@
-import { CTASection } from "@/components/CTASection";
+import { Button } from "@/components/Button";
+import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
-import { InfoCard } from "@/components/InfoCard";
-import { PageHeader } from "@/components/PageHeader";
+import { ContentCard } from "@/components/ContentCard";
+import { PageIntro } from "@/components/PageIntro";
 import { Section } from "@/components/Section";
-import { SectionHeading } from "@/components/SectionHeading";
 import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { getInvolvedPageQuery } from "@/sanity/queries";
@@ -17,39 +17,29 @@ export default async function GetInvolvedPage() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        title={data.pageHeader?.title}
-        subtitle={data.pageHeader?.subtitle}
+      <PageIntro
+        title={data.title}
+        lead={data.lead}
+        description={data.description}
       />
 
-      <Section>
+      <Section className="bg-white">
         <Container>
-          <SectionHeading
-            eyebrow={data.pathwaysHeading?.eyebrow}
-            title={data.pathwaysHeading?.title}
-            description={data.pathwaysHeading?.description}
-            align="center"
-          />
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {data.options?.map(
-              (option: { title: string; description: string; eyebrow?: string }) => (
-                <InfoCard
-                  key={option.title}
-                  title={option.title}
-                  description={option.description}
-                  eyebrow={option.eyebrow}
-                />
-              ),
-            )}
+          <h2 className="heading-2 text-center">{data.pathways?.title}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {data.pathways?.items?.map((item: string) => (
+              <ContentCard key={item} title={item} />
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Button href={data.pathways?.cta?.href} variant="secondary">
+              {data.pathways?.cta?.label}
+            </Button>
           </div>
         </Container>
       </Section>
 
-      <CTASection
-        title={data.cta?.title}
-        description={data.cta?.description}
-        primaryCta={data.cta?.primaryCta}
-      />
+      <ContactBand />
     </SiteLayout>
   );
 }
