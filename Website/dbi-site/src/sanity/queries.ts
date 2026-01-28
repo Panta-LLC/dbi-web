@@ -11,7 +11,9 @@ export const homePageQuery = groq`
       title,
       subtitle,
       primaryCta{${ctaFields}},
-      secondaryCta{${ctaFields}}
+      secondaryCta{${ctaFields}},
+      "imageSrc": image.asset->url,
+      imageAlt
     },
     intro,
     serve{

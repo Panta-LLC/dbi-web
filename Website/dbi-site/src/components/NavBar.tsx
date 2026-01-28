@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Button } from "./Button";
 import { Container } from "./Container";
 
 const navItems = [
-  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Our Programs", href: "/programs" },
   { label: "Get Involved", href: "/get-involved" },
@@ -18,18 +18,28 @@ export function NavBar() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm">
-      <Container className="flex items-center justify-between gap-6 py-4">
-        <Link href="/" className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-700">
-          DBI
+    <header className="fixed inset-x-0 top-0 z-50 bg-white border-b border-orange-400 border-b-5 font-inter font-bold">
+      <Container className="flex items-center justify-between gap-6">
+        <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
+          <img
+            src="/dbi_logo.png"
+            alt="Delta Bay Impact Logo"
+            className="h-16 w-auto"
+            style={{ display: "block" }}
+          />
         </Link>
-        <nav className="hidden items-center gap-8 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 lg:flex">
+        <nav className="hidden items-center gap-8 text-sm font-bold uppercase tracking-[0.12em] lg:flex">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-primary">
               {item.label}
             </Link>
           ))}
         </nav>
+        <div>
+          <Button href="/donate" variant="tertiary" className="py-8 px-4 bg-orange-400 text-white">
+            <h5 className="text-sm font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
+          </Button>
+        </div>
         <button
           type="button"
           aria-label="Open menu"
@@ -82,6 +92,9 @@ export function NavBar() {
               {item.label}
             </Link>
           ))}
+          <Link href="/donate" onClick={closeMenu}>
+            Donate
+          </Link>
         </nav>
       </aside>
     </header>

@@ -9,14 +9,18 @@ type ContentCardProps = {
 
 export function ContentCard({ title, description, cta, className = "" }: ContentCardProps) {
   return (
-    <div className={`rounded-md border border-border bg-white p-5 ${className}`}>
-      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-      {description ? (
-        <p className="mt-3 text-sm text-slate-600">{description}</p>
-      ) : null}
+    <div
+      className={`bg-white p-10 relative ${className}`}
+      style={{
+        clipPath: "polygon(100% 0, 100% 20%, 100% 100%, 4% 100%, 0% 80%, 0 0)",
+        WebkitClipPath: "polygon(100% 0, 100% 20%, 100% 100%, 4% 100%, 0% 80%, 0 0)",
+      }}
+    >
+      <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+      {description ? <p className="mt-3 text-sm text-slate-600">{description}</p> : null}
       {cta ? (
         <div className="mt-4">
-          <Button href={cta.href} variant="secondary" className="px-4 py-2 text-xs">
+          <Button href={cta.href} variant="primary" className="px-4 py-2 text-xs">
             {cta.label}
           </Button>
         </div>
