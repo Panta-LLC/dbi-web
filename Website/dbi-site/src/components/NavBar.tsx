@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { Container } from "./Container";
 
@@ -14,19 +14,37 @@ const navItems = [
 
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(() =>
+    typeof window !== "undefined" ? window.scrollY > 20 : false,
+  );
 
   const closeMenu = () => setMenuOpen(false);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white border-b border-orange-400 border-b-5 font-inter font-bold">
+    <header
+      className={`nav-entrance fixed inset-x-0 top-0 z-50 font-inter font-bold transition-colors duration-300 ${
+        scrolled ? "nav-solid border-b border-orange-400 border-b-5 text-slate-900" : "nav-frosted"
+      }`}
+    >
       <Container className="flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
-          <img
-            src="/dbi_logo.png"
-            alt="Delta Bay Impact Logo"
-            className="h-16 w-auto"
-            style={{ display: "block" }}
-          />
+          <div className="nav-logo-badge slant-clip-tight px-5 py-2">
+            <img
+              src="/dbi_logo.png"
+              alt="Delta Bay Impact Logo"
+              className="h-16 w-auto"
+              style={{ display: "block" }}
+            />
+          </div>
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-bold uppercase tracking-[0.12em] lg:flex">
           {navItems.map((item) => (

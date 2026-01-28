@@ -8,9 +8,9 @@ type SiteLayoutProps = {
 
 export function SiteLayout({ children }: SiteLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
-      {/* <NavBar /> */}
-      <main className="flex-1 pt-18">{children}</main>
+    <div className="flex min-h-screen flex-col bg-blue-100 text-foreground">
+      <NavBar />
+      <main className="flex-1">{children}</main>
       <Footer />
     </div>
   );
