@@ -75,7 +75,7 @@ export default async function Home() {
       <Section className="">
         <Container>
           <div
-            className="p-8 py-10 pb-16 mt-16 text-center flex flex-col items-center justify-center bg-white"
+            className="p-8 py-10 px-20 pb-16 mt-16 text-center flex flex-col items-center justify-center bg-white"
             style={{
               clipPath:
                 "polygon(calc(100% - calc(var(--slant-size))) 0, 100% 100%, calc(var(--slant-size) * 0.75) 100%, 0 0)",
@@ -87,8 +87,7 @@ export default async function Home() {
           </div>
         </Container>
       </Section>
-
-      <Section className="py-20">
+      <Section className="py-20 pb-40">
         <Container>
           <div className="grid lg:grid-cols-[.4fr_1fr] lg:items-start gap-12">
             <div>
@@ -113,6 +112,15 @@ export default async function Home() {
       </Section>
 
       <Section className="py-20 bg-white">
+        <ContactBand
+          title="Sign up for the Delta Bay Impact Newsletter"
+          description="Subscribe to Delta Bay Impact to get updates on community programs, events, and impact stories."
+          placeholder="Email address"
+          buttonLabel="Subscribe"
+          legalText="This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply."
+          className="-mt-40 mb-10"
+        />
+
         <Container>
           <h2 className="heading-2 text-primary">{data.latest?.title}</h2>
           <div className="mt-6 grid gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-center">
@@ -140,7 +148,7 @@ export default async function Home() {
         </Container>
       </Section>
 
-      <Section className="py-20 text-primary bg-orange-200">
+      <Section className="pt-20 pb-32 text-primary bg-orange-200">
         <Container>
           <h2 className="heading-2 text-center text-primary">{data.partners?.title}</h2>
           <div className="mt-6">
@@ -148,8 +156,6 @@ export default async function Home() {
           </div>
         </Container>
       </Section>
-
-      <ContactBand title={data.contact?.title} />
     </SiteLayout>
   );
 }

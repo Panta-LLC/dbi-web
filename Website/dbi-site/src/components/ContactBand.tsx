@@ -1,19 +1,60 @@
+import { Button } from "./Button";
 import { Container } from "./Container";
 
 type ContactBandProps = {
   title?: string;
+  description?: string;
+  placeholder?: string;
+  buttonLabel?: string;
+  legalText?: string;
+  className?: string;
 };
 
-export function ContactBand({ title = "Contact" }: ContactBandProps) {
+export function ContactBand({
+  title = "Sign up for The Optimist Newsletter",
+  description = "Subscribe to The Optimist to get weekly updates on the latest in global health, gender equality, education, and more.",
+  placeholder = "Email address",
+  buttonLabel = "Subscribe",
+  legalText = "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+  className = "",
+}: ContactBandProps) {
+  const titleParts = title.split("The Optimist");
+  const hasOptimist = titleParts.length > 1;
+
   return (
-    <div className="border-y border-border bg-white">
-      <Container className="py-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="heading-2 tracking-[0.2em] text-slate-700 uppercase">
-            {title}
-          </h2>
+    <Container className={className}>
+      <div className="slant-clip bg-orange-300 px-20 py-14 lg:py-18">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div className="text-primary">
+            <h2 className="display-s text-primary">
+              {hasOptimist ? (
+                <>
+                  {titleParts[0]}
+                  <span className="font-serif italic">The Optimist</span>
+                  {titleParts.slice(1).join("The Optimist")}
+                </>
+              ) : (
+                title
+              )}
+            </h2>
+            <p className="body-md mt-4 max-w-xl text-slate-800">{description}</p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <input
+                type="email"
+                name="email"
+                placeholder={placeholder}
+                className="w-full flex-1 slant-clip-tight bg-white px-5 py-4 text-sm text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Button variant="primary" className="px-6 py-3 text-sm">
+                {buttonLabel}
+              </Button>
+            </div>
+            <p className="text-xs text-slate-700">{legalText}</p>
+          </div>
         </div>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 }
