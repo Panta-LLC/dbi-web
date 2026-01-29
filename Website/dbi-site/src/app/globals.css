@@ -102,14 +102,14 @@ body {
     font-family: var(--font-inter), var(--font-noto-sans), system-ui, sans-serif;
     font-size: clamp(1.5rem, 1vw + 1rem, 2.25rem);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
   }
 
   .heading-3 {
     font-family: var(--font-inter), var(--font-noto-sans), system-ui, sans-serif;
     font-size: clamp(1.25rem, 0.5vw + 1rem, 1.75rem);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1;
   }
 
   .body-md {
@@ -149,13 +149,13 @@ body {
   .hero-content {
     opacity: 0;
     transform: translateX(30px);
-    animation: hero-content-in 0.65s ease-out 0.65s forwards;
+    animation: hero-content-in 0.65s ease-out 1s forwards;
   }
 
   .nav-entrance {
     opacity: 0;
     transform: translateY(-16px);
-    animation: nav-in 0.65s ease-in-out 0.65s forwards;
+    animation: nav-in 0.65s ease-in-out 1s forwards;
   }
 
   .nav-solid {

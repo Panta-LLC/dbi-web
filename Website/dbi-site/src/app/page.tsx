@@ -75,12 +75,12 @@ export default async function Home() {
       <Section className="">
         <Container>
           <div
-            className="p-8 py-10 pb-16 text-center flex flex-col items-center justify-center bg-white"
+            className="p-8 py-10 pb-16 mt-16 text-center flex flex-col items-center justify-center bg-white"
             style={{
               clipPath:
-                "polygon(calc(100% - calc(var(--slant-size) * 0.75)) 0, 100% 100%, calc(var(--slant-size) * 0.75) 100%, 0 0)",
+                "polygon(calc(100% - calc(var(--slant-size))) 0, 100% 100%, calc(var(--slant-size) * 0.75) 100%, 0 0)",
               WebkitClipPath:
-                "polygon(calc(100% - calc(var(--slant-size) * 0.75)) 0, 100% 100%, calc(var(--slant-size) * 0.75) 100%, 0 0)",
+                "polygon(calc(100% - calc(var(--slant-size))) 0, 100% 100%, calc(var(--slant-size) * 0.75) 100%, 0 0)",
             }}
           >
             <h2 className="display-m font-semibold max-w-4xl">{data.intro}</h2>

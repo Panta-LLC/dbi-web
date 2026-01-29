@@ -11,11 +11,11 @@ type ButtonProps = {
 };
 
 const baseStyles =
-  "slant-clip-tight inline-flex items-center justify-center px-12 py-4 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ring-offset-background";
+  "slant-clip-tight inline-flex items-center justify-center px-12 py-4 text-lg font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ring-offset-background";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
-  secondary: "text-primary hover:bg-primary/10 bg-white",
+  secondary: "hover:bg-primary/10 bg-white",
   tertiary: "text-primary hover:bg-primary/10 bg-orange-400 text-white",
   ghost: "text-primary hover:bg-primary/10",
 };
