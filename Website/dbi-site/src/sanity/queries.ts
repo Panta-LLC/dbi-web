@@ -24,11 +24,15 @@ export const homePageQuery = groq`
     },
     latest{
       title,
-      items[]{ title, date, description }
+      items[]{ title, date, description, "imageSrc": image.asset->url, imageAlt }
     },
     partners{
       title,
-      items
+      items[]{
+        name,
+        "logoSrc": logo.asset->url,
+        "logoAlt": logoAlt
+      }
     },
     contact{
       title,
@@ -57,7 +61,11 @@ export const aboutPageQuery = groq`
     },
     partners{
       title,
-      items
+      items[]{
+        name,
+        "logoSrc": logo.asset->url,
+        "logoAlt": logoAlt
+      }
     },
     support{
       title,
@@ -163,5 +171,15 @@ export const contactPageQuery = groq`
       phone,
       responseNote
     }
+  }
+`;
+
+export const footerQuery = groq`
+  *[_type == "footer"][0]{
+    heading,
+    description,
+    email,
+    siteLinks[]{ label, href },
+    socialLinks[]{ label, href }
   }
 `;

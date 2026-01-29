@@ -30,6 +30,34 @@ const withKeys = (items, prefix) =>
 
 const documents = [
   {
+    _id: "footer",
+    _type: "footer",
+    title: "Footer",
+    heading: "Delta Bay Impact",
+    description: "Building opportunity through community partnerships, programs, and impact-driven work.",
+    email: "info@deltabayimpact.org",
+    siteLinks: withKeys(
+      [
+        { label: "About", href: "/about" },
+        { label: "Programs", href: "/programs" },
+        { label: "Get Involved", href: "/get-involved" },
+        { label: "Impact", href: "/impact" },
+        { label: "Resources", href: "/resources" },
+        { label: "Contact", href: "/contact" },
+        { label: "Donate", href: "/donate" },
+      ],
+      "footer-link",
+    ),
+    socialLinks: withKeys(
+      [
+        { label: "Instagram", href: "https://instagram.com" },
+        { label: "Facebook", href: "https://facebook.com" },
+        { label: "LinkedIn", href: "https://linkedin.com" },
+      ],
+      "footer-social",
+    ),
+  },
+  {
     _id: "homePage",
     _type: "homePage",
     title: "Home Page",
@@ -90,11 +118,14 @@ const documents = [
     },
     partners: {
       title: "Our Partners",
-      items: [
-        "Community Health Fund",
-        "Keller Canyon Mitigation Fund",
-        "Antioch Community Foundation",
-      ],
+      items: withKeys(
+        [
+          { name: "Community Health Fund" },
+          { name: "Keller Canyon Mitigation Fund" },
+          { name: "Antioch Community Foundation" },
+        ],
+        "partner",
+      ),
     },
     contact: {
       title: "Contact",
@@ -158,11 +189,14 @@ const documents = [
     },
     partners: {
       title: "Our Partners",
-      items: [
-        "Community Health Fund",
-        "Keller Canyon Mitigation Fund",
-        "Antioch Community Foundation",
-      ],
+      items: withKeys(
+        [
+          { name: "Community Health Fund" },
+          { name: "Keller Canyon Mitigation Fund" },
+          { name: "Antioch Community Foundation" },
+        ],
+        "partner",
+      ),
     },
     support: {
       title: "Help DBI support your child, school, or community",

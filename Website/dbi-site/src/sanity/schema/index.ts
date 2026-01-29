@@ -1,6 +1,7 @@
 import { aboutPage } from "./documents/aboutPage";
 import { contactPage } from "./documents/contactPage";
 import { donatePage } from "./documents/donatePage";
+import { footer } from "./documents/footer";
 import { getInvolvedPage } from "./documents/getInvolvedPage";
 import { homePage } from "./documents/homePage";
 import { impactPage } from "./documents/impactPage";
@@ -26,6 +27,7 @@ export const schemaTypes = [
   tabItem,
   contactDetails,
   contactForm,
+  footer,
   homePage,
   aboutPage,
   programsPage,

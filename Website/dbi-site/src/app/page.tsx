@@ -18,13 +18,13 @@ export default async function Home() {
 
   return (
     <SiteLayout>
-      <Section className=" min-h-screen" noPadding reveal={false}>
+      <Section noPadding reveal={false}>
         <Container className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <div className="h-screen min-h-[750px] w-full relative flex items-center justify-center">
+          <div className="max-h-screen h-[750px] w-full relative flex items-center justify-center">
             {data.hero?.imageSrc ? (
               <>
                 <div
-                  className="hero-accent slant-clip w-full min-h-[100%] bg-orange-400"
+                  className="hero-accent slant-clip w-full min-h-full bg-orange-400"
                   style={{
                     height: "100%",
                     width: "100%",
@@ -122,36 +122,73 @@ export default async function Home() {
         />
 
         <Container>
-          <h2 className="heading-2 text-primary">{data.latest?.title}</h2>
-          <div className="mt-6 grid gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-            <button
-              type="button"
-              className="hidden h-10 w-10 items-center justify-center rounded-full border border-border text-sm text-slate-500 lg:flex"
-            >
-              ←
-            </button>
-            <div className="rounded-md border border-border bg-white p-6">
-              <div className="h-32 w-full bg-muted" />
-              <p className="mt-4 text-sm font-semibold text-slate-900">
-                {data.latest?.items?.[0]?.title}
-              </p>
-              <p className="mt-1 text-xs text-slate-500">{data.latest?.items?.[0]?.date}</p>
-              <p className="mt-3 text-sm text-slate-600">{data.latest?.items?.[0]?.description}</p>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="heading-2 text-primary">{data.latest?.title}</h2>
             </div>
-            <button
-              type="button"
-              className="hidden h-10 w-10 items-center justify-center rounded-full border border-border text-sm text-slate-500 lg:flex"
-            >
-              →
-            </button>
+            <div className="hidden items-center gap-3 lg:flex">
+              <button
+                type="button"
+                className="slant-clip-tight inline-flex h-11 w-11 items-center justify-center border border-border text-sm text-slate-600 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:bg-slate-50"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                className="slant-clip-tight inline-flex h-11 w-11 items-center justify-center border border-border text-sm text-slate-600 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:bg-slate-50"
+              >
+                →
+              </button>
+            </div>
+          </div>
+          <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-stretch">
+            <div className="overflow-hidden bg-white">
+              <div className="relative h-56 w-full bg-slate-200 slant-clip-tight">
+                {data.latest?.items?.[0]?.imageSrc ? (
+                  <Image
+                    src={data.latest.items[0].imageSrc}
+                    alt={
+                      data.latest.items[0].imageAlt || data.latest.items[0].title || "Latest update"
+                    }
+                    fill
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="object-cover"
+                  />
+                ) : null}
+              </div>
+              <div className="space-y-3 px-6 py-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">
+                  Featured story
+                </p>
+                <p className="text-lg font-semibold text-slate-900">
+                  {data.latest?.items?.[0]?.title}
+                </p>
+                <p className="text-xs text-slate-500">{data.latest?.items?.[0]?.date}</p>
+                <p className="text-sm text-slate-600">{data.latest?.items?.[0]?.description}</p>
+              </div>
+            </div>
+            <div className="grid gap-4">
+              {(data.latest?.items ?? [])
+                .slice(1, 3)
+                .map((item: { title: string; date?: string; description?: string }) => (
+                  <div key={item.title} className="border border-border bg-white px-5 py-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">
+                      Update
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-slate-900">{item.title}</p>
+                    <p className="mt-1 text-xs text-slate-500">{item.date}</p>
+                    <p className="mt-3 text-sm text-slate-600">{item.description}</p>
+                  </div>
+                ))}
+            </div>
           </div>
         </Container>
       </Section>
 
-      <Section className="pt-20 pb-32 text-primary bg-orange-200">
+      <Section className="pt-20 pb-32 text-primary bg-slate-200">
         <Container>
           <h2 className="heading-2 text-center text-primary">{data.partners?.title}</h2>
-          <div className="mt-6">
+          <div className="mt-16">
             <LogoGrid items={data.partners?.items ?? []} />
           </div>
         </Container>

@@ -82,6 +82,8 @@ export const homePage = defineType({
                 defineField({ name: "title", title: "Title", type: "string" }),
                 defineField({ name: "date", title: "Date", type: "string" }),
                 defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                defineField({ name: "image", title: "Featured Image", type: "image" }),
+                defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
               ],
             },
           ],
@@ -98,7 +100,16 @@ export const homePage = defineType({
           name: "items",
           title: "Partners",
           type: "array",
-          of: [{ type: "string" }],
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({ name: "name", title: "Name", type: "string" }),
+                defineField({ name: "logo", title: "Logo", type: "image" }),
+                defineField({ name: "logoAlt", title: "Logo Alt Text", type: "string" }),
+              ],
+            },
+          ],
         }),
       ],
     }),

@@ -86,7 +86,16 @@ export const aboutPage = defineType({
           name: "items",
           title: "Partners",
           type: "array",
-          of: [{ type: "string" }],
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({ name: "name", title: "Name", type: "string" }),
+                defineField({ name: "logo", title: "Logo", type: "image" }),
+                defineField({ name: "logoAlt", title: "Logo Alt Text", type: "string" }),
+              ],
+            },
+          ],
         }),
       ],
     }),
