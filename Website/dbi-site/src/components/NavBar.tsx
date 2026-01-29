@@ -18,9 +18,7 @@ export function NavBar() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header
-      className="nav-entrance nav-solid fixed inset-x-0 top-0 z-50 border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300"
-    >
+    <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-50 border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300">
       <Container className="flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
           <div className="nav-logo-badge slant-clip-tight px-5 py-2">
@@ -32,7 +30,7 @@ export function NavBar() {
             />
           </div>
         </Link>
-        <nav className="hidden items-center gap-8 text-sm font-bold uppercase tracking-[0.12em] lg:flex">
+        <nav className="hidden items-center gap-8 text-md font-bold uppercase tracking-[0.12em] lg:flex">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-primary">
               {item.label}
@@ -41,7 +39,7 @@ export function NavBar() {
         </nav>
         <div>
           <Button href="/donate" variant="tertiary" className="py-8 px-4 bg-orange-400 text-white">
-            <h5 className="text-sm font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
+            <h5 className="text-md font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
           </Button>
         </div>
         <button

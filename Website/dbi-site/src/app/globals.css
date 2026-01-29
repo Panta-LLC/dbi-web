@@ -143,7 +143,7 @@ body {
     ); */
     clip-path: polygon(calc(100% - var(--slant-size)) 0, 100% 100%, var(--slant-size) 100%, 0 0);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    animation: hero-clip 0.65s ease-out 0.15s forwards;
+    animation: hero-clip 0.75s cubic-bezier(0.165, 0.84, 0.44, 1) 0.15s forwards;
   }
 
   .hero-content {

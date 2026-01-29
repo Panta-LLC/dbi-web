@@ -90,10 +90,13 @@ export default async function Home() {
 
       <Section className="py-20">
         <Container>
-          <div className="grid lg:grid-cols-[.4fr_1fr] lg:items-start">
+          <div className="grid lg:grid-cols-[.4fr_1fr] lg:items-start gap-12">
             <div>
               <h2 className="heading-2">{data.serve?.title}</h2>
               <p className="body-md mt-4">{data.serve?.description}</p>
+              <Button href={data.serve?.cta?.href} variant="primary" className="mt-6">
+                {data.serve?.cta?.label}
+              </Button>
             </div>
             <div className="grid gap-y-5 sm:grid-cols-2">
               {data.serve?.items?.map((item: { title: string; description: string }) => (
