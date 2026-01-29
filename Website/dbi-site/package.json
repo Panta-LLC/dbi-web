@@ -16,9 +16,9 @@
     "dotenv": "^16.6.1",
     "next": "16.1.4",
     "next-sanity": "^12.0.14",
-    "sanity": "^3.70.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sanity": "^5.7.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0",

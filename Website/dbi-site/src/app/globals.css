@@ -128,38 +128,34 @@ body {
     transform-origin: top left;
     opacity: 0;
     transform: translate(var(--hero-offset-x), var(--hero-offset-y));
-    animation: hero-grow-offset 0.75s var(--animation-effect) 0.25s forwards;
+    animation: hero-grow-offset 0.5s ease-out 0.65s forwards;
   }
 
   .hero-mask {
     transform-origin: top left;
     opacity: 0;
     will-change: clip-path;
-    clip-path: polygon(
+    /* clip-path: polygon(
       calc(100% - var(--slant-size)) 0,
       calc(100% - var(--slant-size)) 0,
       0 0,
       0 0
-    );
-    animation: hero-clip 0.75s ease-out forwards;
+    ); */
+    clip-path: polygon(calc(100% - var(--slant-size)) 0, 100% 100%, var(--slant-size) 100%, 0 0);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    animation: hero-clip 0.65s ease-out 0.15s forwards;
   }
 
   .hero-content {
     opacity: 0;
     transform: translateX(30px);
-    animation: hero-content-in 0.7s ease-out 0.95s forwards;
+    animation: hero-content-in 0.65s ease-out 0.65s forwards;
   }
 
   .nav-entrance {
     opacity: 0;
     transform: translateY(-16px);
-    animation: nav-in 0.6s ease-in-out 1s forwards;
-  }
-
-  .nav-frosted {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    animation: nav-in 0.65s ease-in-out 0.65s forwards;
   }
 
   .nav-solid {
@@ -250,32 +246,25 @@ body {
 @keyframes hero-grow-offset {
   0% {
     opacity: 0;
-    transform: translate(0px, 0px) scale(0);
-  }
-  1% {
-    opacity: 1;
+    transform: translate(-2px, -22px);
   }
   100% {
     opacity: 1;
-    transform: translate(var(--hero-offset-x), var(--hero-offset-y)) scale(1);
+    transform: translate(20px, 20px);
+    /* transform: translate(var(--hero-offset-x), var(--hero-offset-y)) scale(1); */
   }
 }
 
 @keyframes hero-clip {
   0% {
-    clip-path: polygon(
-      calc(100% - var(--slant-size)) 0,
-      calc(100% - var(--slant-size)) 0,
-      0 0,
-      0 0
-    );
-  }
-  1% {
-    opacity: 1;
+    opacity: 0;
+    translate: -20px -10px;
+    /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); */
   }
   100% {
-    clip-path: polygon(calc(100% - var(--slant-size)) 0, 100% 100%, var(--slant-size) 100%, 0 0);
     opacity: 1;
+    translate: 0 0;
+    /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5); */
   }
 }
 

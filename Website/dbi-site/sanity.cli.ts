@@ -9,4 +9,4 @@ if (!projectId || !dataset) {
   );
 }
 
-export default defineCliConfig({ projectId, dataset });
+export default defineCliConfig({ api: { projectId, dataset } });

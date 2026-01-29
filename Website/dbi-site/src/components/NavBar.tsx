@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "./Button";
 import { Container } from "./Container";
 
@@ -14,26 +14,12 @@ const navItems = [
 
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(() =>
-    typeof window !== "undefined" ? window.scrollY > 20 : false,
-  );
 
   const closeMenu = () => setMenuOpen(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <header
-      className={`nav-entrance fixed inset-x-0 top-0 z-50 font-inter font-bold transition-colors duration-300 ${
-        scrolled ? "nav-solid border-b border-orange-400 border-b-5 text-slate-900" : "nav-frosted"
-      }`}
+      className="nav-entrance nav-solid fixed inset-x-0 top-0 z-50 border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300"
     >
       <Container className="flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
