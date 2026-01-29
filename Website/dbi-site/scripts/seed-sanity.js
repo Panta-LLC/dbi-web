@@ -363,6 +363,15 @@ const documents = [
 ];
 
 async function run() {
+  const existingHomePage = await client.getDocument("homePage");
+
+  if (existingHomePage?.hero?.image && documents[1]?.hero) {
+    documents[1].hero.image = existingHomePage.hero.image;
+    if (!documents[1].hero.imageAlt) {
+      documents[1].hero.imageAlt = existingHomePage.hero.imageAlt;
+    }
+  }
+
   const results = await Promise.all(
     documents.map((doc) => client.createOrReplace(doc)),
   );
