@@ -1,11 +1,9 @@
 import { Button } from "@/components/Button";
-import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
 import { ContentCard } from "@/components/ContentCard";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { ImageCard } from "@/components/ImageCard";
-import { PageIntro } from "@/components/PageIntro";
 import { Section } from "@/components/Section";
-import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { impactPageQuery } from "@/sanity/queries";
 
@@ -17,9 +15,7 @@ export default async function ImpactPage() {
   }
 
   return (
-    <SiteLayout>
-      <PageIntro title={data.title} lead={data.lead} />
-
+    <ContentPageLayout title={data.title} lead={data.lead}>
       <Section className="bg-white">
         <Container>
           <h2 className="heading-2 text-center">{data.outcomes?.title}</h2>
@@ -56,8 +52,6 @@ export default async function ImpactPage() {
           </div>
         </Container>
       </Section>
-
-      <ContactBand />
-    </SiteLayout>
+    </ContentPageLayout>
   );
 }

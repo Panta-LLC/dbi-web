@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import { sanityClient } from "@/sanity/client";
 import { footerQuery } from "@/sanity/queries";
 import { Container } from "./Container";
+import { LogoGrid } from "./LogoGrid";
 
 type LinkItem = { label: string; href: string };
 type IconComponent = () => ReactElement;
@@ -71,6 +72,12 @@ const defaultContent = {
   description:
     "Building opportunity through community partnerships, programs, and impact-driven work.",
   email: "info@deltabayimpact.org",
+  partnersTitle: "Our Partners",
+  partners: [
+    { name: "Community Health Fund" },
+    { name: "Keller Canyon Mitigation Fund" },
+    { name: "Antioch Community Foundation" },
+  ],
   siteLinks: [
     { label: "About", href: "/about" },
     { label: "Programs", href: "/programs" },
@@ -100,6 +107,11 @@ export async function Footer() {
   const content = {
     ...defaultContent,
     ...data,
+    partners: (data.partners?.length ? data.partners : defaultContent.partners) as {
+      name: string;
+      logoSrc?: string;
+      logoAlt?: string;
+    }[],
     siteLinks: (data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks) as LinkItem[],
     socialLinks: (data.socialLinks?.length
       ? data.socialLinks
@@ -107,10 +119,17 @@ export async function Footer() {
   };
 
   return (
-    <footer className="bg-white">
-      <Container className="py-12">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
-          <div className="space-y-4">
+    <footer className="bg-white border-t-5 border-orange-400">
+      <Container className="pb-12">
+        {content.partners.length ? (
+          <>
+            <div className="my-4">
+              <LogoGrid items={content.partners} />
+            </div>
+          </>
+        ) : null}
+        <div className="grid gap-10 md:grid-cols-3">
+          <div className="col-span-1 space-y-4">
             <div className="flex items-center ">
               <img
                 src="/dbi_logo.png"
@@ -121,55 +140,55 @@ export async function Footer() {
             </div>
             <p className="display-s">{content.description}</p>
           </div>
-          <div className="space-y-4">
-            <h3 className="heading-3">Site</h3>
-            <ul className="grid gap-2 text-sm text-slate-700">
+          <div className="col-span-2 space-y-4 content-end">
+            <div className="gap-2 text-sm text-slate-700 border-b-2 border-slate-200 pb-4">
               {content.siteLinks.map((link: LinkItem) => (
-                <li key={link.href}>
+                <div key={link.href} className="inline-block">
                   {isExternalLink(link.href) ? (
-                    <a href={link.href} className="transition hover:text-primary">
+                    <a href={link.href} className="heading-3 transition hover:text-primary">
                       {link.label}
                     </a>
                   ) : (
-                    <Link href={link.href} className="transition hover:text-primary">
+                    <Link
+                      href={link.href}
+                      className="text-sm heading-4 transition hover:text-primary mr-4"
+                    >
                       {link.label}
                     </Link>
                   )}
-                </li>
+                </div>
               ))}
-            </ul>
-          </div>
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <h3 className="heading-3">Contact</h3>
-              <a
-                href={`mailto:${content.email}`}
-                className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-primary"
-              >
-                <EmailIcon />
-                {content.email}
-              </a>
             </div>
-            <div className="space-y-3">
-              <h3 className="heading-3">Social</h3>
-              <ul className="flex items-center gap-3 text-slate-700">
-                {content.socialLinks.map((link: LinkItem) => {
-                  const Icon = SOCIAL_ICONS[link.label.toLowerCase()] ?? InstagramIcon;
-                  return (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-slate-600 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary"
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={link.label}
-                      >
-                        <Icon />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <a
+                  href={`mailto:${content.email}`}
+                  className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-primary"
+                >
+                  <EmailIcon />
+                  {content.email}
+                </a>
+              </div>
+              <div className="space-y-3">
+                <ul className="flex items-center gap-3 text-slate-700">
+                  {content.socialLinks.map((link: LinkItem) => {
+                    const Icon = SOCIAL_ICONS[link.label.toLowerCase()] ?? InstagramIcon;
+                    return (
+                      <li key={link.label}>
+                        <a
+                          href={link.href}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-slate-600 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary"
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={link.label}
+                        >
+                          <Icon />
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

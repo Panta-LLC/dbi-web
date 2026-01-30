@@ -26,14 +26,6 @@ export const homePageQuery = groq`
       title,
       items[]{ title, date, description, "imageSrc": image.asset->url, imageAlt }
     },
-    partners{
-      title,
-      items[]{
-        name,
-        "logoSrc": logo.asset->url,
-        "logoAlt": logoAlt
-      }
-    },
     contact{
       title,
       description,
@@ -58,14 +50,6 @@ export const aboutPageQuery = groq`
     leadership{
       title,
       members[]{ name, role }
-    },
-    partners{
-      title,
-      items[]{
-        name,
-        "logoSrc": logo.asset->url,
-        "logoAlt": logoAlt
-      }
     },
     support{
       title,
@@ -180,6 +164,12 @@ export const footerQuery = groq`
     description,
     email,
     siteLinks[]{ label, href },
-    socialLinks[]{ label, href }
+    socialLinks[]{ label, href },
+    partnersTitle,
+    partners[]{
+      name,
+      "logoSrc": logo.asset->url,
+      "logoAlt": logoAlt
+    }
   }
 `;

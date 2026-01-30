@@ -56,6 +56,15 @@ const documents = [
       ],
       "footer-social",
     ),
+    partnersTitle: "Our Partners",
+    partners: withKeys(
+      [
+        { name: "Community Health Fund" },
+        { name: "Keller Canyon Mitigation Fund" },
+        { name: "Antioch Community Foundation" },
+      ],
+      "footer-partner",
+    ),
   },
   {
     _id: "homePage",
@@ -116,17 +125,6 @@ const documents = [
         "latest",
       ),
     },
-    partners: {
-      title: "Our Partners",
-      items: withKeys(
-        [
-          { name: "Community Health Fund" },
-          { name: "Keller Canyon Mitigation Fund" },
-          { name: "Antioch Community Foundation" },
-        ],
-        "partner",
-      ),
-    },
     contact: {
       title: "Contact",
       description:
@@ -185,17 +183,6 @@ const documents = [
           { name: "Tiffany Francies", role: "Executive Director" },
         ],
         "leader",
-      ),
-    },
-    partners: {
-      title: "Our Partners",
-      items: withKeys(
-        [
-          { name: "Community Health Fund" },
-          { name: "Keller Canyon Mitigation Fund" },
-          { name: "Antioch Community Foundation" },
-        ],
-        "partner",
       ),
     },
     support: {

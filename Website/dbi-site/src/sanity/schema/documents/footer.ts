@@ -27,5 +27,21 @@ export const footer = defineType({
       type: "array",
       of: [{ type: "cta" }],
     }),
+    defineField({ name: "partnersTitle", title: "Partners Title", type: "string" }),
+    defineField({
+      name: "partners",
+      title: "Partners",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "name", title: "Name", type: "string" }),
+            defineField({ name: "logo", title: "Logo", type: "image" }),
+            defineField({ name: "logoAlt", title: "Logo Alt Text", type: "string" }),
+          ],
+        },
+      ],
+    }),
   ],
 });

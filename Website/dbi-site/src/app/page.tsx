@@ -185,14 +185,14 @@ export default async function Home() {
         </Container>
       </Section>
 
-      <Section className="pt-20 pb-32 text-primary bg-slate-200">
+      {/* <Section className="text-primary bg-white">
         <Container>
           <h2 className="heading-2 text-center text-primary">{data.partners?.title}</h2>
           <div className="mt-16">
             <LogoGrid items={data.partners?.items ?? []} />
           </div>
         </Container>
-      </Section>
+      </Section> */}
     </SiteLayout>
   );
 }

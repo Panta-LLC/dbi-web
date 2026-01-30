@@ -1,10 +1,8 @@
 import { Button } from "@/components/Button";
-import { ContactBand } from "@/components/ContactBand";
 import { Container } from "@/components/Container";
 import { ContentCard } from "@/components/ContentCard";
-import { PageIntro } from "@/components/PageIntro";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { Section } from "@/components/Section";
-import { SiteLayout } from "@/components/SiteLayout";
 import { sanityClient } from "@/sanity/client";
 import { getInvolvedPageQuery } from "@/sanity/queries";
 
@@ -16,13 +14,7 @@ export default async function GetInvolvedPage() {
   }
 
   return (
-    <SiteLayout>
-      <PageIntro
-        title={data.title}
-        lead={data.lead}
-        description={data.description}
-      />
-
+    <ContentPageLayout title={data.title} lead={data.lead} description={data.description}>
       <Section className="bg-white">
         <Container>
           <h2 className="heading-2 text-center">{data.pathways?.title}</h2>
@@ -38,8 +30,6 @@ export default async function GetInvolvedPage() {
           </div>
         </Container>
       </Section>
-
-      <ContactBand />
-    </SiteLayout>
+    </ContentPageLayout>
   );
 }
