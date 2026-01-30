@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #eef2f5;
-  --foreground: #111827;
-  --muted: #f8fafc;
-  --border: #d7dee7;
-  --primary: #1c3f78;
-  --primary-foreground: #ffffff;
-  --accent: #f28c28;
-  --accent-foreground: #1f2937;
-  --secondary: #7da2d6;
-  --secondary-foreground: #0f1f3a;
+  --color-1: #2a579c;
+  --color-2: #ff7900;
+  --color-3: #fbfff5;
+  --color-4: #002354;
+  --color-5: #222d2f;
+  --font-noto-sans: "Noto Sans", system-ui, -apple-system, sans-serif;
+  --font-noto-serif: "Noto Serif", Georgia, serif;
+  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+  --background: var(--color-3);
+  --foreground: #000000;
+  --muted: var(--color-3);
+  --border: var(--color-1);
+  --primary: var(--color-1);
+  --primary-foreground: var(--color-3);
+  --accent: var(--color-2);
+  --accent-foreground: var(--color-4);
+  --secondary: var(--color-4);
+  --secondary-foreground: var(--color-3);
   --slant-size: 50px;
   --slant-size-tight: 5px;
   --animation-effect: cubic-bezier(0.445, 0.05, 0.55, 0.95);
@@ -33,7 +41,7 @@
 }
 
 body {
-  background: #000000;
+  background: var(--background);
   color: var(--foreground);
   font-family:
     var(--font-noto-sans),
@@ -110,6 +118,13 @@ body {
     font-size: clamp(1.25rem, 0.5vw + 1rem, 1.75rem);
     font-weight: 700;
     line-height: 1;
+  }
+
+  .heading-4 {
+    font-family: var(--font-inter), var(--font-noto-sans), system-ui, sans-serif;
+    font-size: clamp(1rem, 0.5vw + 0.75rem, 1.5rem);
+    font-weight: 700;
+    line-height: 1.2;
   }
 
   .body-md {

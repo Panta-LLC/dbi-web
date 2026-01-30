@@ -1,71 +1,15 @@
 import Link from "next/link";
 import type { ReactElement } from "react";
+import { FaEnvelope, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { sanityClient } from "@/sanity/client";
 import { footerQuery } from "@/sanity/queries";
 import { Container } from "./Container";
+import { EmailActions } from "./EmailActions";
 import { LogoGrid } from "./LogoGrid";
+import { Section } from "./Section";
 
 type LinkItem = { label: string; href: string };
 type IconComponent = () => ReactElement;
-
-const EmailIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
-    <path
-      d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2 8 5 8-5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
-    <rect
-      x="4"
-      y="4"
-      width="16"
-      height="16"
-      rx="4"
-      ry="4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-    />
-    <circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="17" cy="7" r="1" fill="currentColor" />
-  </svg>
-);
-
-const FacebookIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
-    <path
-      d="M15 3h3v3h-3c-1.1 0-2 .9-2 2v3h5l-1 4h-4v6h-4v-6H6v-4h3V8a5 5 0 0 1 5-5z"
-      fill="currentColor"
-    />
-  </svg>
-);
-
-const LinkedInIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
-    <rect
-      x="3"
-      y="3"
-      width="18"
-      height="18"
-      rx="2"
-      ry="2"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-    />
-    <rect x="7" y="9" width="2.5" height="8" fill="currentColor" />
-    <circle cx="8.25" cy="7.5" r="1.2" fill="currentColor" />
-    <path d="M12 9h2.2a3 3 0 0 1 3 3v5H15v-4.5a1.5 1.5 0 0 0-3 0V17H10v-8h2z" fill="currentColor" />
-  </svg>
-);
 
 const defaultContent = {
   heading: "Delta Bay Impact",
@@ -95,9 +39,9 @@ const defaultContent = {
 };
 
 const SOCIAL_ICONS: Record<string, IconComponent> = {
-  instagram: InstagramIcon,
-  facebook: FacebookIcon,
-  linkedin: LinkedInIcon,
+  instagram: () => <FaInstagram className="h-7 w-7" />,
+  facebook: () => <FaFacebookF className="h-7 w-7" />,
+  linkedin: () => <FaLinkedinIn className="h-7 w-7" />,
 };
 
 const isExternalLink = (href: string) => href.startsWith("http");
@@ -119,81 +63,91 @@ export async function Footer() {
   };
 
   return (
-    <footer className="bg-white border-t-5 border-orange-400">
-      <Container className="pb-12">
-        {content.partners.length ? (
-          <>
-            <div className="my-4">
-              <LogoGrid items={content.partners} />
-            </div>
-          </>
-        ) : null}
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="col-span-1 space-y-4">
-            <div className="flex items-center ">
-              <img
-                src="/dbi_logo.png"
-                alt="Delta Bay Impact Logo"
-                className="h-16 w-auto"
-                style={{ maxWidth: "160px" }}
-              />
-            </div>
-            <p className="display-s">{content.description}</p>
-          </div>
-          <div className="col-span-2 space-y-4 content-end">
-            <div className="gap-2 text-sm text-slate-700 border-b-2 border-slate-200 pb-4">
-              {content.siteLinks.map((link: LinkItem) => (
-                <div key={link.href} className="inline-block">
-                  {isExternalLink(link.href) ? (
-                    <a href={link.href} className="heading-3 transition hover:text-primary">
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      className="text-sm heading-4 transition hover:text-primary mr-4"
-                    >
-                      {link.label}
-                    </Link>
-                  )}
+    <>
+      <Section className="bg-slate-100">
+        <Container>
+          {content.partners.length ? (
+            <div>
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-xs">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                    {content.partnersTitle}
+                  </p>
+                  <p className="heading-4">
+                    Thank you to our sponsors for supporting our community work.
+                  </p>
                 </div>
-              ))}
-            </div>
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <a
-                  href={`mailto:${content.email}`}
-                  className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-primary"
-                >
-                  <EmailIcon />
-                  {content.email}
-                </a>
+                <div className="w-full lg:max-w-4xl">
+                  <LogoGrid items={content.partners} />
+                </div>
               </div>
-              <div className="space-y-3">
-                <ul className="flex items-center gap-3 text-slate-700">
-                  {content.socialLinks.map((link: LinkItem) => {
-                    const Icon = SOCIAL_ICONS[link.label.toLowerCase()] ?? InstagramIcon;
-                    return (
-                      <li key={link.label}>
-                        <a
-                          href={link.href}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-slate-600 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary"
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={link.label}
-                        >
-                          <Icon />
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
+            </div>
+          ) : null}
+        </Container>
+      </Section>
+      <footer className="bg-white border-t-5 border-orange-400">
+        <Container className="py-12">
+          <div className="grid gap-10 md:grid-cols-3">
+            <div className="col-span-1 space-y-4">
+              <div className="flex items-center ">
+                <img
+                  src="/dbi_logo.png"
+                  alt="Delta Bay Impact Logo"
+                  className="h-16 w-auto"
+                  style={{ maxWidth: "160px" }}
+                />
+              </div>
+              <p className="display-s">{content.description}</p>
+            </div>
+            <div className="col-span-2 space-y-4 content-end">
+              <div className="gap-2 text-slate-700 border-b-2 border-slate-200 pb-4">
+                {content.siteLinks.map((link: LinkItem) => (
+                  <div key={link.href} className="inline-block">
+                    {isExternalLink(link.href) ? (
+                      <a href={link.href} className="heading-3 transition hover:text-primary">
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-sm heading-3 transition hover:text-primary mr-4"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-4">
+                <EmailActions email={content.email} />
+                <div className="space-y-3">
+                  <ul className="flex items-center gap-3">
+                    {content.socialLinks.map((link: LinkItem) => {
+                      const Icon =
+                        SOCIAL_ICONS[link.label.toLowerCase()] ??
+                        (() => <FaInstagram className="h-7 w-7" />);
+                      return (
+                        <li key={link.label}>
+                          <a
+                            href={link.href}
+                            className="inline-flex items-center justify-center  transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={link.label}
+                          >
+                            <Icon />
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="mt-10 pt-6">© {new Date().getFullYear()} Delta Bay Impact</div>
-      </Container>
-    </footer>
+          <div className="mt-10 pt-6">© {new Date().getFullYear()} Delta Bay Impact</div>
+        </Container>
+      </footer>
+    </>
   );
 }

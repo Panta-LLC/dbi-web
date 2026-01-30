@@ -124,7 +124,7 @@ export default async function Home() {
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="heading-2 text-primary">{data.latest?.title}</h2>
+              <h2 className="heading-2">{data.latest?.title}</h2>
             </div>
             <div className="hidden items-center gap-3 lg:flex">
               <button
@@ -156,14 +156,12 @@ export default async function Home() {
                   />
                 ) : null}
               </div>
-              <div className="space-y-3 px-6 py-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-500">
-                  Featured story
-                </p>
+              <div className="space-y-1 px-6 py-6">
+                <p className="text-xs font-semibold uppercase">Featured story</p>
                 <p className="text-lg font-semibold text-slate-900">
                   {data.latest?.items?.[0]?.title}
                 </p>
-                <p className="text-xs text-slate-500">{data.latest?.items?.[0]?.date}</p>
+                <p className="text-xs text-slate-500 mb-4">{data.latest?.items?.[0]?.date}</p>
                 <p className="text-sm text-slate-600">{data.latest?.items?.[0]?.description}</p>
               </div>
             </div>
@@ -184,15 +182,6 @@ export default async function Home() {
           </div>
         </Container>
       </Section>
-
-      {/* <Section className="text-primary bg-white">
-        <Container>
-          <h2 className="heading-2 text-center text-primary">{data.partners?.title}</h2>
-          <div className="mt-16">
-            <LogoGrid items={data.partners?.items ?? []} />
-          </div>
-        </Container>
-      </Section> */}
     </SiteLayout>
   );
 }
