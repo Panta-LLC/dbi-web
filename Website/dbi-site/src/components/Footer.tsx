@@ -145,7 +145,14 @@ export async function Footer() {
               </div>
             </div>
           </div>
-          <div className="mt-10 pt-6">© {new Date().getFullYear()} Delta Bay Impact</div>
+          <div className="mt-10 border-t border-slate-200 pt-6">
+            <p className="text-sm text-slate-600">
+              © {new Date().getFullYear()} Delta Bay Impact | Nonprofit youth organization
+            </p>
+            <p className="mt-1 text-sm text-slate-600">
+              Serving Bay Point, Concord, and Pittsburg schools since 2023
+            </p>
+          </div>
         </Container>
       </footer>
     </>

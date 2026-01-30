@@ -41,7 +41,7 @@ export function LogoGrid({ items }: LogoGridProps) {
         return (
           <div
             key={`${name}-${index}`}
-            className="slang-clip-tight flex h-30 items-center justify-center  bg-white p-6 text-xs font-semibold text-slate-500"
+            className="slant-clip-tight flex h-30 items-center justify-center bg-white p-6 text-xs font-semibold text-slate-500"
           >
             {logoSrc ? (
               <Image

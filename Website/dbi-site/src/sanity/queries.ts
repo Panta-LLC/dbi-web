@@ -16,6 +16,16 @@ export const homePageQuery = groq`
       imageAlt
     },
     intro,
+    impactSnapshot{
+      eyebrow,
+      title,
+      description,
+      metrics[]{ value, label, href }
+    },
+    trustSection{
+      eyebrow,
+      links[]{ label, href }
+    },
     serve{
       title,
       description,
@@ -24,7 +34,7 @@ export const homePageQuery = groq`
     },
     latest{
       title,
-      items[]{ title, date, description, "imageSrc": image.asset->url, imageAlt }
+      items[]{ title, date, description, href, "imageSrc": image.asset->url, imageAlt }
     },
     contact{
       title,

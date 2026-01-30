@@ -72,47 +72,72 @@ const documents = [
     title: "Home Page",
     hero: {
       title:
-        "Building Belonging, Opportunity, and Academic Success for African American Youth",
+        "Every African American Student in Contra Costa County Deserves to Thrive",
       subtitle:
-        "Delta Bay Impact partners with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
-      primaryCta: { label: "Learn how we support students", href: "/programs" },
-      secondaryCta: { label: "Partner with us", href: "/contact" },
+        "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
+      primaryCta: { label: "See How We Support Students", href: "/programs" },
+      secondaryCta: { label: "Partner with Delta Bay Impact", href: "/contact" },
     },
     intro:
-      "African American students and families in Contra Costa County face long-standing barriers to educational equity, connection, and access to resources. Delta Bay Impact exists to change that narrative by creating safe spaces, trusted relationships, and pathways to opportunity rooted in belonging.",
-    serve: {
-      title: "How we serve our community",
+      "Right now, African American students in Contra Costa County are building confidence, excelling academically, and discovering their potential—because of mentorship, advocacy, and community support that works.",
+    impactSnapshot: {
+      eyebrow: "Our impact",
+      title: "Real students. Real schools. Real results.",
       description:
-        "We partner with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
-      cta: { label: "Learn more", href: "/programs" },
+        "See where we're making a difference—and how you can help African American students in Contra Costa County thrive.",
+      metrics: withKeys(
+        [
+          { value: "4+", label: "Community programs", href: "/programs" },
+          { value: "3", label: "Schools served", href: "/impact" },
+          { value: "Get involved", label: "Volunteer or partner", href: "/get-involved" },
+        ],
+        "metric",
+      ),
+    },
+    trustSection: {
+      eyebrow: "Trust & transparency",
+      links: withKeys(
+        [
+          { label: "About & leadership", href: "/about" },
+          { label: "Impact reporting", href: "/impact" },
+          { label: "Ask a question", href: "/contact" },
+        ],
+        "trust-link",
+      ),
+    },
+    serve: {
+      title: "What Students Gain from Working with Us",
+      description:
+        "From classroom support to family engagement, our programs give African American students the resources, relationships, and advocacy they need to excel in school and beyond.",
+      cta: { label: "Discover How We Help Students Succeed", href: "/programs" },
       items: withKeys(
         [
           {
             title: "School-Based Mentorship and Advocacy",
             description:
-              "Trusted mentors support students academically and personally while advocating for their needs within school systems.",
+              "One-on-one mentors help students build confidence, improve grades, and navigate school challenges—while advocating for their success at every level.",
           },
           {
             title: "Academic Support Connections",
             description:
-              "We connect students to tutoring and skill-building resources that reinforce classroom learning.",
+              "We connect students with personalized tutoring and academic resources that build skills and boost classroom performance.",
           },
           {
             title: "Family Engagement",
             description:
-              "We strengthen communication and partnership between schools and families through events and consistent outreach.",
+              "Through family events and regular communication, we strengthen school-home partnerships that help students succeed inside and outside the classroom.",
           },
           {
             title: "Mental Health Awareness and Referrals",
             description:
-              "We promote mental wellness and connect families to culturally responsive resources.",
+              "We connect students and families to culturally responsive mental health resources, creating a support system that helps young people thrive emotionally and academically.",
           },
         ],
         "serve",
       ),
     },
     latest: {
-      title: "The Latest",
+      title: "Impact in Action",
       items: withKeys(
         [
           {
@@ -120,6 +145,7 @@ const documents = [
             date: "February 14, 2026",
             description:
               "African American students and families in Contra Costa County face long-standing barriers to educational equity, connection, and access to resources.",
+            href: "/impact",
           },
         ],
         "latest",
