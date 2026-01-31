@@ -15,90 +15,105 @@ const navItems = [
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-50 border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300">
-      <Container className="flex items-center justify-between gap-6">
-        <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
-          <div className="nav-logo-badge slant-clip-tight px-5 py-2">
-            <img
-              src="/dbi_logo.png"
-              alt="Delta Bay Impact Logo"
-              className="h-16 w-auto"
-              style={{ display: "block" }}
-            />
+    <>
+      <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-[100] border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300">
+        <Container className="flex items-center justify-between gap-6">
+          <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
+            <div className="nav-logo-badge px-5 py-2">
+              <img
+                src="/dbi_logo.png"
+                alt="Delta Bay Impact Logo"
+                className="h-16 w-auto"
+                style={{ display: "block" }}
+              />
+            </div>
+          </Link>
+          <nav className="hidden items-center gap-8 text-md font-bold uppercase tracking-[0.12em] lg:flex">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-primary">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div>
+            <Button
+              href="/donate"
+              variant="tertiary"
+              className="py-8 px-4 bg-orange-400 text-white"
+            >
+              <h5 className="text-md font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
+            </Button>
           </div>
-        </Link>
-        <nav className="hidden items-center gap-8 text-md font-bold uppercase tracking-[0.12em] lg:flex">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-primary">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div>
-          <Button href="/donate" variant="tertiary" className="py-8 px-4 bg-orange-400 text-white">
-            <h5 className="text-md font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
-          </Button>
-        </div>
-        <button
-          type="button"
-          aria-label="Open menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen(true)}
-          className="flex h-11 w-11 items-center justify-center rounded-md border border-border text-slate-700 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-primary lg:hidden"
-        >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
+          <button
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={toggleMenu}
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-border text-slate-700 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-primary lg:hidden"
           >
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </Container>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-5 w-5 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              {menuOpen ? (
+                /* X icon */
+                <>
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </>
+              ) : (
+                /* Hamburger icon */
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </Container>
+      </header>
+
+      {/* Mobile menu overlay - blurs content but stays below navbar */}
       <div
-        className={`fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-300 ease-out ${
+        className={`fixed inset-0 top-[88px] z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ease-out ${
           menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={closeMenu}
         aria-hidden={!menuOpen}
       />
+
+      {/* Mobile menu drawer - slides out below navbar */}
       <aside
-        className={`fixed right-0 top-0 z-50 h-full w-72 max-w-full bg-white shadow-lg transition-transform duration-300 ease-out ${
+        className={`fixed right-0 top-[88px] z-[110] h-[calc(100vh-88px)] w-72 max-w-full bg-white shadow-lg transition-transform duration-300 ease-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-hidden={!menuOpen}
       >
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-600">
-            Menu
-          </span>
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={closeMenu}
-            className="text-sm font-semibold text-slate-600"
-          >
-            Close
-          </button>
-        </div>
         <nav className="flex flex-col gap-4 px-6 py-6 text-sm font-semibold uppercase tracking-[0.12em] text-slate-700">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} onClick={closeMenu}>
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={closeMenu}
+              className="touch-target py-2 hover:text-primary transition"
+            >
               {item.label}
             </Link>
           ))}
-          <Link href="/donate" onClick={closeMenu}>
+          <Link
+            href="/donate"
+            onClick={closeMenu}
+            className="touch-target py-2 hover:text-primary transition"
+          >
             Donate
           </Link>
         </nav>
       </aside>
-    </header>
+    </>
   );
 }

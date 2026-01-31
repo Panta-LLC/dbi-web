@@ -85,32 +85,35 @@ export async function Footer() {
           ) : null}
         </Container>
       </Section>
-      <footer className="bg-white border-t-5 border-orange-400">
-        <Container className="py-12">
-          <div className="grid gap-10 md:grid-cols-3">
-            <div className="col-span-1 space-y-4">
-              <div className="flex items-center ">
+      <footer className="bg-white border-t-4 md:border-t-5 border-orange-400">
+        <Container className="py-8 md:py-10 lg:py-12">
+          <div className="grid gap-8 md:gap-10 md:grid-cols-3">
+            <div className="col-span-1 space-y-3 md:space-y-4">
+              <div className="flex items-center">
                 <img
                   src="/dbi_logo.png"
                   alt="Delta Bay Impact Logo"
-                  className="h-16 w-auto"
+                  className="h-14 md:h-16 w-auto"
                   style={{ maxWidth: "160px" }}
                 />
               </div>
-              <p className="display-s">{content.description}</p>
+              <p className="display-s text-balance">{content.description}</p>
             </div>
-            <div className="col-span-2 space-y-4 content-end">
-              <div className="gap-2 text-slate-700 border-b-2 border-slate-200 pb-4">
+            <div className="col-span-1 md:col-span-2 space-y-4 md:space-y-5 content-end">
+              <div className="flex flex-wrap gap-x-3 gap-y-2 md:gap-x-4 text-slate-700 border-b-2 border-slate-200 pb-4">
                 {content.siteLinks.map((link: LinkItem) => (
                   <div key={link.href} className="inline-block">
                     {isExternalLink(link.href) ? (
-                      <a href={link.href} className="heading-3 transition hover:text-primary">
+                      <a 
+                        href={link.href} 
+                        className="touch-target text-sm md:text-base font-semibold transition hover:text-primary focus:text-primary"
+                      >
                         {link.label}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm heading-3 transition hover:text-primary mr-4"
+                        className="touch-target text-sm md:text-base font-semibold transition hover:text-primary focus:text-primary"
                       >
                         {link.label}
                       </Link>
@@ -121,16 +124,16 @@ export async function Footer() {
               <div className="space-y-4">
                 <EmailActions email={content.email} />
                 <div className="space-y-3">
-                  <ul className="flex items-center gap-3">
+                  <ul className="flex items-center gap-4 md:gap-5">
                     {content.socialLinks.map((link: LinkItem) => {
                       const Icon =
                         SOCIAL_ICONS[link.label.toLowerCase()] ??
-                        (() => <FaInstagram className="h-7 w-7" />);
+                        (() => <FaInstagram className="h-6 w-6 md:h-7 md:w-7" />);
                       return (
                         <li key={link.label}>
                           <a
                             href={link.href}
-                            className="inline-flex items-center justify-center  transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary"
+                            className="touch-target inline-flex items-center justify-center p-1 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
                             target="_blank"
                             rel="noreferrer"
                             aria-label={link.label}
@@ -145,11 +148,11 @@ export async function Footer() {
               </div>
             </div>
           </div>
-          <div className="mt-10 border-t border-slate-200 pt-6">
-            <p className="text-sm text-slate-600">
+          <div className="mt-8 md:mt-10 border-t border-slate-200 pt-5 md:pt-6">
+            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
               © {new Date().getFullYear()} Delta Bay Impact | Nonprofit youth organization
             </p>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-xs md:text-sm text-slate-600 leading-relaxed">
               Serving Bay Point, Concord, and Pittsburg schools since 2023
             </p>
           </div>

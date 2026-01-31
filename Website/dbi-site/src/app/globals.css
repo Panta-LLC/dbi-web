@@ -19,9 +19,41 @@
   --accent-foreground: var(--color-4);
   --secondary: var(--color-4);
   --secondary-foreground: var(--color-3);
-  --slant-size: 50px;
-  --slant-size-tight: 5px;
   --animation-effect: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+  /* Responsive spacing scale */
+  --spacing-section: clamp(2rem, 5vw, 5rem);
+  --spacing-container: clamp(1rem, 3vw, 1.5rem);
+  --spacing-card: clamp(1rem, 2vw, 1.5rem);
+
+  /* Responsive slant sizes - default to mobile */
+  --slant-size-mobile: 15px;
+  --slant-size-tablet: 30px;
+  --slant-size-desktop: 50px;
+  --slant-size: var(--slant-size-mobile);
+  --slant-size-tight: 3px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --slant-size-mobile: 20px;
+    --slant-size: 20px;
+    --slant-size-tight: 4px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --slant-size: var(--slant-size-tablet);
+    --slant-size-tight: 5px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --slant-size: var(--slant-size-desktop);
+    --slant-size-tight: 5px;
+  }
 }
 
 @theme inline {
@@ -158,32 +190,41 @@ body {
       system-ui,
       -apple-system,
       sans-serif;
-    font-size: 1rem;
-    line-height: 1.4;
+    font-size: clamp(0.9375rem, 0.5vw + 0.875rem, 1.125rem);
+    line-height: 1.6;
+  }
+
+  .body-sm {
+    font-family:
+      var(--font-noto-sans),
+      system-ui,
+      -apple-system,
+      sans-serif;
+    font-size: clamp(0.875rem, 0.25vw + 0.8125rem, 1rem);
+    line-height: 1.5;
   }
 
   .hero-accent {
     --hero-offset-x: 25px;
     --hero-offset-y: 0px;
     transform-origin: top left;
-    opacity: 0;
-    transform: translate(var(--hero-offset-x), var(--hero-offset-y));
-    animation: hero-grow-offset 0.5s ease-out 0.65s forwards;
+    opacity: 1;
+    transform: translate(var(--hero-offset-x), var(--hero-offset-y), skew(-20deg));
+    /* animation: hero-grow-offset 0.5s ease-out 0.65s forwards; */
   }
 
   .hero-mask {
     transform-origin: top left;
     opacity: 0;
-    will-change: clip-path;
-    /* clip-path: polygon(
-      calc(100% - var(--slant-size)) 0,
-      calc(100% - var(--slant-size)) 0,
-      0 0,
-      0 0
-    ); */
-    clip-path: polygon(calc(100% - var(--slant-size)) 0, 100% 100%, var(--slant-size) 100%, 0 0);
+    will-change: transform;
+    transform: skewX(-8deg);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
     animation: hero-clip 0.75s cubic-bezier(0.165, 0.84, 0.44, 1) 0.15s forwards;
+  }
+
+  .hero-mask > * {
+    transform: skewX(8deg);
   }
 
   .hero-content {
@@ -218,37 +259,30 @@ body {
   }
 
   .slant-clip {
-    clip-path: polygon(calc(100% - var(--slant-size)) 0, 100% 100%, var(--slant-size) 100%, 0 0);
-    -webkit-clip-path: polygon(
-      calc(100% - calc(var(--slant-size) * 1)) 0,
-      100% 100%,
-      calc(var(--slant-size) * 1) 100%,
-      0 0
-    );
+    transform: skewX(-16deg);
+    border-radius: 4px;
+  }
+
+  .slant-clip > * {
+    transform: skewX(-16deg);
   }
 
   .slant-clip-content-card {
-    clip-path: polygon(
-      calc(100% - calc(var(--slant-size) * 0.75)) 0,
-      100% 100%,
-      calc(var(--slant-size) * 0.75) 100%,
-      0 0
-    );
+    transform: skewX(-4deg);
+    border-radius: 4px;
+  }
+
+  .slant-clip-content-card > * {
+    transform: skewX(4deg);
   }
 
   .slant-clip-tight {
-    clip-path: polygon(
-      calc(100% - var(--slant-size-tight)) 0,
-      100% 100%,
-      var(--slant-size-tight) 100%,
-      0 0
-    );
-    -webkit-clip-path: polygon(
-      calc(100% - var(--slant-size-tight)) 0,
-      100% 100%,
-      var(--slant-size-tight) 100%,
-      0 0
-    );
+    transform: skewX(-16deg);
+    border-radius: 4px;
+  }
+
+  .slant-clip-tight > * {
+    transform: skewX(16deg);
   }
 
   .reveal {
@@ -271,7 +305,7 @@ body {
 
   .reveal .content-card {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(28px) skewX(0deg);
     transition:
       opacity 0.6s var(--animation-effect) 0.15s,
       transform 0.6s var(--animation-effect) 0.15s;
@@ -279,18 +313,208 @@ body {
 
   .reveal.is-visible .content-card {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) skewX(-4deg);
+  }
+  .reveal.is-visible .content-card > * {
+    transform: skewX(4deg);
+  }
+
+  /* Responsive utilities */
+  .responsive-padding {
+    padding-left: clamp(1rem, 3vw, 2rem);
+    padding-right: clamp(1rem, 3vw, 2rem);
+  }
+
+  .responsive-py {
+    padding-top: clamp(2rem, 5vw, 4rem);
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+  }
+
+  .responsive-gap {
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text overflow on small screens */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Optimized image container for responsive images */
+  .responsive-image-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .responsive-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 767px) {
+    .slant-clip {
+      transform: skewX(-1.5deg);
+    }
+
+    .slant-clip > * {
+      transform: skewX(1.5deg);
+    }
+
+    .slant-clip-content-card {
+      transform: skewX(-1deg);
+    }
+
+    .slant-clip-content-card > * {
+      transform: skewX(1deg);
+    }
+
+    .slant-clip-tight {
+      transform: skewX(-8deg);
+    }
+
+    .slant-clip-tight > * {
+      transform: skewX(8deg);
+    }
+
+    .hero-mask {
+      transform: skewX(-8deg);
+    }
+
+    .hero-mask > * {
+      transform: skewX(8deg) scale(1.2);
+    }
+
+    /* Reduce animation complexity on mobile */
+    .hero-accent {
+      --hero-offset-x: 15px;
+      --hero-offset-y: 15px;
+    }
+
+    /* Ensure readable line lengths */
+    .body-md,
+    .body-sm {
+      max-width: 65ch;
+    }
+  }
+
+  /* Tablet optimizations */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .slant-clip {
+      transform: skewX(-2deg);
+    }
+
+    .slant-clip > * {
+      transform: skewX(2deg);
+    }
+
+    .slant-clip-content-card {
+      transform: skewX(-1.5deg);
+    }
+
+    .slant-clip-content-card > * {
+      transform: skewX(1.5deg);
+    }
+
+    .slant-clip-tight {
+      transform: skewX(-1deg);
+    }
+
+    .slant-clip-tight > * {
+      transform: skewX(1deg);
+    }
+
+    .hero-mask {
+      transform: skewX(-8deg);
+    }
+
+    .hero-mask > * {
+      transform: skewX(8deg);
+    }
+  }
+
+  /* Desktop optimizations */
+  @media (min-width: 1024px) {
+    .slant-clip {
+      transform: skewX(-8deg) translateZ(0);
+    }
+
+    .slant-clip > * {
+      transform: skewX(8deg);
+    }
+
+    .slant-clip-content-card {
+      transform: skewX(-2deg);
+    }
+
+    .slant-clip-content-card > * {
+      transform: skewX(2deg);
+    }
+
+    .slant-clip-tight {
+      transform: skewX(-8deg);
+    }
+
+    .slant-clip-tight > * {
+      transform: skewX(8deg);
+    }
+
+    .hero-mask {
+      transform: skewX(-8deg) translateZ(0);
+    }
+
+    .hero-mask > * {
+      transform: skewX(8deg);
+      scale: 1.2;
+    }
+  }
+
+  /* High DPI screens - optimize rendering */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero-mask,
+    .hero-accent {
+      transform: translateZ(0) skewX(-8deg);
+      will-change: transform;
+      .hero-accent > * {
+        transform: skewX(8deg);
+      }
+    }
+  }
+
+  /* Landscape mobile optimization */
+  @media (max-height: 600px) and (orientation: landscape) {
+    .hero-content {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .display-xl,
+    .display-l,
+    .display-m {
+      line-height: 1.1;
+    }
   }
 }
 
 @keyframes hero-grow-offset {
   0% {
     opacity: 0;
-    transform: translate(-2px, -22px);
+    transform: translate(-2px, -22px), skewX(-8deg);
   }
   100% {
     opacity: 1;
-    transform: translate(20px, 20px);
+    transform: translate(-20px, -20px), skewX(-8deg);
     /* transform: translate(var(--hero-offset-x), var(--hero-offset-y)) scale(1); */
   }
 }
@@ -298,12 +522,12 @@ body {
 @keyframes hero-clip {
   0% {
     opacity: 0;
-    translate: -20px -10px;
+    transform: translate(-2px, -22px) skewX(-8deg);
     /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); */
   }
   100% {
     opacity: 1;
-    translate: 0 0;
+    transform: translate(-20px, -20px) skewX(-8deg);
     /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5); */
   }
 }
