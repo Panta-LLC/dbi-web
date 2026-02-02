@@ -104,8 +104,8 @@ export async function Footer() {
                 {content.siteLinks.map((link: LinkItem) => (
                   <div key={link.href} className="inline-block">
                     {isExternalLink(link.href) ? (
-                      <a 
-                        href={link.href} 
+                      <a
+                        href={link.href}
                         className="touch-target text-sm md:text-base font-semibold transition hover:text-primary focus:text-primary"
                       >
                         {link.label}
@@ -124,16 +124,16 @@ export async function Footer() {
               <div className="space-y-4">
                 <EmailActions email={content.email} />
                 <div className="space-y-3">
-                  <ul className="flex items-center gap-4 md:gap-5">
+                  <ul className="flex items-center">
                     {content.socialLinks.map((link: LinkItem) => {
                       const Icon =
                         SOCIAL_ICONS[link.label.toLowerCase()] ??
-                        (() => <FaInstagram className="h-6 w-6 md:h-7 md:w-7" />);
+                        (() => <FaInstagram className="h-5 w-5 md:h-6 md:w-6" />);
                       return (
                         <li key={link.label}>
                           <a
                             href={link.href}
-                            className="touch-target inline-flex items-center justify-center p-1 transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
+                            className="touch-target inline-flex items-center justify-center transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
                             target="_blank"
                             rel="noreferrer"
                             aria-label={link.label}

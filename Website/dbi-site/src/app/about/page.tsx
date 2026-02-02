@@ -19,7 +19,7 @@ export default async function AboutPage() {
       <Section>
         <Container>
           <h2 className="heading-2 text-center">{data.values?.title}</h2>
-          <div className="mt-12 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {data.values?.items?.map((value: { title: string; description: string }) => (
               <ContentCard key={value.title} title={value.title} description={value.description} />
             ))}

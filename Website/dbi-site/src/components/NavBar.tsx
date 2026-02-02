@@ -21,13 +21,13 @@ export function NavBar() {
   return (
     <>
       <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-[100] border-orange-400 border-b-5 font-inter font-bold text-slate-900 transition-colors duration-300">
-        <Container className="flex items-center justify-between gap-6">
+        <Container className="flex items-center justify-between gap-3 lg:gap-6">
           <Link href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
-            <div className="nav-logo-badge px-5 py-2">
+            <div className="nav-logo-badge px-3 py-1 lg:px-5 lg:py-2">
               <img
                 src="/dbi_logo.png"
                 alt="Delta Bay Impact Logo"
-                className="h-16 w-auto"
+                className="h-10 lg:h-16 w-auto"
                 style={{ display: "block" }}
               />
             </div>
@@ -39,48 +39,48 @@ export function NavBar() {
               </Link>
             ))}
           </nav>
-          <div>
+          <div className="flex items-center gap-2 lg:gap-6">
             <Button
               href="/donate"
               variant="tertiary"
-              className="py-8 px-4 bg-orange-400 text-white"
+              className="py-4 px-3 lg:py-8 lg:px-4 bg-orange-400 text-white"
             >
-              <h5 className="text-md font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
+              <h5 className="text-sm lg:text-md font-bold uppercase tracking-[0.12em] text-white">Donate</h5>
             </Button>
-          </div>
-          <button
-            type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            onClick={toggleMenu}
-            className="flex h-11 w-11 items-center justify-center rounded-md border border-border text-slate-700 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-primary lg:hidden"
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-5 w-5 transition-transform duration-200"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+            <button
+              type="button"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              onClick={toggleMenu}
+              className="flex h-9 w-9 lg:h-11 lg:w-11 items-center justify-center rounded-md border border-border text-slate-700 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-primary lg:hidden"
             >
-              {menuOpen ? (
-                /* X icon */
-                <>
-                  <path d="M6 18L18 6M6 6l12 12" />
-                </>
-              ) : (
-                /* Hamburger icon */
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-200"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                {menuOpen ? (
+                  /* X icon */
+                  <>
+                    <path d="M6 18L18 6M6 6l12 12" />
+                  </>
+                ) : (
+                  /* Hamburger icon */
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </Container>
       </header>
 
       {/* Mobile menu overlay - blurs content but stays below navbar */}
       <div
-        className={`fixed inset-0 top-[88px] z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+        className={`mobile-menu-overlay fixed inset-0 top-[56px] lg:top-[88px] z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ease-out ${
           menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={closeMenu}
@@ -89,7 +89,7 @@ export function NavBar() {
 
       {/* Mobile menu drawer - slides out below navbar */}
       <aside
-        className={`fixed right-0 top-[88px] z-[110] h-[calc(100vh-88px)] w-72 max-w-full bg-white shadow-lg transition-transform duration-300 ease-out ${
+        className={`mobile-menu-drawer fixed right-0 top-[56px] lg:top-[88px] z-[110] h-[calc(100vh-56px)] lg:h-[calc(100vh-88px)] w-72 max-w-full bg-white shadow-lg transition-transform duration-300 ease-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-hidden={!menuOpen}
