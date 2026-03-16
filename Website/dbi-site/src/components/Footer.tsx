@@ -1,12 +1,12 @@
-import Link from "next/link";
 import type { ReactElement } from "react";
 import { FaEnvelope, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { sanityClient } from "@/sanity/client";
 import { footerQuery } from "@/sanity/queries";
 import { Container } from "./Container";
 import { EmailActions } from "./EmailActions";
-import { LogoGrid } from "./LogoGrid";
 import { Section } from "./Section";
+import { SponsorSection } from "./SponsorSection";
+import { Link } from "./Link";
 
 type LinkItem = { label: string; href: string };
 type IconComponent = () => ReactElement;
@@ -16,9 +16,9 @@ const defaultContent = {
   description:
     "Building opportunity through community partnerships, programs, and impact-driven work.",
   email: "info@deltabayimpact.org",
-  partnersTitle: "Our Partners",
+  partnersTitle: "Our Sponsors",
   partners: [
-    { name: "Community Health Fund" },
+    { name: "Community Health Fund", tagline: "John Muir Health · Building Bridges to Better Health" },
     { name: "Keller Canyon Mitigation Fund" },
     { name: "Antioch Community Foundation" },
   ],
@@ -55,6 +55,7 @@ export async function Footer() {
       name: string;
       logoSrc?: string;
       logoAlt?: string;
+      tagline?: string;
     }[],
     siteLinks: (data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks) as LinkItem[],
     socialLinks: (data.socialLinks?.length
@@ -64,27 +65,18 @@ export async function Footer() {
 
   return (
     <>
-      <Section className="bg-slate-100">
-        <Container>
-          {content.partners.length ? (
-            <div>
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div className="max-w-xs">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                    {content.partnersTitle}
-                  </p>
-                  <p className="heading-4">
-                    Thank you to our sponsors for supporting our community work.
-                  </p>
-                </div>
-                <div className="w-full lg:max-w-4xl">
-                  <LogoGrid items={content.partners} />
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </Container>
-      </Section>
+      {content.partners.length ? (
+        <SponsorSection
+          titleLine1="Special Thanks to"
+          titleLine2={content.partnersTitle ?? "Our Sponsors"}
+          items={content.partners.map((p: { name: string; logoSrc?: string; logoAlt?: string; tagline?: string }) => ({
+            name: p.name,
+            logoSrc: p.logoSrc,
+            logoAlt: p.logoAlt,
+            tagline: p.tagline,
+          }))}
+        />
+      ) : null}
       <footer className="bg-white border-t-4 md:border-t-5 border-orange-400">
         <Container className="py-8 md:py-10 lg:py-12">
           <div className="grid gap-8 md:gap-10 md:grid-cols-3">
@@ -103,21 +95,13 @@ export async function Footer() {
               <div className="flex flex-wrap gap-x-3 gap-y-2 md:gap-x-4 text-slate-700 border-b-2 border-slate-200 pb-4">
                 {content.siteLinks.map((link: LinkItem) => (
                   <div key={link.href} className="inline-block">
-                    {isExternalLink(link.href) ? (
-                      <a
-                        href={link.href}
-                        className="touch-target text-sm md:text-base font-semibold transition hover:text-primary focus:text-primary"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="touch-target text-sm md:text-base font-semibold transition hover:text-primary focus:text-primary"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
+                    <Link
+                      href={link.href}
+                      variant="nav"
+                      className="touch-target text-sm md:text-base font-semibold"
+                    >
+                      {link.label}
+                    </Link>
                   </div>
                 ))}
               </div>

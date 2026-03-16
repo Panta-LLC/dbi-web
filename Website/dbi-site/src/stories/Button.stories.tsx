@@ -9,25 +9,35 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = {
+export const CtaPrimary: Story = {
   args: {
     children: "Join a DBI program",
-    href: "/",
+    href: "/programs",
+    variant: "cta-primary",
   },
 };
 
-export const Secondary: Story = {
+export const CtaSecondary: Story = {
   args: {
     children: "Donate or partner",
-    href: "/",
-    variant: "secondary",
+    href: "/donate",
+    variant: "cta-secondary",
   },
 };
 
-export const Ghost: Story = {
+export const NavPrimary: Story = {
   args: {
-    children: "Learn more",
-    href: "/",
-    variant: "ghost",
+    children: "Donate",
+    href: "/donate",
+    variant: "nav-primary",
   },
 };
+
+export const NavSecondary: Story = {
+  args: {
+    children: "Impact stories",
+    href: "/impact",
+    variant: "nav-secondary",
+  },
+};
+

@@ -67,6 +67,20 @@ export const homePage = defineType({
       ],
     }),
     defineField({
+      name: "testimonials",
+      title: "Testimonials",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "quote", title: "Quote", type: "text", rows: 3 }),
+            defineField({ name: "attribution", title: "Attribution (e.g. - Former Mentee)", type: "string" }),
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: "trustSection",
       title: "Trust & Transparency",
       type: "object",
@@ -106,6 +120,15 @@ export const homePage = defineType({
               fields: [
                 defineField({ name: "title", title: "Title", type: "string" }),
                 defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                defineField({
+                  name: "image",
+                  title: "Image",
+                  type: "image",
+                  options: { hotspot: true },
+                }),
+                defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
+                defineField({ name: "href", title: "Link URL", type: "string", description: "Optional; falls back to section CTA" }),
+                defineField({ name: "hoverColor", title: "Hover Overlay Color", type: "string", description: "CSS color, e.g. rgba(234, 88, 12, 0.92)" }),
               ],
             },
           ],

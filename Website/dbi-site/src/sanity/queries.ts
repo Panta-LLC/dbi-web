@@ -22,6 +22,7 @@ export const homePageQuery = groq`
       description,
       metrics[]{ value, label, href }
     },
+    testimonials[]{ quote, attribution },
     trustSection{
       eyebrow,
       links[]{ label, href }
@@ -30,7 +31,7 @@ export const homePageQuery = groq`
       title,
       description,
       cta{${ctaFields}},
-      items[]{ title, description }
+      items[]{ title, description, "imageSrc": image.asset->url, imageAlt, href, hoverColor }
     },
     latest{
       title,
@@ -179,7 +180,8 @@ export const footerQuery = groq`
     partners[]{
       name,
       "logoSrc": logo.asset->url,
-      "logoAlt": logoAlt
+      logoAlt,
+      tagline
     }
   }
 `;

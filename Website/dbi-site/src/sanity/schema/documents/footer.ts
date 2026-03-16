@@ -39,6 +39,7 @@ export const footer = defineType({
             defineField({ name: "name", title: "Name", type: "string" }),
             defineField({ name: "logo", title: "Logo", type: "image" }),
             defineField({ name: "logoAlt", title: "Logo Alt Text", type: "string" }),
+            defineField({ name: "tagline", title: "Tagline", type: "string", description: "Optional subtext under the name" }),
           ],
         },
       ],
