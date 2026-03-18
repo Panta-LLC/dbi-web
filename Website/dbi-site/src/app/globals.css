@@ -6,10 +6,11 @@
   --color-3: #fbfff5;
   --color-4: #002354;
   --color-5: #222d2f;
+  --color-6: #ecf0f1;
   --font-noto-sans: "Noto Sans", system-ui, -apple-system, sans-serif;
   --font-noto-serif: "Noto Serif", Georgia, serif;
   --font-inter: "Inter", system-ui, -apple-system, sans-serif;
-  --background: var(--color-3);
+  --background: var(--color-zinc-500);
   --foreground: #000000;
   --muted: var(--color-3);
   --border: var(--color-1);
@@ -107,6 +108,10 @@ body {
   top: 0;
 }
 
+.bg-light-gray {
+  background-color: var(--color-6);
+}
+
 @layer base {
   h1,
   h2,
@@ -128,7 +133,6 @@ body {
     font-family: var(--font-noto-serif), Georgia, serif;
     font-size: clamp(2.75rem, 3.5vw + 1.5rem, 4.5rem);
     font-weight: 300;
-    font-style: italic;
     line-height: 1.05;
   }
 
@@ -136,7 +140,6 @@ body {
     font-family: var(--font-noto-serif), Georgia, serif;
     font-size: clamp(2.25rem, 2.5vw + 1.25rem, 3.5rem);
     font-weight: 300;
-    font-style: italic;
     line-height: 1.1;
   }
 
@@ -151,7 +154,6 @@ body {
     font-family: var(--font-noto-serif), Georgia, serif;
     font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
     font-weight: 600;
-    font-style: italic;
     line-height: 1.15;
   }
 
@@ -273,10 +275,24 @@ body {
     z-index: 0;
   }
 
+  /* CTA Primary: primary background, slant top-to-bottom on the right */
+  .slanted-button--cta-primary::before {
+    background: var(--primary);
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  }
+
   .slanted-button--outline::before {
     background: white;
     border: 2px solid var(--color-2);
     box-sizing: border-box;
+  }
+
+  /* Knockout/ghost: white background, black text, same slanted shape as CTA primary */
+  .slanted-button--knockout::before {
+    background: white;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
   }
 
   .slant-clip {

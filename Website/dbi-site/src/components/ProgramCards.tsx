@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type React from "react";
+import React from "react";
 import { Link } from "@/components/Link";
 
 export type ProgramCardItem = {
@@ -18,27 +18,18 @@ type ProgramCardsProps = {
   className?: string;
 };
 
-const DEFAULT_HOVER_COLOR = "rgba(42, 87, 156, 0.92)"; // #2A579C
+const DEFAULT_HOVER_COLOR = "#ff7900";
 
-function ProgramCard({ item, isFirst, isLast }: { item: ProgramCardItem; isFirst: boolean; isLast: boolean }) {
+function ProgramCard({ item }: { item: ProgramCardItem }) {
   const hoverColor = item.hoverColor ?? DEFAULT_HOVER_COLOR;
-
-  // Diagonal clip: narrow bottom (trapezoid). Slight overlap for separator lines.
-  const clipPath = isFirst
-    ? "polygon(0 0, 100% 0, 98% 100%, 0 100%)"
-    : isLast
-      ? "polygon(2% 0, 100% 0, 100% 100%, 0 100%)"
-      : "polygon(2% 0, 100% 0, 98% 100%, 0 100%)";
 
   return (
     <Link
       href={item.href}
       variant="cta"
-      className="program-card group relative flex-1 min-w-[240px] sm:min-w-0 shrink-0 flex flex-col overflow-hidden"
+      className="program-card group relative flex-1 sm:min-w-0 shrink-0 flex flex-col overflow-hidden bg-white min-h-[50vw] sm:min-h-[260px] md:min-h-[320px]"
       style={
         {
-          clipPath,
-          WebkitClipPath: clipPath,
           "--program-card-hover": hoverColor,
         } as React.CSSProperties
       }
@@ -53,6 +44,7 @@ function ProgramCard({ item, isFirst, isLast }: { item: ProgramCardItem; isFirst
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover"
+            unoptimized
           />
         ) : null}
       </div>
@@ -61,30 +53,29 @@ function ProgramCard({ item, isFirst, isLast }: { item: ProgramCardItem; isFirst
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.95) 100%)",
+          // First-card style: subtle fade into white at the bottom over the photo.
+          background:
+            "linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,1) 100%)",
         }}
         aria-hidden
       />
 
-      {/* Hover: bottom-to-top color overlay (fades in) */}
+      {/* Hover: bottom-to-top color overlay (fades in and slides up) – matches second card */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="absolute inset-0 opacity-0 translate-y-[50%] group-hover:translate-y-0 group-focus-visible:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300 ease-out pointer-events-none"
         style={{
-          background: `linear-gradient(to top, var(--program-card-hover) 0%, var(--program-card-hover) 50%, transparent 100%)`,
+          background: `linear-gradient(to top, var(--program-card-hover) 0%, transparent 70%)`,
         }}
         aria-hidden
       />
 
-      {/* Content: title at bottom by default, slides to vertical center on hover; learn more fades in after */}
-      <div className="relative flex flex-col flex-1 min-h-[280px] sm:min-h-[320px] md:min-h-[360px] px-6 py-8 sm:px-8 sm:py-10">
-        <div className="absolute left-6 right-6 sm:left-8 sm:right-8 flex flex-col items-center text-center transition-all duration-300 ease-out pb-8 sm:pb-10 bottom-0 group-hover:top-1/2 group-hover:bottom-auto group-hover:translate-y-[-50%] group-focus-visible:top-1/2 group-focus-visible:bottom-auto group-focus-visible:translate-y-[-50%]">
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-white group-focus-visible:text-white transition-colors duration-200">
+      {/* Content: title anchored near bottom; padding-bottom grows on hover, always visible */}
+      <div className="relative flex flex-col flex-1 px-6 py-6 sm:px-8 sm:py-8 w-full">
+        <div className="absolute left-6 right-6 sm:left-8 sm:right-8 flex flex-col items-center text-center -mb-4 group-hover:pb-5 group-focus-visible:pb-5 bottom-0 transition-all duration-300 ease-out">
+          <h3 className="heading-3 text-slate-900 transition-colors duration-200 group-hover:text-white group-focus-visible:text-white">
             {item.title}
           </h3>
-          <span
-            className="mt-2 text-sm font-semibold text-white opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-250"
-            style={{ transitionDelay: "320ms" }}
-          >
+          <span className="mt-1 text-sm font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
             Learn more
           </span>
         </div>
@@ -97,18 +88,15 @@ export function ProgramCards({ items, className = "" }: ProgramCardsProps) {
   if (!items?.length) return null;
 
   return (
-    <div
-      className={`flex flex-row w-full overflow-x-auto overflow-y-hidden bg-slate-200 ${className}`}
-      style={{ minHeight: "320px" }}
-    >
-      {items.map((item, index) => (
-        <ProgramCard
-          key={item.title + index}
-          item={item}
-          isFirst={index === 0}
-          isLast={index === items.length - 1}
-        />
-      ))}
+    <div className={`relative w-full ${className} `}>
+      <div
+        className="relative z-10 gap-3 mx-auto flex w-full flex-col sm:flex-row items-stretch justify-center overflow-x-auto bg-white px-3 max-w-5xl"
+        style={{ minHeight: "280px" }}
+      >
+        {items.map((item, index) => (
+          <ProgramCard key={item.title + index} item={item} />
+        ))}
+      </div>
     </div>
   );
 }

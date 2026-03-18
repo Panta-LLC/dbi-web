@@ -67,7 +67,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${notoSans.variable} ${notoSerif.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${notoSans.variable} ${notoSerif.variable} ${inter.variable} antialiased bg-primary`}
+      >
         <StructuredData />
         <Analytics />
         {children}

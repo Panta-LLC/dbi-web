@@ -21,7 +21,7 @@ export function NavBar() {
 
   return (
     <>
-      <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-[100] font-inter text-slate-900 transition-colors duration-300">
+      <header className="nav-entrance nav-solid fixed max-w-7xl mx-auto inset-x-0 top-0 z-[100] font-inter text-slate-900 transition-colors duration-300">
         {/* <Container className="flex items-center justify-start gap-3 lg:gap-6"> */}
         <div className="flex items-center justify-start max-w-5xl mx-auto">
           <div className="flex grow items-center justify-start gap-3 lg:gap-6">
@@ -30,7 +30,7 @@ export function NavBar() {
                 <img
                   src="/dbi_logo.png"
                   alt="Delta Bay Impact Logo"
-                  className="h-14 w-auto"
+                  className="h-12 sm:h-16 w-auto"
                   style={{ display: "block" }}
                 />
               </div>
@@ -45,7 +45,7 @@ export function NavBar() {
           </div>
           <div className="absolute flex pr-2 items-center ml-auto my-auto text-right right-0 top-auto bottom-auto">
             <Button href="/donate" variant="nav-primary" className="m-2">
-              <h5 className="text-sm lg:text-md font-bold uppercase text-white">Donate</h5>
+              <h5 className="text-lg text-white">Donate</h5>
             </Button>
             <button
               type="button"

@@ -21,7 +21,8 @@ export function Section({
 }: SectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const slantClass = slant === "top" ? "section-slant-top" : slant === "bottom" ? "section-slant-bottom" : "";
+  const slantClass =
+    slant === "top" ? "section-slant-top" : slant === "bottom" ? "section-slant-bottom" : "";
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -50,7 +51,11 @@ export function Section({
   }, []);
 
   return (
-    <section id={id} ref={sectionRef} className={`${slantClass} ${noPadding ? "" : "py-10"} ${className}`}>
+    <section
+      id={id}
+      ref={sectionRef}
+      className={`${slantClass} ${noPadding ? "" : "my-3"} ${className}`}
+    >
       <div className={reveal ? `reveal ${isVisible ? "is-visible" : ""}` : ""}>{children}</div>
     </section>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Button } from "./Button";
 
 type NewsletterSignupProps = {
   title?: string;
@@ -24,48 +25,69 @@ export function NewsletterSignup({
   className = "",
 }: NewsletterSignupProps) {
   return (
-    <div className={`grid lg:grid-cols-[1fr_1fr] min-h-[320px] lg:min-h-[380px] overflow-hidden ${className}`}>
-      {/* Left: orange panel */}
-      <div className="flex flex-col justify-center bg-(--color-2,#ff7900) px-6 py-12 sm:px-10 md:px-12 lg:px-14 xl:px-16">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
-          {title}
-        </h2>
-        <p className="mt-4 text-base md:text-lg text-white/95 max-w-lg">
-          {description}
-        </p>
-        <form
-          className="mt-6 md:mt-8 flex flex-col gap-3 max-w-md"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <input
-            type="email"
-            name="email"
-            placeholder={placeholder}
-            className="touch-target w-full rounded-lg bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-(--color-2,#ff7900)"
-            aria-label="Email address"
-          />
-          <button
-            type="submit"
-            className="touch-target w-full sm:w-auto rounded-lg bg-(--color-1,#2a579c) px-6 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-(--color-2,#ff7900)"
-          >
-            {buttonLabel}
-          </button>
+    <div
+      className={`flex flex-col lg:flex-row min-h-[320px] lg:min-h-[380px] overflow-hidden bg-white ${className}`}
+    >
+      {/* Left: orange slanted panel with content */}
+      <div className="relative flex items-stretch flex-1 pl-8 pr-4">
+        {/* Slanted orange background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: "var(--color-2, #ff7900)",
+            clipPath: "polygon(0 0, 100% 0, 76% 100%, 0 100%)",
+            WebkitClipPath: "polygon(0 0, 100% 0, 76% 100%, 0 100%)",
+          }}
+          aria-hidden
+        />
+
+        {/* Content */}
+        <div className="relative flex flex-col justify-center py-12">
+          <h2 className="display-m text-white leading-tight max-w-md">{title}</h2>
+          <p className="mt-4 text-base md:text-lg text-white/95 max-w-md">{description}</p>
+
+          <form className="mt-6 md:mt-8 gap-1 max-w-lg" onSubmit={(e) => e.preventDefault()}>
+            {/* Slanted email field */}
+            <div className="relative flex-1 flex-row min-w-[200px] mb-3">
+              <div
+                className="absolute inset-0 bg-white"
+                style={{
+                  clipPath: "polygon(0 0, 100% 0, 95% 100%, 0 100%)",
+                  WebkitClipPath: "polygon(0 0, 100% 0, 95% 100%, 0 100%)",
+                }}
+                aria-hidden
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder={placeholder}
+                className="touch-target relative z-10 w-full bg-transparent px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none"
+                aria-label="Email address"
+              />
+            </div>
+            {/* Slanted CTA button */}
+            <Button
+              variant="cta-primary"
+              className="touch-target w-full sm:w-auto relative inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)]"
+            >
+              <span className="relative z-10">{buttonLabel}</span>
+            </Button>
+          </form>
+
           {legalText ? (
-            <p className="text-xs text-white/80 leading-relaxed mt-1">
-              {legalText}
-            </p>
+            <p className="mt-2 text-xs text-white/80 leading-relaxed max-w-md">{legalText}</p>
           ) : null}
-        </form>
+        </div>
       </div>
 
-      {/* Right: image with diagonal left edge */}
-      <div className="relative min-h-[240px] lg:min-h-full">
+      {/* Right: image with matching slanted left edge */}
+      <div className="relative flex items-stretch flex-1 min-h-[260px] lg:min-h-full -ml-41">
         {imageSrc ? (
           <div
             className="absolute inset-0"
             style={{
-              clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 0)",
-              WebkitClipPath: "polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 0)",
+              clipPath: "polygon(25.5% 0, 100% 0, 100% 100%, 0 100%)",
+              WebkitClipPath: "polygon(25.5% 0, 100% 0, 100% 100%, 0 100%)",
             }}
           >
             <Image
@@ -80,8 +102,8 @@ export function NewsletterSignup({
           <div
             className="absolute inset-0 bg-slate-300"
             style={{
-              clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 0)",
-              WebkitClipPath: "polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 0)",
+              clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)",
+              WebkitClipPath: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)",
             }}
           />
         )}

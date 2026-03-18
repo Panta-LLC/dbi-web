@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant = "cta-primary" | "cta-secondary" | "nav-primary" | "nav-secondary";
+type ButtonVariant = "cta-primary" | "cta-secondary" | "cta-knockout" | "nav-primary" | "nav-secondary";
 
 type ButtonProps = {
   children: ReactNode;
@@ -15,13 +15,13 @@ const baseStyles =
 
 const variantStyles: Record<ButtonVariant, string> = {
   "cta-primary":
-    "slanted-button px-3 py-2.5 sm:px-4 sm:py-3 md:px-8 md:py-3.5 lg:px-9 lg:py-4 text-sm sm:text-base md:text-lg text-white",
+    "slanted-button slanted-button--cta-primary pl-2 pr-12 py-2.5 sm:pl-3 sm:pr-14 sm:py-3 md:pl-4 md:pr-8 md:py-1.5 lg:pl-6 lg:pr-10 lg:py-2 text-sm sm:text-base md:text-lg text-white",
   "cta-secondary":
     "slanted-button slanted-button--outline px-3 py-2 sm:px-4 sm:py-2.5 md:px-7 md:py-3 lg:px-8 lg:py-3.5 text-sm sm:text-base md:text-lg text-primary",
-  "nav-primary":
-    "slanted-button py-2 text-xs sm:text-sm uppercase tracking-[0.16em] text-white pl-7 pr-3",
-  "nav-secondary":
-    "px-2 py-1.5 text-xs sm:text-sm uppercase tracking-[0.16em] text-slate-700 hover:text-primary",
+  "cta-knockout":
+    "slanted-button slanted-button--knockout pl-2 pr-12 py-2.5 sm:pl-3 sm:pr-14 sm:py-3 md:pl-4 md:pr-8 md:py-1.5 lg:pl-6 lg:pr-10 lg:py-2 text-sm sm:text-base md:text-lg text-black",
+  "nav-primary": "slanted-button py-2 text-xs sm:text-sm text-white pl-7 pr-3",
+  "nav-secondary": "px-2 py-1.5 text-xs sm:text-sm text-slate-700 hover:text-primary",
 };
 
 export function Button({
@@ -34,7 +34,7 @@ export function Button({
 }: ButtonProps) {
   const classes = `${baseStyles} ${variantStyles[variant]} ${className}`.trim();
   const isSlanted =
-    variant === "cta-primary" || variant === "cta-secondary" || variant === "nav-primary";
+    variant === "cta-primary" || variant === "cta-secondary" || variant === "cta-knockout" || variant === "nav-primary";
 
   if (href) {
     const content = (

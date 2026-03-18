@@ -38,7 +38,7 @@ export function TestimonialSlider({
   return (
     <div
       className={`relative flex items-center justify-center py-10 md:py-14 ${className}`}
-      style={{ backgroundColor: "#374151" }}
+      style={{ backgroundColor: BLUE_BG }}
     >
       {/* Left arrow */}
       <button
@@ -56,25 +56,24 @@ export function TestimonialSlider({
       </button>
 
       {/* Quote panel */}
-      <div
-        className="relative w-full max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm"
-        style={{ backgroundColor: BLUE_BG }}
-      >
+      <div className="relative w-full max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm flex">
         <span
-          className="block text-5xl md:text-6xl font-serif leading-none mb-2"
-          style={{ color: ORANGE }}
+          className="block display-l font-extrabold leading-none mb-2 mr-2"
+          style={{ color: ORANGE, fontSize: "9rem", lineHeight: ".35em" }}
           aria-hidden
         >
-          "
+          “
         </span>
-        <blockquote className="text-lg md:text-xl font-bold text-white leading-snug text-left">
-          {current.quote}
-        </blockquote>
-        {current.attribution ? (
-          <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
-            {current.attribution}
-          </p>
-        ) : null}
+        <div>
+          <blockquote className="display-m font-bold text-white leading-snug text-left">
+            {current.quote}
+          </blockquote>
+          {current.attribution ? (
+            <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
+              {current.attribution}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       {/* Right arrow */}

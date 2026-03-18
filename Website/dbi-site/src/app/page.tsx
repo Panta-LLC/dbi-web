@@ -28,7 +28,7 @@ export default async function Home() {
   // Impact snapshot with CMS fallbacks
   const impactSnapshot = data.impactSnapshot || {
     eyebrow: "Impact snapshot",
-    title: "Community-driven work you can verify.",
+    title: "Measurable Impact",
     description: "Explore our programs, recent updates, and the best ways to support the work.",
     metrics: [
       {
@@ -71,46 +71,9 @@ export default async function Home() {
       />
 
       <TextHighlightSection text={data.intro} />
-      <Section className="pt-8 pb-12">
-        <Container>
-          <MeasurableImpact
-            title={impactSnapshot.title}
-            metrics={
-              impactSnapshot.metrics?.map(
-                (m: { value: string; label: string; href: string }) => ({
-                  value: m.value,
-                  label: m.label,
-                  href: m.href,
-                }),
-              ) ?? []
-            }
-          />
-          <TestimonialSlider
-            items={data.testimonials?.map((t: { quote: string; attribution?: string }) => ({
-              quote: t.quote,
-              attribution: t.attribution,
-            }))}
-            className="mt-10 md:mt-12"
-          />
-          <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-2 md:gap-3 text-sm text-slate-700">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 w-full sm:w-auto">
-              {trustSection.eyebrow}
-            </span>
-            {trustSection.links?.map((link: { label: string; href: string }) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="touch-target inline-flex items-center font-semibold text-slate-700 hover:text-primary transition"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </Container>
-      </Section>
-      <Section className="pt-12 md:pt-16 lg:pt-20 pb-24 md:pb-32 lg:pb-40">
-        <Container>
-          <div className="mb-8 md:mb-10">
+      <Section className="bg-light-gray">
+        <Container className="bg-light-gray">
+          {/* <div className="mb-8 md:mb-10">
             <h2 className="heading-2 text-balance">{data.serve?.title}</h2>
             <p className="body-md mt-3 md:mt-4">{data.serve?.description}</p>
             <Button
@@ -120,7 +83,7 @@ export default async function Home() {
             >
               {data.serve?.cta?.label}
             </Button>
-          </div>
+          </div> */}
           <ProgramCards
             items={
               data.serve?.items?.map(
@@ -143,18 +106,38 @@ export default async function Home() {
           />
         </Container>
       </Section>
-
-      <Section className="py-20 bg-white">
+      <Section className="bg-white">
+        <MeasurableImpact
+          title={impactSnapshot.title}
+          metrics={
+            impactSnapshot.metrics?.map((m: { value: string; label: string; href: string }) => ({
+              value: m.value,
+              label: m.label,
+              href: m.href,
+            })) ?? []
+          }
+        />
+      </Section>
+      <Section>
+        <TestimonialSlider
+          items={data.testimonials?.map((t: { quote: string; attribution?: string }) => ({
+            quote: t.quote,
+            attribution: t.attribution,
+          }))}
+        />
+      </Section>
+      <Section className="bg-white">
         <NewsletterSignup
           title="Keep up with our Work!"
           description="Subscribe to our newsletter and receive periodic updates from Delta Bay Impact."
           placeholder="Your email address"
           buttonLabel="Sign-up"
           legalText="This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply."
-          className="-mt-24 mb-10 md:-mt-32 lg:-mt-40"
+          imageSrc={"https://picsum.photos/200/300"}
+          imageAlt={data.newsletter?.imageAlt}
         />
 
-        <Container>
+        {/* <Container>
           <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4 md:gap-6">
             <div>
               <h2 className="heading-2 text-balance">{data.latest?.title}</h2>
@@ -207,7 +190,11 @@ export default async function Home() {
                 <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                   {featuredItem?.description}
                 </p>
-                <Link href={featuredHref} variant="body" className="touch-target inline-flex items-center pt-2 text-sm">
+                <Link
+                  href={featuredHref}
+                  variant="body"
+                  className="touch-target inline-flex items-center pt-2 text-sm"
+                >
                   Read the story
                 </Link>
               </div>
@@ -243,7 +230,7 @@ export default async function Home() {
                 )}
             </div>
           </div>
-        </Container>
+        </Container> */}
       </Section>
     </SiteLayout>
   );

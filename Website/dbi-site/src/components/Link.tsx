@@ -19,7 +19,7 @@ const baseStyles =
 const variantStyles: Record<LinkVariant, string> = {
   nav: "nav-item-text text-slate-800 hover:text-primary px-4",
   body: "text-primary underline-offset-4 hover:underline",
-  cta: "px-3 py-1.5 rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 text-sm md:text-base",
+  cta: "px-3 py-1.5 bg-primary text-primary-foreground hover:bg-primary/90 text-sm md:text-base",
 };
 
 const isExternalHref = (href: string) => /^https?:\/\//.test(href);
