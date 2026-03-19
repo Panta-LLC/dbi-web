@@ -12,15 +12,16 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@sanity/client": "^7.14.0",
+    "@sanity/client": "^7.18.0",
+    "@sanity/vision": "^5.17.1",
     "dotenv": "^16.6.1",
     "lucide-react": "^0.563.0",
     "next": "16.1.4",
-    "next-sanity": "^12.0.14",
+    "next-sanity": "^12.1.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
-    "sanity": "^5.7.0"
+    "sanity": "^5.17.1"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0",

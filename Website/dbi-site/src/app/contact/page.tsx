@@ -1,21 +1,26 @@
-import { Button } from "@/components/Button";
-import { Container } from "@/components/Container";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
-import { Section } from "@/components/Section";
-import { contactPage } from "@/data/siteContent";
+import { SiteLayout } from "@/components/SiteLayout";
+import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
+import { sanityClient } from "@/sanity/client";
+import { pageByPathQuery } from "@/sanity/queries";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const cmsPage = await sanityClient.fetch(pageByPathQuery, { path: "/contact" }).catch(() => null);
+  if (!cmsPage?.content?.length) {
+    return null;
+  }
+
+  if (cmsPage.layout === "site") {
+    return (
+      <SiteLayout>
+        <PageContentRenderer content={cmsPage.content} />
+      </SiteLayout>
+    );
+  }
+
   return (
-    <ContentPageLayout
-      title={contactPage.title}
-      lead={contactPage.lead}
-      description={contactPage.description}
-    >
-      <Section className="bg-white">
-        <Container className="flex justify-center">
-          <Button href={contactPage.cta.href}>{contactPage.cta.label}</Button>
-        </Container>
-      </Section>
+    <ContentPageLayout title={cmsPage.title} lead={cmsPage.lead} description={cmsPage.description}>
+      <PageContentRenderer content={cmsPage.content} />
     </ContentPageLayout>
   );
 }

@@ -30,13 +30,11 @@ const withKeys = (items, prefix) =>
 
 const documents = [
   {
-    _id: "footer",
-    _type: "footer",
-    title: "Footer",
-    heading: "Delta Bay Impact",
-    description: "Building opportunity through community partnerships, programs, and impact-driven work.",
-    email: "info@deltabayimpact.org",
-    siteLinks: withKeys(
+    _id: "site",
+    _type: "site",
+    title: "Site Settings",
+    organizationName: "Delta Bay Impact",
+    primaryNav: withKeys(
       [
         { label: "About", href: "/about" },
         { label: "Programs", href: "/programs" },
@@ -46,25 +44,42 @@ const documents = [
         { label: "Contact", href: "/contact" },
         { label: "Donate", href: "/donate" },
       ],
-      "footer-link",
+      "site-nav",
     ),
-    socialLinks: withKeys(
-      [
-        { label: "Instagram", href: "https://instagram.com" },
-        { label: "Facebook", href: "https://facebook.com" },
-        { label: "LinkedIn", href: "https://linkedin.com" },
-      ],
-      "footer-social",
-    ),
-    partnersTitle: "Our Partners",
-    partners: withKeys(
-      [
-        { name: "Community Health Fund" },
-        { name: "Keller Canyon Mitigation Fund" },
-        { name: "Antioch Community Foundation" },
-      ],
-      "footer-partner",
-    ),
+    footer: {
+      heading: "Delta Bay Impact",
+      description: "Building opportunity through community partnerships, programs, and impact-driven work.",
+      email: "info@deltabayimpact.org",
+      siteLinks: withKeys(
+        [
+          { label: "About", href: "/about" },
+          { label: "Programs", href: "/programs" },
+          { label: "Get Involved", href: "/get-involved" },
+          { label: "Impact", href: "/impact" },
+          { label: "Resources", href: "/resources" },
+          { label: "Contact", href: "/contact" },
+          { label: "Donate", href: "/donate" },
+        ],
+        "footer-link",
+      ),
+      socialLinks: withKeys(
+        [
+          { label: "Instagram", href: "https://instagram.com" },
+          { label: "Facebook", href: "https://facebook.com" },
+          { label: "LinkedIn", href: "https://linkedin.com" },
+        ],
+        "footer-social",
+      ),
+      partnersTitle: "Our Partners",
+      partners: withKeys(
+        [
+          { name: "Community Health Fund" },
+          { name: "Keller Canyon Mitigation Fund" },
+          { name: "Antioch Community Foundation" },
+        ],
+        "footer-partner",
+      ),
+    },
   },
   {
     _id: "homePage",
@@ -373,21 +388,358 @@ const documents = [
         "We respond within two business days and will connect you with the right program lead.",
     },
   },
+  {
+    _id: "page-home",
+    _type: "page",
+    title: "Home Page",
+    lead: "Delta Bay Impact",
+    layout: "site",
+    content: withKeys(
+      [
+        {
+          _type: "heroSection",
+          title:
+            "Every African American Student in Contra Costa County Deserves to Thrive",
+          subtitle:
+            "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
+          primaryCta: { label: "See How We Support Students", href: "/programs" },
+          secondaryCta: { label: "Partner with Delta Bay Impact", href: "/contact" },
+        },
+        {
+          _type: "textHighlightSection",
+          text:
+            "Right now, African American students in Contra Costa County are building confidence, excelling academically, and discovering their potential—because of mentorship, advocacy, and community support that works.",
+        },
+        {
+          _type: "programCardsSection",
+          cta: { label: "Discover How We Help Students Succeed", href: "/programs" },
+          items: withKeys(
+            [
+              {
+                title: "School-Based Mentorship and Advocacy",
+                description:
+                  "One-on-one mentors help students build confidence, improve grades, and navigate school challenges—while advocating for their success at every level.",
+              },
+              {
+                title: "Academic Support Connections",
+                description:
+                  "We connect students with personalized tutoring and academic resources that build skills and boost classroom performance.",
+              },
+              {
+                title: "Family Engagement",
+                description:
+                  "Through family events and regular communication, we strengthen school-home partnerships that help students succeed inside and outside the classroom.",
+              },
+              {
+                title: "Mental Health Awareness and Referrals",
+                description:
+                  "We connect students and families to culturally responsive mental health resources, creating a support system that helps young people thrive emotionally and academically.",
+              },
+            ],
+            "program-card",
+          ),
+        },
+        {
+          _type: "measurableImpactSection",
+          title: "Real students. Real schools. Real results.",
+          metrics: withKeys(
+            [
+              { value: "4+", label: "Community programs", href: "/programs" },
+              { value: "3", label: "Schools served", href: "/impact" },
+              { value: "Get involved", label: "Volunteer or partner", href: "/get-involved" },
+            ],
+            "impact-metric",
+          ),
+        },
+        {
+          _type: "testimonialSliderSection",
+        },
+        {
+          _type: "newsletterSignupSection",
+          title: "Keep up with our Work!",
+          description:
+            "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
+          placeholder: "Your email address",
+          buttonLabel: "Sign-up",
+          legalText:
+            "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+        },
+      ],
+      "home-page-content",
+    ),
+    path: "/",
+  },
+  {
+    _id: "page-about",
+    _type: "page",
+    title: "About Page",
+    lead:
+      "Delta Bay Impact empowers African American youth and families by addressing educational inequity through mentorship, advocacy, and culturally responsive support systems.",
+    description:
+      "Communities where African American students feel safe, supported, and confident, thriving academically, socially, and emotionally, with clear pathways to college, careers, and income mobility.",
+    layout: "contentPage",
+    path: "/about",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "Our Values",
+          items: withKeys(
+            [
+              { title: "Youth-Centeredness", description: "Students' voices and experiences guide our work." },
+              { title: "Belonging and Empowerment", description: "Identity, culture, and connection matter." },
+              { title: "Collaboration", description: "Schools, families, and communities work best together." },
+              { title: "Equity and Inclusion", description: "Addressing systemic barriers at their roots." },
+              { title: "Accountability", description: "Measuring impact and learning continuously." },
+            ],
+            "value-card",
+          ),
+        },
+        {
+          _type: "textAndCtaSection",
+          description:
+            "Founded in 2023, Delta Bay Impact grew from deep listening within local schools and communities. Our early pilot demonstrated that when students feel seen, supported, and connected, engagement and confidence improve. DBI was created to build on that success at scale and in partnership with schools and families.",
+        },
+        {
+          _type: "imageCardGridSection",
+          title: "Our Leadership",
+          items: withKeys(
+            [
+              { title: "Tiffany Francies", subtitle: "Executive Director" },
+              { title: "Tiffany Francies", subtitle: "Executive Director" },
+              { title: "Tiffany Francies", subtitle: "Executive Director" },
+              { title: "Tiffany Francies", subtitle: "Executive Director" },
+            ],
+            "leader-card",
+          ),
+        },
+        {
+          _type: "supportSection",
+          title: "Help DBI support your child, school, or community",
+          description:
+            "Our goal is to support all African-American youth in Contra Costa County. If your school or community could benefit from our services, please reach out.",
+          primaryCta: { label: "Learn more", href: "/programs" },
+          secondaryCta: { label: "Partner with us", href: "/contact" },
+        },
+      ],
+      "about-page-content",
+    ),
+  },
+  {
+    _id: "page-programs",
+    _type: "page",
+    title: "Programs Page",
+    lead: "Overview",
+    description:
+      "Delta Bay Impact delivers integrated, school-based programs that address academic success, well-being, and belonging.",
+    layout: "contentPage",
+    path: "/programs",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "Programs",
+          items: withKeys(
+            [
+              {
+                title: "School-Based Mentorship and Advocacy",
+                description:
+                  "DBI mentors build trusted relationships with students, providing academic support, goal-setting, and personal development while advocating for students' educational needs.",
+              },
+              {
+                title: "Academic Support and Tutoring Connections",
+                description:
+                  "We connect students to tutoring, homework help, and skill-building resources that reinforce learning and confidence.",
+              },
+              {
+                title: "Family Engagement",
+                description:
+                  "DBI strengthens school-family partnerships through regular communication, family engagement nights, and community-based events that create shared understanding and support.",
+              },
+              {
+                title: "Mental Health Awareness and Referrals",
+                description:
+                  "We provide mental health education and connect students and families to culturally responsive school-based and community resources.",
+              },
+            ],
+            "program-card",
+          ),
+        },
+        {
+          _type: "ctaButtonSection",
+          buttonVariant: "primary",
+          cta: { label: "Partner with Delta Bay Impact", href: "/contact" },
+        },
+      ],
+      "programs-page-content",
+    ),
+  },
+  {
+    _id: "page-impact",
+    _type: "page",
+    title: "Impact Page",
+    lead:
+      "We measure success by listening to students and families, partnering with schools, and tracking indicators that reflect engagement, belonging, and academic participation.",
+    layout: "contentPage",
+    path: "/impact",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "Outcomes",
+          items: withKeys(
+            [
+              { title: "Student engagement and sense of belonging" },
+              { title: "Attendance and participation" },
+              { title: "Family engagement and communication" },
+              { title: "School partnership effectiveness" },
+            ],
+            "outcome-card",
+          ),
+        },
+        {
+          _type: "imageCardGridSection",
+          title: "Where We Serve",
+          items: withKeys(
+            [
+              { title: "Riverview Middle School", subtitle: "Bay Point, CA" },
+              { title: "Olympic High School", subtitle: "Concord, CA" },
+              { title: "Wren Elementary School", subtitle: "Pittsburg, CA" },
+            ],
+            "location-card",
+          ),
+        },
+        {
+          _type: "textAndCtaSection",
+          description:
+            "Students report stronger relationships with mentors, greater engagement in school, and a clearer sense of belonging within their school communities.",
+          cta: { label: "View our reports", href: "/resources" },
+          ctaVariant: "secondary",
+        },
+      ],
+      "impact-page-content",
+    ),
+  },
+  {
+    _id: "page-get-involved",
+    _type: "page",
+    title: "Get Involved Page",
+    lead: "Partner With Us",
+    description:
+      "We collaborate with schools, districts, community organizations, and funders to expand access to mentorship and support for African American youth.",
+    layout: "contentPage",
+    path: "/get-involved",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "Ways to Engage",
+          items: withKeys(
+            [
+              { title: "School and district partnerships" },
+              { title: "Community and nonprofit partnerships" },
+              { title: "Board and advisory involvement" },
+              { title: "Corporate sponsorships and in-kind support" },
+            ],
+            "pathway-card",
+          ),
+        },
+        {
+          _type: "ctaButtonSection",
+          buttonVariant: "secondary",
+          cta: { label: "Start a conversation", href: "/contact" },
+        },
+      ],
+      "get-involved-page-content",
+    ),
+  },
+  {
+    _id: "page-resources",
+    _type: "page",
+    title: "Resources Page",
+    lead: "Purpose",
+    description:
+      "This space shares updates, learning, and tools that support transparency, collaboration, and community connection.",
+    layout: "contentPage",
+    path: "/resources",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "What You'll Find",
+          items: withKeys(
+            [
+              { title: "Program updates and announcements" },
+              { title: "Family and student resources" },
+              { title: "Partner spotlights" },
+              { title: "Educational equity insights" },
+              { title: "Annual impact and sustainability reports" },
+            ],
+            "resource-card",
+          ),
+        },
+      ],
+      "resources-page-content",
+    ),
+  },
+  {
+    _id: "page-donate",
+    _type: "page",
+    title: "Donate Page",
+    lead: "Invest in Belonging and Opportunity",
+    description:
+      "Your support helps create safe spaces, trusted mentorship relationships, and pathways to academic success for African American youth and families.",
+    layout: "contentPage",
+    path: "/donate",
+    content: withKeys(
+      [
+        {
+          _type: "cardGridSection",
+          title: "How Your Gift Helps",
+          items: withKeys(
+            [
+              { title: "Expands mentorship and academic support" },
+              { title: "Strengthens family engagement" },
+              { title: "Connects students to wellness resources" },
+              { title: "Sustains school and community partnerships" },
+            ],
+            "donate-card",
+          ),
+        },
+        {
+          _type: "ctaButtonSection",
+          buttonVariant: "primary",
+          cta: { label: "Support our work", href: "/donate" },
+        },
+      ],
+      "donate-page-content",
+    ),
+  },
+  {
+    _id: "page-contact",
+    _type: "page",
+    title: "Contact",
+    lead: "Let's connect",
+    description:
+      "Questions about partnership, programs, or support? Reach out to our team and we will follow up quickly.",
+    layout: "contentPage",
+    path: "/contact",
+    content: withKeys(
+      [
+        {
+          _type: "ctaButtonSection",
+          buttonVariant: "primary",
+          cta: { label: "Email us", href: "mailto:info@deltabayimpact.org" },
+        },
+      ],
+      "contact-page-content",
+    ),
+  },
 ];
 
 async function run() {
-  const existingHomePage = await client.getDocument("homePage");
-
-  if (existingHomePage?.hero?.image && documents[1]?.hero) {
-    documents[1].hero.image = existingHomePage.hero.image;
-    if (!documents[1].hero.imageAlt) {
-      documents[1].hero.imageAlt = existingHomePage.hero.imageAlt;
-    }
-  }
-
-  const results = await Promise.all(
-    documents.map((doc) => client.createOrReplace(doc)),
-  );
+  const documentsToSeed = documents.filter((doc) => doc._type === "site" || doc._type === "page");
+  const results = await Promise.all(documentsToSeed.map((doc) => client.createOrReplace(doc)));
   console.log(`Seeded ${results.length} documents.`);
 }
 

@@ -55,7 +55,7 @@ function ProgramCard({ item }: { item: ProgramCardItem }) {
         style={{
           // First-card style: subtle fade into white at the bottom over the photo.
           background:
-            "linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,1) 100%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(255,255,255,0.1) 55%, rgba(255,255,255,1) 100%)",
         }}
         aria-hidden
       />

@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { FaEnvelope, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { sanityClient } from "@/sanity/client";
-import { footerQuery } from "@/sanity/queries";
+import { siteQuery } from "@/sanity/queries";
 import { Container } from "./Container";
 import { EmailActions } from "./EmailActions";
 import { Section } from "./Section";
@@ -47,7 +47,8 @@ const SOCIAL_ICONS: Record<string, IconComponent> = {
 const isExternalLink = (href: string) => href.startsWith("http");
 
 export async function Footer() {
-  const data = (await sanityClient.fetch(footerQuery).catch(() => null)) ?? defaultContent;
+  const siteData = await sanityClient.fetch(siteQuery).catch(() => null);
+  const data = siteData?.footer ?? defaultContent;
   const content = {
     ...defaultContent,
     ...data,

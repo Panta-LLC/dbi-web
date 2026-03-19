@@ -5,183 +5,84 @@ const ctaFields = `
   href
 `;
 
-export const homePageQuery = groq`
-  *[_type == "homePage"][0]{
-    hero{
+export const pageByPathQuery = groq`
+  *[_type == "page" && path == $path] | order(_updatedAt desc)[0]{
+    title,
+    lead,
+    description,
+    layout,
+    content[]{
+      _type,
       title,
       subtitle,
+      text,
+      description,
+      placeholder,
+      buttonLabel,
+      legalText,
+      ctaVariant,
+      buttonVariant,
+      "imageSrc": image.asset->url,
+      imageAlt,
       primaryCta{${ctaFields}},
       secondaryCta{${ctaFields}},
-      "imageSrc": image.asset->url,
-      imageAlt
-    },
-    intro,
-    impactSnapshot{
-      eyebrow,
-      title,
-      description,
-      metrics[]{ value, label, href }
-    },
-    testimonials[]{ quote, attribution },
-    trustSection{
-      eyebrow,
-      links[]{ label, href }
-    },
-    serve{
-      title,
-      description,
       cta{${ctaFields}},
-      items[]{ title, description, "imageSrc": image.asset->url, imageAlt, href, hoverColor }
-    },
-    latest{
-      title,
-      items[]{ title, date, description, href, "imageSrc": image.asset->url, imageAlt }
-    },
-    contact{
-      title,
+      items[]{
+        title,
+        description,
+        subtitle,
+        value,
+        label,
+        quote,
+        attribution,
+        "imageSrc": image.asset->url,
+        imageAlt,
+        href,
+        hoverColor
+      },
+      metrics[]{
+        title,
+        description,
+        value,
+        label,
+        href,
+      },
+      "programCta": cta{${ctaFields}},
+      "programItems": items[]{
+        title,
+        description,
+        "imageSrc": image.asset->url,
+        imageAlt,
+        href,
+        hoverColor
+      },
+      "impactMetrics": metrics[]{ value, label, href },
+      "testimonialItems": items[]{ quote, attribution },
+      "cardItems": items[]{ title, description },
+      "imageItems": items[]{ title, subtitle },
+      "textCta": cta{${ctaFields}},
+      "ctaButton": cta{${ctaFields}}
+    }
+  }
+`;
+
+export const siteQuery = groq`
+  *[_type == "site"][0]{
+    organizationName,
+    primaryNav[]{ label, href },
+    footer{
+      heading,
       description,
-      cta{${ctaFields}}
-    }
-  }
-`;
-
-export const aboutPageQuery = groq`
-  *[_type == "aboutPage"][0]{
-    title,
-    lead,
-    description,
-    values{
-      title,
-      items[]{ title, description }
-    },
-    story{
-      title,
-      description
-    },
-    leadership{
-      title,
-      members[]{ name, role }
-    },
-    support{
-      title,
-      description,
-      primaryCta{${ctaFields}},
-      secondaryCta{${ctaFields}}
-    }
-  }
-`;
-
-export const programsPageQuery = groq`
-  *[_type == "programsPage"][0]{
-    title,
-    lead,
-    description,
-    programs{
-      title,
-      items[]{ title, description },
-      cta{${ctaFields}}
-    }
-  }
-`;
-
-export const impactPageQuery = groq`
-  *[_type == "impactPage"][0]{
-    title,
-    lead,
-    outcomes{
-      title,
-      items
-    },
-    locations{
-      title,
-      items[]{ name, location }
-    },
-    learning{
-      description,
-      cta{${ctaFields}}
-    }
-  }
-`;
-
-export const getInvolvedPageQuery = groq`
-  *[_type == "getInvolvedPage"][0]{
-    title,
-    lead,
-    description,
-    pathways{
-      title,
-      items,
-      cta{${ctaFields}}
-    }
-  }
-`;
-
-export const resourcesPageQuery = groq`
-  *[_type == "resourcesPage"][0]{
-    title,
-    lead,
-    description,
-    items{
-      title,
-      items
-    }
-  }
-`;
-
-export const donatePageQuery = groq`
-  *[_type == "donatePage"][0]{
-    title,
-    lead,
-    description,
-    support{
-      title,
-      items,
-      cta{${ctaFields}}
-    }
-  }
-`;
-
-export const contactPageQuery = groq`
-  *[_type == "contactPage"][0]{
-    pageHeader{
-      title,
-      subtitle
-    },
-    contactHeading{
-      eyebrow,
-      title,
-      description
-    },
-    contactForm{
-      firstNamePlaceholder,
-      lastNamePlaceholder,
-      emailPlaceholder,
-      organizationPlaceholder,
-      messagePlaceholder,
-      submitLabel
-    },
-    contactDetails{
-      eyebrow,
       email,
-      phone,
-      responseNote
-    }
-  }
-`;
-
-export const footerQuery = groq`
-  *[_type == "footer"][0]{
-    heading,
-    description,
-    email,
-    siteLinks[]{ label, href },
-    socialLinks[]{ label, href },
-    partnersTitle,
-    partners[]{
-      name,
-      "logoSrc": logo.asset->url,
-      logoAlt,
-      tagline
+      siteLinks[]{ label, href },
+      socialLinks[]{ label, href },
+      partnersTitle,
+      partners[]{
+        name,
+        "logoSrc": logo.asset->url,
+        logoAlt,
+        tagline
+      }
     }
   }
 `;

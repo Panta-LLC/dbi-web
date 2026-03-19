@@ -1,29 +1,26 @@
-import { Container } from "@/components/Container";
-import { ContentCard } from "@/components/ContentCard";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
-import { Section } from "@/components/Section";
+import { SiteLayout } from "@/components/SiteLayout";
+import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import { sanityClient } from "@/sanity/client";
-import { resourcesPageQuery } from "@/sanity/queries";
+import { pageByPathQuery } from "@/sanity/queries";
 
 export default async function ResourcesPage() {
-  const data = await sanityClient.fetch(resourcesPageQuery);
-
-  if (!data) {
+  const cmsPage = await sanityClient.fetch(pageByPathQuery, { path: "/resources" }).catch(() => null);
+  if (!cmsPage?.content?.length) {
     return null;
   }
 
+  if (cmsPage.layout === "site") {
+    return (
+      <SiteLayout>
+        <PageContentRenderer content={cmsPage.content} />
+      </SiteLayout>
+    );
+  }
+
   return (
-    <ContentPageLayout title={data.title} lead={data.lead} description={data.description}>
-      <Section className="bg-white">
-        <Container>
-          <h2 className="heading-2 text-center">{data.items?.title}</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {data.items?.items?.map((item: string) => (
-              <ContentCard key={item} title={item} />
-            ))}
-          </div>
-        </Container>
-      </Section>
+    <ContentPageLayout title={cmsPage.title} lead={cmsPage.lead} description={cmsPage.description}>
+      <PageContentRenderer content={cmsPage.content} />
     </ContentPageLayout>
   );
 }

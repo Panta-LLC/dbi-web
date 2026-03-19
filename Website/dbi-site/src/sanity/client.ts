@@ -14,5 +14,6 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  // Disable CDN in development to avoid stale reads while editing Studio content.
+  useCdn: process.env.NODE_ENV === "production",
 });

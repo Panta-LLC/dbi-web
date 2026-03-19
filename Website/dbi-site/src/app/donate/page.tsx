@@ -1,35 +1,26 @@
-import { Button } from "@/components/Button";
-import { Container } from "@/components/Container";
-import { ContentCard } from "@/components/ContentCard";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
-import { Section } from "@/components/Section";
+import { SiteLayout } from "@/components/SiteLayout";
+import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import { sanityClient } from "@/sanity/client";
-import { donatePageQuery } from "@/sanity/queries";
+import { pageByPathQuery } from "@/sanity/queries";
 
 export default async function DonatePage() {
-  const data = await sanityClient.fetch(donatePageQuery);
-
-  if (!data) {
+  const cmsPage = await sanityClient.fetch(pageByPathQuery, { path: "/donate" }).catch(() => null);
+  if (!cmsPage?.content?.length) {
     return null;
   }
 
+  if (cmsPage.layout === "site") {
+    return (
+      <SiteLayout>
+        <PageContentRenderer content={cmsPage.content} />
+      </SiteLayout>
+    );
+  }
+
   return (
-    <ContentPageLayout title={data.title} lead={data.lead} description={data.description}>
-      <Section className="bg-white">
-        <Container>
-          <h2 className="heading-2 text-center">{data.support?.title}</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {data.support?.items?.map((item: string) => (
-              <ContentCard key={item} title={item} />
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <Button href={data.support?.cta?.href}>
-              {data.support?.cta?.label}
-            </Button>
-          </div>
-        </Container>
-      </Section>
+    <ContentPageLayout title={cmsPage.title} lead={cmsPage.lead} description={cmsPage.description}>
+      <PageContentRenderer content={cmsPage.content} />
     </ContentPageLayout>
   );
 }
