@@ -66,9 +66,14 @@ export const pageByPathQuery = groq`
   }
 `;
 
+export const siteSettingsQuery = groq`
+  *[_type == "site"][0]{ donateUrl }
+`;
+
 export const siteQuery = groq`
   *[_type == "site"][0]{
     organizationName,
+    donateUrl,
     primaryNav[]{ label, href },
     footer{
       heading,
@@ -86,9 +91,7 @@ export const siteQuery = groq`
         "imageSrc": image.asset->url,
         imageAlt,
         mailchimp{
-          formActionUrl,
-          successRedirectUrl,
-          emailFieldName
+          listId
         }
       },
       partners[]{

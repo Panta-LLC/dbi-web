@@ -21,33 +21,15 @@ export const newsletterSignupSection = defineType({
       name: "mailchimp",
       title: "Mailchimp Integration",
       type: "object",
-      description: "Configure Mailchimp form submission. Get the form action URL from Mailchimp: Audience → Signup forms → Embedded forms.",
+      description:
+        "Uses the Mailchimp Marketing API. Set MAILCHIMP_API_KEY and MAILCHIMP_LIST_ID in your environment. List ID can optionally override the env default.",
       fields: [
         defineField({
-          name: "formActionUrl",
-          title: "Form Action URL",
-          type: "url",
-          description:
-            "The full form action URL from Mailchimp (e.g. https://domain.us1.list-manage.com/subscribe/post?u=xxx&id=xxx)",
-          validation: (Rule) =>
-            Rule.uri({
-              scheme: ["https"],
-              allowRelative: false,
-            }),
-        }),
-        defineField({
-          name: "successRedirectUrl",
-          title: "Success Redirect URL (optional)",
-          type: "url",
-          description:
-            "Custom thank-you page URL. Configure this in Mailchimp: Forms → Confirmation thank you page → 'Instead of showing this thank you page, send subscribers to another URL'. Store here for reference.",
-        }),
-        defineField({
-          name: "emailFieldName",
-          title: "Email Field Name",
+          name: "listId",
+          title: "Audience List ID (optional)",
           type: "string",
-          initialValue: "EMAIL",
-          description: "Mailchimp uses 'EMAIL' by default. Only change if your form uses a different field name.",
+          description:
+            "Mailchimp audience/list ID. Find in Audience → Settings → Audience name and defaults. If empty, uses MAILCHIMP_LIST_ID from environment.",
         }),
       ],
     }),

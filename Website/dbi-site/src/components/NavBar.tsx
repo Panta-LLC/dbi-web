@@ -13,7 +13,14 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-export function NavBar() {
+const DEFAULT_DONATE_HREF = "/donate";
+
+type NavBarProps = {
+  donateUrl?: string | null;
+};
+
+export function NavBar({ donateUrl }: NavBarProps) {
+  const donateHref = donateUrl || DEFAULT_DONATE_HREF;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -44,7 +51,7 @@ export function NavBar() {
             </nav>
           </div>
           <div className="absolute flex pr-2 items-center ml-auto my-auto text-right right-0 top-auto bottom-auto">
-            <Button href="/donate" variant="nav-primary" className="m-2">
+            <Button href={donateHref} variant="nav-primary" className="m-2">
               <h5 className="text-lg text-white">Donate</h5>
             </Button>
             <button
@@ -101,7 +108,7 @@ export function NavBar() {
               {item.label}
             </Link>
           ))}
-          <Link href="/donate" variant="nav" onClick={closeMenu}>
+          <Link href={donateHref} variant="nav" onClick={closeMenu}>
             Donate
           </Link>
         </nav>

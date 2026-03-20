@@ -27,6 +27,10 @@ NEXT_PUBLIC_SANITY_DATASET=
 NEXT_PUBLIC_SANITY_API_VERSION=2025-01-22
 NEXT_PUBLIC_GA_ID=
 SANITY_API_WRITE_TOKEN=
+
+# Newsletter (Mailchimp Marketing API)
+MAILCHIMP_API_KEY=        # From Mailchimp: Account → Extras → API keys
+MAILCHIMP_LIST_ID=        # Audience list ID from Audience → Settings
 ```
 
 ## Sanity

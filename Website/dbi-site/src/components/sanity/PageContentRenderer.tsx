@@ -67,7 +67,17 @@ type ContentBlock = {
   ctaButton?: Cta;
 };
 
-function renderBlock(block: ContentBlock, index: number): ReactElement | null {
+function resolveHref(href: string | undefined, donateUrl: string | null | undefined): string | undefined {
+  if (!href) return undefined;
+  if (href === "/donate" && donateUrl) return donateUrl;
+  return href;
+}
+
+function renderBlock(
+  block: ContentBlock,
+  index: number,
+  donateUrl: string | null | undefined
+): ReactElement | null {
   switch (block._type) {
     case "heroSection":
       return (
@@ -77,8 +87,16 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
           imageAlt={block.imageAlt || "Hero"}
           title={block.title}
           subtitle={block.subtitle}
-          primaryCta={block.primaryCta}
-          secondaryCta={block.secondaryCta}
+          primaryCta={
+            block.primaryCta?.href
+              ? { ...block.primaryCta, href: resolveHref(block.primaryCta.href, donateUrl)! }
+              : block.primaryCta
+          }
+          secondaryCta={
+            block.secondaryCta?.href
+              ? { ...block.secondaryCta, href: resolveHref(block.secondaryCta.href, donateUrl)! }
+              : block.secondaryCta
+          }
         />
       );
 
@@ -91,7 +109,10 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
         description: item.description,
         imageSrc: item.imageSrc,
         imageAlt: item.imageAlt,
-        href: item.href ?? block.programCta?.href ?? "/services",
+        href: resolveHref(
+          item.href ?? block.programCta?.href ?? "/services",
+          donateUrl
+        ) ?? "/services",
         hoverColor: item.hoverColor,
       }));
 
@@ -113,7 +134,7 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
               block.impactMetrics?.map((m) => ({
                 value: m.value ?? "",
                 label: m.label ?? "",
-                href: m.href,
+                href: resolveHref(m.href, donateUrl),
               })) ?? []
             }
           />
@@ -181,10 +202,15 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-start">
                 {block.primaryCta?.href ? (
-                  <Button href={block.primaryCta.href}>{block.primaryCta.label}</Button>
+                  <Button href={resolveHref(block.primaryCta.href, donateUrl)}>
+                    {block.primaryCta.label}
+                  </Button>
                 ) : null}
                 {block.secondaryCta?.href ? (
-                  <Button href={block.secondaryCta.href} variant="cta-secondary">
+                  <Button
+                    href={resolveHref(block.secondaryCta.href, donateUrl)}
+                    variant="cta-secondary"
+                  >
                     {block.secondaryCta.label}
                   </Button>
                 ) : null}
@@ -202,7 +228,7 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
             {block.textCta?.href ? (
               <div className="mt-6 flex justify-center">
                 <Button
-                  href={block.textCta.href}
+                  href={resolveHref(block.textCta.href, donateUrl)}
                   variant={block.ctaVariant === "primary" ? "cta-primary" : "cta-secondary"}
                 >
                   {block.textCta.label}
@@ -219,7 +245,7 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
           <Container className="py-10 flex justify-center">
             {block.ctaButton?.href ? (
               <Button
-                href={block.ctaButton.href}
+                href={resolveHref(block.ctaButton.href, donateUrl)}
                 variant={block.buttonVariant === "secondary" ? "cta-secondary" : "cta-primary"}
               >
                 {block.ctaButton.label}
@@ -234,9 +260,14 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
   }
 }
 
-export function PageContentRenderer({ content }: { content?: ContentBlock[] }) {
+type PageContentRendererProps = {
+  content?: ContentBlock[];
+  donateUrl?: string | null;
+};
+
+export function PageContentRenderer({ content, donateUrl }: PageContentRendererProps) {
   if (!content?.length) return null;
 
-  return <>{content.map((block, index) => renderBlock(block, index))}</>;
+  return <>{content.map((block, index) => renderBlock(block, index, donateUrl))}</>;
 }
 

@@ -42,9 +42,14 @@ export function Button({
         <span className="relative z-[1]">{children}</span>
       </span>
     );
+    const isExternal = href.startsWith("http://") || href.startsWith("https://");
 
     return (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        className={classes}
+        {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+      >
         {content}
       </Link>
     );

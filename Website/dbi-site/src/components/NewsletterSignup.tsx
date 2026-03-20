@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { Button } from "./Button";
 
 type MailchimpConfig = {
-  formActionUrl?: string;
-  successRedirectUrl?: string;
-  emailFieldName?: string;
+  listId?: string;
 };
 
 type NewsletterSignupProps = {
@@ -32,9 +31,49 @@ export function NewsletterSignup({
   mailchimp,
   className = "",
 }: NewsletterSignupProps) {
-  const useMailchimp = mailchimp?.formActionUrl;
-  const formAction = useMailchimp ? mailchimp.formActionUrl : undefined;
-  const emailFieldName = mailchimp?.emailFieldName ?? "EMAIL";
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || status === "loading") return;
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          firstName: firstName.trim() || undefined,
+          lastName: lastName.trim() || undefined,
+          ...(mailchimp?.listId && { listId: mailchimp.listId }),
+        }),
+      });
+
+      const data = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
+
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data.message ?? "Thanks for subscribing!");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div
       className={`flex flex-col lg:flex-row min-h-[320px] lg:min-h-[380px] overflow-hidden bg-white ${className}`}
@@ -57,37 +96,59 @@ export function NewsletterSignup({
           <h2 className="display-m text-white leading-tight max-w-md">{title}</h2>
           <p className="mt-4 text-base md:text-lg text-white/95 max-w-md">{description}</p>
 
-          <form
-            className="mt-6 md:mt-8 gap-1 max-w-lg"
-            action={formAction}
-            method={useMailchimp ? "post" : undefined}
-            target={useMailchimp ? "_blank" : undefined}
-            onSubmit={useMailchimp ? undefined : (e) => e.preventDefault()}
-          >
-            {/* Slanted email field */}
-            <div className="relative flex-1 flex-row min-w-[200px] mb-3">
-              <div
-                className="absolute inset-0 bg-white"
-                style={{
-                  clipPath: "polygon(0 0, 100% 0, 95% 100%, 0 100%)",
-                  WebkitClipPath: "polygon(0 0, 100% 0, 95% 100%, 0 100%)",
-                }}
-                aria-hidden
+          <form className="mt-6 md:mt-8 gap-1 max-w-lg" onSubmit={handleSubmit}>
+            {/* First and last name row */}
+            <div className="flex gap-3 mb-3">
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                disabled={status === "loading"}
+                className="touch-target flex-1 w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
+                aria-label="First name"
               />
               <input
-                type="email"
-                name={emailFieldName}
-                placeholder={placeholder}
-                className="touch-target relative z-10 w-full bg-transparent px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none"
-                aria-label="Email address"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name"
+                disabled={status === "loading"}
+                className="touch-target flex-1 w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
+                aria-label="Last name"
               />
             </div>
+            {/* Email field */}
+            <div className="mb-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={placeholder}
+                disabled={status === "loading"}
+                className="touch-target w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
+                aria-label="Email address"
+                required
+              />
+            </div>
+            {message ? (
+              <p
+                className={`mb-3 text-sm ${status === "success" ? "text-white" : "text-white/90"}`}
+                role="status"
+              >
+                {message}
+              </p>
+            ) : null}
             {/* Slanted CTA button */}
             <Button
+              type="submit"
               variant="cta-primary"
-              className="touch-target w-full sm:w-auto relative inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)]"
+              disabled={status === "loading"}
+              className="touch-target w-full sm:w-auto relative inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <span className="relative z-10">{buttonLabel}</span>
+              <span className="relative z-10">
+                {status === "loading" ? "Subscribing…" : buttonLabel}
+              </span>
             </Button>
           </form>
 

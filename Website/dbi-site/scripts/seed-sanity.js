@@ -34,6 +34,7 @@ const documents = [
     _type: "site",
     title: "Site Settings",
     organizationName: "Delta Bay Impact",
+    donateUrl: "https://deltabayimpact.networkforgood.com/projects/261977-belonging-builds-brilliance",
     primaryNav: withKeys(
       [
         { label: "About", href: "/about" },

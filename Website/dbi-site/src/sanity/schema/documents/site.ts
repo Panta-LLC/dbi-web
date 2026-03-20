@@ -13,6 +13,13 @@ export const site = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "donateUrl",
+      title: "Donate URL",
+      type: "url",
+      description:
+        "External donation page URL (e.g. Network for Good). When set, all donate links will point here instead of /donate.",
+    }),
+    defineField({
       name: "organizationName",
       title: "Organization Name",
       type: "string",
