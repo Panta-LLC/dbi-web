@@ -79,6 +79,15 @@ const documents = [
         ],
         "footer-partner",
       ),
+      newsletterSignup: {
+        title: "Keep up with our Work!",
+        description: "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
+        placeholder: "Your email address",
+        buttonLabel: "Sign-up",
+        legalText:
+          "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+        imageAlt: "Community",
+      },
     },
   },
   {
@@ -453,16 +462,6 @@ const documents = [
         },
         {
           _type: "testimonialSliderSection",
-        },
-        {
-          _type: "newsletterSignupSection",
-          title: "Keep up with our Work!",
-          description:
-            "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
-          placeholder: "Your email address",
-          buttonLabel: "Sign-up",
-          legalText:
-            "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
         },
       ],
       "home-page-content",

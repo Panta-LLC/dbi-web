@@ -3,6 +3,12 @@
 import Image from "next/image";
 import { Button } from "./Button";
 
+type MailchimpConfig = {
+  formActionUrl?: string;
+  successRedirectUrl?: string;
+  emailFieldName?: string;
+};
+
 type NewsletterSignupProps = {
   title?: string;
   description?: string;
@@ -11,6 +17,7 @@ type NewsletterSignupProps = {
   legalText?: string;
   imageSrc?: string;
   imageAlt?: string;
+  mailchimp?: MailchimpConfig | null;
   className?: string;
 };
 
@@ -22,8 +29,12 @@ export function NewsletterSignup({
   legalText,
   imageSrc,
   imageAlt = "Community",
+  mailchimp,
   className = "",
 }: NewsletterSignupProps) {
+  const useMailchimp = mailchimp?.formActionUrl;
+  const formAction = useMailchimp ? mailchimp.formActionUrl : undefined;
+  const emailFieldName = mailchimp?.emailFieldName ?? "EMAIL";
   return (
     <div
       className={`flex flex-col lg:flex-row min-h-[320px] lg:min-h-[380px] overflow-hidden bg-white ${className}`}
@@ -46,7 +57,13 @@ export function NewsletterSignup({
           <h2 className="display-m text-white leading-tight max-w-md">{title}</h2>
           <p className="mt-4 text-base md:text-lg text-white/95 max-w-md">{description}</p>
 
-          <form className="mt-6 md:mt-8 gap-1 max-w-lg" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="mt-6 md:mt-8 gap-1 max-w-lg"
+            action={formAction}
+            method={useMailchimp ? "post" : undefined}
+            target={useMailchimp ? "_blank" : undefined}
+            onSubmit={useMailchimp ? undefined : (e) => e.preventDefault()}
+          >
             {/* Slanted email field */}
             <div className="relative flex-1 flex-row min-w-[200px] mb-3">
               <div
@@ -59,7 +76,7 @@ export function NewsletterSignup({
               />
               <input
                 type="email"
-                name="email"
+                name={emailFieldName}
                 placeholder={placeholder}
                 className="touch-target relative z-10 w-full bg-transparent px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none"
                 aria-label="Email address"

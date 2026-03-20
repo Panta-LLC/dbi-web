@@ -109,7 +109,7 @@ export function Hero({ imageSrc, imageAlt, title, subtitle, primaryCta, secondar
   return (
     <Section className="relative w-full mb-2" noPadding reveal={false}>
       <div
-        className="relative w-full min-h-[55vw] sm:min-h-[45vw] lg:min-h-[40vw]"
+        className="relative w-full h-[55vw] sm:h-[45vw] lg:h-[40vw] max-h-[550px]"
         data-name="Hero"
       >
         <MaskGroup imageSrc={imageSrc} imageAlt={imageAlt} />

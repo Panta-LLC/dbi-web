@@ -5,7 +5,6 @@ import { ContentCard } from "@/components/ContentCard";
 import { Hero } from "@/components/Hero";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
-import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { ProgramCards } from "@/components/ProgramCards";
 import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
@@ -131,21 +130,6 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
                 attribution: t.attribution,
               })) ?? undefined
             }
-          />
-        </Section>
-      );
-
-    case "newsletterSignupSection":
-      return (
-        <Section className="bg-white" key={index}>
-          <NewsletterSignup
-            title={block.title}
-            description={block.description}
-            placeholder={block.placeholder}
-            buttonLabel={block.buttonLabel}
-            legalText={block.legalText}
-            imageSrc={block.imageSrc}
-            imageAlt={block.imageAlt}
           />
         </Section>
       );

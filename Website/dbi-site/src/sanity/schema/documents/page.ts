@@ -78,7 +78,6 @@ export const page = defineType({
         { type: "programCardsSection" },
         { type: "measurableImpactSection" },
         { type: "testimonialSliderSection" },
-        { type: "newsletterSignupSection" },
         { type: "cardGridSection" },
         { type: "imageCardGridSection" },
         { type: "supportSection" },

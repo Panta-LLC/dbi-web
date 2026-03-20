@@ -77,6 +77,20 @@ export const siteQuery = groq`
       siteLinks[]{ label, href },
       socialLinks[]{ label, href },
       partnersTitle,
+      newsletterSignup{
+        title,
+        description,
+        placeholder,
+        buttonLabel,
+        legalText,
+        "imageSrc": image.asset->url,
+        imageAlt,
+        mailchimp{
+          formActionUrl,
+          successRedirectUrl,
+          emailFieldName
+        }
+      },
       partners[]{
         name,
         "logoSrc": logo.asset->url,

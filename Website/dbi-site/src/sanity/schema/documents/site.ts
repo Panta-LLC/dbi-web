@@ -46,6 +46,11 @@ export const site = defineType({
         }),
         defineField({ name: "partnersTitle", title: "Partners Title", type: "string" }),
         defineField({
+          name: "newsletterSignup",
+          title: "Newsletter Signup",
+          type: "newsletterSignupSection",
+        }),
+        defineField({
           name: "partners",
           title: "Partners",
           type: "array",

@@ -1,10 +1,10 @@
 import type { ReactElement } from "react";
-import { FaEnvelope, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { sanityClient } from "@/sanity/client";
 import { siteQuery } from "@/sanity/queries";
 import { Container } from "./Container";
 import { EmailActions } from "./EmailActions";
-import { Section } from "./Section";
+import { NewsletterSignup } from "./NewsletterSignup";
 import { SponsorSection } from "./SponsorSection";
 import { Link } from "./Link";
 
@@ -22,6 +22,15 @@ const defaultContent = {
     { name: "Keller Canyon Mitigation Fund" },
     { name: "Antioch Community Foundation" },
   ],
+  newsletterSignup: {
+    title: "Keep up with our Work!",
+    description: "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
+    placeholder: "Your email address",
+    buttonLabel: "Sign-up",
+    legalText:
+      "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    imageAlt: "Community",
+  },
   siteLinks: [
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
@@ -44,8 +53,6 @@ const SOCIAL_ICONS: Record<string, IconComponent> = {
   linkedin: () => <FaLinkedinIn className="h-7 w-7" />,
 };
 
-const isExternalLink = (href: string) => href.startsWith("http");
-
 export async function Footer() {
   const siteData = await sanityClient.fetch(siteQuery).catch(() => null);
   const data = siteData?.footer ?? defaultContent;
@@ -66,6 +73,16 @@ export async function Footer() {
 
   return (
     <>
+      <NewsletterSignup
+        title={content.newsletterSignup?.title}
+        description={content.newsletterSignup?.description}
+        placeholder={content.newsletterSignup?.placeholder}
+        buttonLabel={content.newsletterSignup?.buttonLabel}
+        legalText={content.newsletterSignup?.legalText}
+        imageSrc={content.newsletterSignup?.imageSrc}
+        imageAlt={content.newsletterSignup?.imageAlt}
+        mailchimp={content.newsletterSignup?.mailchimp}
+      />
       {content.partners.length ? (
         <SponsorSection
           titleLine1="Special Thanks to"
