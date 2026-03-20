@@ -79,15 +79,11 @@ export function NewsletterSignup({
       className={`flex flex-col lg:flex-row min-h-[320px] lg:min-h-[380px] overflow-hidden bg-white ${className}`}
     >
       {/* Left: orange slanted panel with content */}
-      <div className="relative flex items-stretch flex-1 pl-8 pr-4">
-        {/* Slanted orange background */}
+      <div className="relative flex items-stretch flex-1 px-8">
+        {/* Orange background (slanted on lg+, rectangular on small) */}
         <div
-          className="absolute inset-0"
-          style={{
-            backgroundColor: "var(--color-2, #ff7900)",
-            clipPath: "polygon(0 0, 100% 0, 76% 100%, 0 100%)",
-            WebkitClipPath: "polygon(0 0, 100% 0, 76% 100%, 0 100%)",
-          }}
+          className="absolute inset-0 newsletter-panel-left"
+          style={{ backgroundColor: "var(--color-2, #ff7900)" }}
           aria-hidden
         />
 
@@ -158,16 +154,10 @@ export function NewsletterSignup({
         </div>
       </div>
 
-      {/* Right: image with matching slanted left edge */}
-      <div className="relative flex items-stretch flex-1 min-h-[260px] lg:min-h-full -ml-41">
+      {/* Right: image (slanted on lg+, rectangular on small) */}
+      <div className="relative flex items-stretch flex-1 min-h-[350px] lg:min-h-full lg:-ml-41">
         {imageSrc ? (
-          <div
-            className="absolute inset-0"
-            style={{
-              clipPath: "polygon(25.5% 0, 100% 0, 100% 100%, 0 100%)",
-              WebkitClipPath: "polygon(25.5% 0, 100% 0, 100% 100%, 0 100%)",
-            }}
-          >
+          <div className="absolute inset-0 newsletter-panel-right">
             <Image
               src={imageSrc}
               alt={imageAlt}
@@ -177,13 +167,7 @@ export function NewsletterSignup({
             />
           </div>
         ) : (
-          <div
-            className="absolute inset-0 bg-slate-300"
-            style={{
-              clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)",
-              WebkitClipPath: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)",
-            }}
-          />
+          <div className="absolute inset-0 bg-slate-300 newsletter-panel-right-placeholder" />
         )}
       </div>
     </div>

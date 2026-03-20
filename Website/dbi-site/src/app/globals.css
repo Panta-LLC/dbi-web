@@ -112,6 +112,35 @@ body {
   background-color: var(--color-6);
 }
 
+/* Newsletter signup: no slant on small screens, slanted on lg+ */
+.newsletter-panel-left {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.newsletter-panel-right,
+.newsletter-panel-right-placeholder {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@media (min-width: 1024px) {
+  .newsletter-panel-left {
+    clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
+  }
+
+  .newsletter-panel-right {
+    clip-path: polygon(25.5% 0, 100% 0, 100% 100%, 0 100%);
+    -webkit-clip-path: polygon(25.5% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .newsletter-panel-right-placeholder {
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    -webkit-clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
 @layer base {
   h1,
   h2,
