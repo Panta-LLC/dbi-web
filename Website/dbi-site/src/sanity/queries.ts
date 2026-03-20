@@ -59,7 +59,12 @@ export const pageByPathQuery = groq`
       "impactMetrics": metrics[]{ value, label, href },
       "testimonialItems": items[]{ quote, attribution },
       "cardItems": items[]{ title, description },
-      "imageItems": items[]{ title, subtitle },
+      "imageItems": items[]{
+        title,
+        subtitle,
+        "imageSrc": image.asset->url,
+        imageAlt
+      },
       "textCta": cta{${ctaFields}},
       "ctaButton": cta{${ctaFields}}
     }

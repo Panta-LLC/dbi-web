@@ -21,7 +21,6 @@ export function ContentPageLayout({ title, lead, description, children }: Conten
         </div>
       </Section>
       {children}
-      <ContactBand className="bg-primary" />
     </SiteLayout>
   );
 }

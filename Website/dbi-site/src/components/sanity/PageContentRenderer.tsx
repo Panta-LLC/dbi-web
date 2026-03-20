@@ -60,6 +60,8 @@ type ContentBlock = {
   imageItems?: Array<{
     title?: string;
     subtitle?: string;
+    imageSrc?: string;
+    imageAlt?: string;
   }>;
   // textAndCtaSection
   textCta?: Cta;
@@ -184,6 +186,8 @@ function renderBlock(
                   key={`${item.title ?? "image-card"}-${i}`}
                   title={item.title ?? ""}
                   subtitle={item.subtitle}
+                  imageSrc={item.imageSrc}
+                  imageAlt={item.imageAlt}
                 />
               ))}
             </div>
