@@ -8,7 +8,7 @@ export const textHighlightSection = defineType({
     defineField({
       name: "text",
       title: "Text",
-      type: "string",
+      type: "text",
       rows: 3,
     }),
   ],
