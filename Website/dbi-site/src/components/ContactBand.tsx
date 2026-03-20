@@ -41,7 +41,7 @@ export function ContactBand({
                   aria-label="Email address"
                 />
                 <Button
-                  variant="primary"
+                  variant="cta-primary"
                   className="touch-target px-6 py-3 text-sm text-white sm:whitespace-nowrap"
                 >
                   {buttonLabel}

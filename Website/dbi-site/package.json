@@ -21,7 +21,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
-    "sanity": "^5.17.1"
+    "sanity": "^5.17.1",
+    "styled-components": "^6.3.12"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0",
