@@ -69,7 +69,10 @@ type ContentBlock = {
   ctaButton?: Cta;
 };
 
-function resolveHref(href: string | undefined, donateUrl: string | null | undefined): string | undefined {
+function resolveHref(
+  href: string | undefined,
+  donateUrl: string | null | undefined,
+): string | undefined {
   if (!href) return undefined;
   if (href === "/donate" && donateUrl) return donateUrl;
   return href;
@@ -78,7 +81,7 @@ function resolveHref(href: string | undefined, donateUrl: string | null | undefi
 function renderBlock(
   block: ContentBlock,
   index: number,
-  donateUrl: string | null | undefined
+  donateUrl: string | null | undefined,
 ): ReactElement | null {
   switch (block._type) {
     case "heroSection":
@@ -111,10 +114,8 @@ function renderBlock(
         description: item.description,
         imageSrc: item.imageSrc,
         imageAlt: item.imageAlt,
-        href: resolveHref(
-          item.href ?? block.programCta?.href ?? "/services",
-          donateUrl
-        ) ?? "/services",
+        href:
+          resolveHref(item.href ?? block.programCta?.href ?? "/services", donateUrl) ?? "/services",
         hoverColor: item.hoverColor,
       }));
 
@@ -159,10 +160,10 @@ function renderBlock(
 
     case "cardGridSection":
       return (
-        <Section className="bg-white" key={index}>
+        <Section className="bg-white my-10" key={index}>
           <Container>
             <h2 className="heading-2 text-center">{block.title}</h2>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {(block.cardItems ?? []).map((item, i) => (
                 <ContentCard
                   key={`${item.title ?? "card"}-${i}`}
@@ -177,10 +178,10 @@ function renderBlock(
 
     case "imageCardGridSection":
       return (
-        <Section className="bg-white" key={index}>
+        <Section className="bg-light-gray py-10" key={index}>
           <Container>
             <h2 className="heading-2 text-center">{block.title}</h2>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
               {(block.imageItems ?? []).map((item, i) => (
                 <ImageCard
                   key={`${item.title ?? "image-card"}-${i}`}
@@ -202,7 +203,9 @@ function renderBlock(
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
               <div className="flex-1">
                 <h2 className="heading-2">{block.title}</h2>
-                {block.description ? <p className="body-md mt-4 text-slate-600">{block.description}</p> : null}
+                {block.description ? (
+                  <p className="body-md mt-4 text-slate-600">{block.description}</p>
+                ) : null}
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-start">
                 {block.primaryCta?.href ? (
@@ -228,7 +231,9 @@ function renderBlock(
       return (
         <Section className="bg-white" key={index}>
           <Container className="text-center">
-            {block.description ? <p className="body-md text-slate-600">{block.description}</p> : null}
+            {block.description ? (
+              <p className="body-md text-slate-600">{block.description}</p>
+            ) : null}
             {block.textCta?.href ? (
               <div className="mt-6 flex justify-center">
                 <Button
@@ -274,4 +279,3 @@ export function PageContentRenderer({ content, donateUrl }: PageContentRendererP
 
   return <>{content.map((block, index) => renderBlock(block, index, donateUrl))}</>;
 }
-

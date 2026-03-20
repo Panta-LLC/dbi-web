@@ -56,8 +56,8 @@ function HeroContent({
   return (
     <div className="absolute  inset-0 flex items-start" data-name="Hero Content">
       <div className="absolute flex items-center z-20 py-5 pl-2 md:pl-16 h-full">
-        <div className="relative z-1 pl-12 sm:pl-20 md:pl-18 lg:pl-18">
-          <h1 className="font-bold text-white text-xl sm:text-3xl md:text-4xl lg:text-5xl leading-[1.15] tracking-tight">
+        <div className="relative z-1 pl-20 md:pl-18 lg:pl-18">
+          <h1 className="font-bold text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[1.15] tracking-tight">
             {lines.map((line, i) => (
               <span key={i}>
                 {line}

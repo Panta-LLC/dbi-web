@@ -9,10 +9,8 @@ type ContentCardProps = {
 
 export function ContentCard({ title, description, cta, className = "" }: ContentCardProps) {
   return (
-    <div
-      className={`content-card slant-clip-content-card bg-white p-10 px-13 relative ${className}`}
-    >
-      <h3 className="heading-3 text-lg font-bold text-slate-900">{title}</h3>
+    <div className={`content-card bg-white p-10 px-13 relative ${className}`}>
+      <h3 className="display-s text-slate-900">{title}</h3>
       {description ? <p className="mt-3 text-md">{description}</p> : null}
       {/* {cta ? (
         <div className="mt-6">
