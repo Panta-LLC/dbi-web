@@ -13,7 +13,7 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-const DEFAULT_DONATE_HREF = "/donate";
+const DEFAULT_DONATE_HREF = process.env.NEXT_PUBLIC_DONATE_URL || "/donate";
 
 type NavBarProps = {
   donateUrl?: string | null;
