@@ -37,7 +37,7 @@ const documents = [
     primaryNav: withKeys(
       [
         { label: "About", href: "/about" },
-        { label: "Programs", href: "/programs" },
+        { label: "Services", href: "/services" },
         { label: "Get Involved", href: "/get-involved" },
         { label: "Impact", href: "/impact" },
         { label: "Resources", href: "/resources" },
@@ -53,7 +53,7 @@ const documents = [
       siteLinks: withKeys(
         [
           { label: "About", href: "/about" },
-          { label: "Programs", href: "/programs" },
+          { label: "Services", href: "/services" },
           { label: "Get Involved", href: "/get-involved" },
           { label: "Impact", href: "/impact" },
           { label: "Resources", href: "/resources" },
@@ -90,7 +90,7 @@ const documents = [
         "Every African American Student in Contra Costa County Deserves to Thrive",
       subtitle:
         "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
-      primaryCta: { label: "See How We Support Students", href: "/programs" },
+      primaryCta: { label: "See How We Support Students", href: "/services" },
       secondaryCta: { label: "Partner with Delta Bay Impact", href: "/contact" },
     },
     intro:
@@ -102,7 +102,7 @@ const documents = [
         "See where we're making a difference—and how you can help African American students in Contra Costa County thrive.",
       metrics: withKeys(
         [
-          { value: "4+", label: "Community programs", href: "/programs" },
+          { value: "4+", label: "Community programs", href: "/services" },
           { value: "3", label: "Schools served", href: "/impact" },
           { value: "Get involved", label: "Volunteer or partner", href: "/get-involved" },
         ],
@@ -124,7 +124,7 @@ const documents = [
       title: "What Students Gain from Working with Us",
       description:
         "From classroom support to family engagement, our programs give African American students the resources, relationships, and advocacy they need to excel in school and beyond.",
-      cta: { label: "Discover How We Help Students Succeed", href: "/programs" },
+      cta: { label: "Discover How We Help Students Succeed", href: "/services" },
       items: withKeys(
         [
           {
@@ -230,7 +230,7 @@ const documents = [
       title: "Help DBI support your child, school, or community",
       description:
         "Our goal is to support all African-American youth in Contra Costa County. If your school or community could benefit from our services, please reach out.",
-      primaryCta: { label: "Learn more", href: "/programs" },
+      primaryCta: { label: "Learn more", href: "/services" },
       secondaryCta: { label: "Partner with us", href: "/contact" },
     },
   },
@@ -402,7 +402,7 @@ const documents = [
             "Every African American Student in Contra Costa County Deserves to Thrive",
           subtitle:
             "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
-          primaryCta: { label: "See How We Support Students", href: "/programs" },
+          primaryCta: { label: "See How We Support Students", href: "/services" },
           secondaryCta: { label: "Partner with Delta Bay Impact", href: "/contact" },
         },
         {
@@ -412,7 +412,7 @@ const documents = [
         },
         {
           _type: "programCardsSection",
-          cta: { label: "Discover How We Help Students Succeed", href: "/programs" },
+          cta: { label: "Discover How We Help Students Succeed", href: "/services" },
           items: withKeys(
             [
               {
@@ -444,7 +444,7 @@ const documents = [
           title: "Real students. Real schools. Real results.",
           metrics: withKeys(
             [
-              { value: "4+", label: "Community programs", href: "/programs" },
+              { value: "4+", label: "Community programs", href: "/services" },
               { value: "3", label: "Schools served", href: "/impact" },
               { value: "Get involved", label: "Volunteer or partner", href: "/get-involved" },
             ],
@@ -518,7 +518,7 @@ const documents = [
           title: "Help DBI support your child, school, or community",
           description:
             "Our goal is to support all African-American youth in Contra Costa County. If your school or community could benefit from our services, please reach out.",
-          primaryCta: { label: "Learn more", href: "/programs" },
+          primaryCta: { label: "Learn more", href: "/services" },
           secondaryCta: { label: "Partner with us", href: "/contact" },
         },
       ],
@@ -526,14 +526,14 @@ const documents = [
     ),
   },
   {
-    _id: "page-programs",
+    _id: "page-services",
     _type: "page",
-    title: "Programs Page",
+    title: "Services Page",
     lead: "Overview",
     description:
       "Delta Bay Impact delivers integrated, school-based programs that address academic success, well-being, and belonging.",
     layout: "contentPage",
-    path: "/programs",
+    path: "/services",
     content: withKeys(
       [
         {

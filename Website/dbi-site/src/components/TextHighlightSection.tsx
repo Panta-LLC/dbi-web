@@ -24,7 +24,7 @@ export function TextHighlightSection({
   return (
     <Section className={className + " bg-light-gray"}>
       <Container className="py-12 sm:py-16 flex flex-col items-center justify-center lg:items-center">
-        {content}
+        <div className="max-w-2xl mx-auto text-balance">{content}</div>
       </Container>
     </Section>
   );

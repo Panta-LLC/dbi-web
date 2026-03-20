@@ -4,7 +4,7 @@ export const homePage = {
       "Building Belonging, Opportunity, and Academic Success for African American Youth",
     subtitle:
       "Delta Bay Impact partners with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
-    primaryCta: { label: "Learn how we support students", href: "/programs" },
+    primaryCta: { label: "Learn how we support students", href: "/services" },
     secondaryCta: { label: "Partner with us", href: "/contact" },
   },
   intro:
@@ -13,7 +13,7 @@ export const homePage = {
     title: "How we serve our community",
     description:
       "We partner with schools, families, and communities to support African American students through mentorship, advocacy, and culturally responsive programs that strengthen well-being, confidence, and academic success.",
-    cta: { label: "Learn more", href: "/programs" },
+    cta: { label: "Learn more", href: "/services" },
     items: [
       {
         title: "School-Based Mentorship and Advocacy",
@@ -121,7 +121,7 @@ export const aboutPage = {
     title: "Help DBI support your child, school, or community",
     description:
       "Our goal is to support all African-American youth in Contra Costa County. If your school or community could benefit from our services, please reach out.",
-    primaryCta: { label: "Learn more", href: "/programs" },
+    primaryCta: { label: "Learn more", href: "/services" },
     secondaryCta: { label: "Partner with us", href: "/contact" },
   },
 };

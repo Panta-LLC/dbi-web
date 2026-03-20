@@ -24,7 +24,7 @@ const defaultContent = {
   ],
   siteLinks: [
     { label: "About", href: "/about" },
-    { label: "Programs", href: "/programs" },
+    { label: "Services", href: "/services" },
     { label: "Get Involved", href: "/get-involved" },
     { label: "Impact", href: "/impact" },
     { label: "Resources", href: "/resources" },

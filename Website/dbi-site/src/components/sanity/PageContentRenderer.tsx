@@ -92,7 +92,7 @@ function renderBlock(block: ContentBlock, index: number): ReactElement | null {
         description: item.description,
         imageSrc: item.imageSrc,
         imageAlt: item.imageAlt,
-        href: item.href ?? block.programCta?.href ?? "/programs",
+        href: item.href ?? block.programCta?.href ?? "/services",
         hoverColor: item.hoverColor,
       }));
 

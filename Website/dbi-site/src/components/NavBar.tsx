@@ -8,7 +8,7 @@ import { Link } from "./Link";
 
 const navItems = [
   { label: "About", href: "/about" },
-  { label: "Our Programs", href: "/programs" },
+  { label: "Our Services", href: "/services" },
   { label: "Get Involved", href: "/get-involved" },
   { label: "Contact", href: "/contact" },
 ];

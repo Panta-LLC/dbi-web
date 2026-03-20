@@ -34,7 +34,7 @@ export const page = defineType({
 
           return count === 0 || "Path must be unique.";
         }),
-      description: "Example: /about, /programs, /",
+      description: "Example: /about, /services, /",
     }),
     defineField({
       name: "title",

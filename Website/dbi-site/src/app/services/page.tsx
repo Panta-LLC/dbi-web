@@ -1,17 +1,20 @@
-import { redirect } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import { sanityClient } from "@/sanity/client";
 import { pageByPathQuery } from "@/sanity/queries";
 
-export default async function ProgramsPage() {
-  let cmsPage = await sanityClient.fetch(pageByPathQuery, { path: "/programs" }).catch(() => null);
+export default async function ServicesPage() {
+  // Support a transitional period where Sanity might still have /programs.
+  let cmsPage = await sanityClient
+    .fetch(pageByPathQuery, { path: "/services" })
+    .catch(() => null);
+
   if (!cmsPage?.content?.length) {
-    const servicesPage = await sanityClient.fetch(pageByPathQuery, { path: "/services" }).catch(() => null);
-    if (servicesPage?.content?.length) {
-      redirect("/services");
-    }
+    cmsPage = await sanityClient.fetch(pageByPathQuery, { path: "/programs" }).catch(() => null);
+  }
+
+  if (!cmsPage?.content?.length) {
     return null;
   }
 
@@ -29,3 +32,4 @@ export default async function ProgramsPage() {
     </ContentPageLayout>
   );
 }
+
