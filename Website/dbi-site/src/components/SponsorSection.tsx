@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Container } from "./Container";
 
 export type SponsorItem = {
@@ -19,7 +19,7 @@ type SponsorSectionProps = {
 };
 
 const ORANGE = "var(--color-2, #ff7900)";
-const VISIBLE_COUNT = 3;
+const VISIBLE_COUNT_DESKTOP = 3;
 
 export function SponsorSection({
   titleLine1 = "Special Thanks to",
@@ -27,14 +27,53 @@ export function SponsorSection({
   items = [],
   className = "",
 }: SponsorSectionProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const list = items.length ? items : [];
-  const needsCarousel = list.length > VISIBLE_COUNT;
-  const maxIndex = Math.max(0, list.length - VISIBLE_COUNT);
-  const visibleItems = needsCarousel ? list.slice(index, index + VISIBLE_COUNT) : list;
+  const needsCarouselMobile = list.length > 1;
+  const needsCarouselDesktop = list.length > VISIBLE_COUNT_DESKTOP;
+  const maxIndexDesktop = Math.max(0, list.length - VISIBLE_COUNT_DESKTOP);
+  const visibleItemsDesktop = needsCarouselDesktop
+    ? list.slice(index, index + VISIBLE_COUNT_DESKTOP)
+    : list;
 
-  const goPrev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
-  const goNext = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
+  const scrollToItem = (targetIndex: number) => {
+    const el = scrollRef.current;
+    if (!el || !needsCarouselMobile) return;
+    const itemEl = el.querySelector(`[data-sponsor-index="${targetIndex}"]`);
+    if (itemEl) {
+      itemEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  };
+
+  const goPrev = () => {
+    if (needsCarouselMobile) {
+      const prev = index <= 0 ? list.length - 1 : index - 1;
+      setIndex(prev);
+      scrollToItem(prev);
+    } else if (needsCarouselDesktop) {
+      setIndex((i) => (i <= 0 ? maxIndexDesktop : i - 1));
+    }
+  };
+
+  const goNext = () => {
+    if (needsCarouselMobile) {
+      const next = index >= list.length - 1 ? 0 : index + 1;
+      setIndex(next);
+      scrollToItem(next);
+    } else if (needsCarouselDesktop) {
+      setIndex((i) => (i >= maxIndexDesktop ? 0 : i + 1));
+    }
+  };
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollLeft = el.scrollLeft;
+    const itemWidth = el.scrollWidth / list.length;
+    const newIndex = Math.round(scrollLeft / itemWidth);
+    setIndex(Math.min(newIndex, list.length - 1));
+  };
 
   if (!list.length) return null;
 
@@ -50,7 +89,7 @@ export function SponsorSection({
 
         <div className="flex items-center justify-center gap-2 md:gap-4 px-4">
           {/* Left arrow */}
-          {needsCarousel ? (
+          {(needsCarouselMobile || needsCarouselDesktop) ? (
             <button
               type="button"
               onClick={goPrev}
@@ -67,9 +106,46 @@ export function SponsorSection({
             <div className="w-10 md:w-12 shrink-0" aria-hidden />
           )}
 
-          {/* Sponsor logos row */}
-          <div className="flex-1 flex flex-row items-stretch justify-center gap-6 md:gap-10 min-w-0 max-w-5xl">
-            {visibleItems.map((item, i) => (
+          {/* Mobile: scroll carousel (one sponsor, smooth scroll) */}
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="md:hidden flex-1 min-w-0 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory scrollbar-hide"
+          >
+            <div className="flex gap-6">
+              {list.map((item, i) => (
+                <div
+                  key={`${item.name}-${i}`}
+                  data-sponsor-index={i}
+                  className="shrink-0 w-full min-w-full snap-center flex flex-col items-center justify-center text-center px-4"
+                >
+                  {item.logoSrc ? (
+                    <div className="relative w-full max-w-[180px] aspect-2/1 mx-auto flex items-center justify-center">
+                      <Image
+                        src={item.logoSrc}
+                        alt={item.logoAlt ?? item.name}
+                        width={180}
+                        height={90}
+                        className="w-full h-auto object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full max-w-[180px] aspect-2/1 mx-auto flex items-center justify-center bg-slate-100 rounded text-slate-500 text-sm font-semibold">
+                      {item.name}
+                    </div>
+                  )}
+                  <p className="mt-3 text-sm font-bold text-slate-900">{item.name}</p>
+                  {item.tagline ? (
+                    <p className="mt-1 text-xs text-slate-600">{item.tagline}</p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: static row of 3 */}
+          <div className="hidden md:flex flex-1 flex-row items-stretch justify-center gap-6 lg:gap-10 min-w-0 max-w-5xl">
+            {visibleItemsDesktop.map((item, i) => (
               <div
                 key={`${item.name}-${i}`}
                 className="flex-1 min-w-0 flex flex-col items-center justify-center text-center px-4"
@@ -89,16 +165,16 @@ export function SponsorSection({
                     {item.name}
                   </div>
                 )}
-                <p className="mt-3 text-sm md:text-base font-bold text-slate-900">{item.name}</p>
+                <p className="mt-3 text-sm lg:text-base font-bold text-slate-900">{item.name}</p>
                 {item.tagline ? (
-                  <p className="mt-1 text-xs md:text-sm text-slate-600">{item.tagline}</p>
+                  <p className="mt-1 text-xs lg:text-sm text-slate-600">{item.tagline}</p>
                 ) : null}
               </div>
             ))}
           </div>
 
           {/* Right arrow */}
-          {needsCarousel ? (
+          {(needsCarouselMobile || needsCarouselDesktop) ? (
             <button
               type="button"
               onClick={goNext}

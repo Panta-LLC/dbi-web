@@ -112,6 +112,14 @@ body {
   background-color: var(--color-6);
 }
 
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Newsletter signup: no slant on small screens, slanted on lg+ */
 .newsletter-panel-left {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
