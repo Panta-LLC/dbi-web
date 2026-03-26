@@ -8,7 +8,7 @@ import { parseBody } from "next-sanity/webhook";
  *
  * Sanity (manage.sanity.io → Project → API → Webhooks):
  * - URL: https://<your-domain>/api/revalidate
- * - Secret: same value as SANITY_REVALIDATE_SECRET in Vercel (used for request signing)
+ * - Secret: same value as SANITY_REVALIDATE_SECRET or REVALIDATE_SECRET in the host env (signing)
  * - Trigger on create / update / delete for the dataset you publish from
  *
  * Manual test: GET /api/revalidate?secret=<SANITY_REVALIDATE_SECRET>
@@ -18,11 +18,19 @@ async function revalidateSite() {
   revalidatePath("/", "layout");
 }
 
+function getRevalidateSecret(): string | undefined {
+  return process.env.SANITY_REVALIDATE_SECRET ?? process.env.REVALIDATE_SECRET;
+}
+
 function requireSecret(): string | NextResponse {
-  const secret = process.env.SANITY_REVALIDATE_SECRET;
+  const secret = getRevalidateSecret();
   if (!secret) {
     return NextResponse.json(
-      { ok: false, message: "SANITY_REVALIDATE_SECRET is not configured" },
+      {
+        ok: false,
+        message:
+          "Set SANITY_REVALIDATE_SECRET (or REVALIDATE_SECRET) in the host env (e.g. Vercel → Settings → Environment Variables), same value as the Sanity webhook secret, then redeploy.",
+      },
       { status: 500 },
     );
   }
