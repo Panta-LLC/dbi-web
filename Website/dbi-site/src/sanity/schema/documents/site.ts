@@ -78,6 +78,12 @@ export const site = defineType({
             },
           ],
         }),
+        defineField({
+          name: "sponsorCarousel",
+          title: "Sponsor carousel",
+          type: "carouselSettings",
+          description: "Autoplay, dots, and progress for the partner strip.",
+        }),
       ],
     }),
   ],

@@ -178,6 +178,13 @@ body {
     font-size: clamp(2.25rem, 2.5vw + 1.25rem, 3.5rem);
     font-weight: 300;
     line-height: 1.1;
+
+    @media (max-width: 768px) {
+      font-size: clamp(1.75rem, 2.5vw + 1.25rem, 3rem);
+    }
+    @media (max-width: 480px) {
+      font-size: clamp(1.5rem, 2.5vw + 1rem, 2.75rem);
+    }
   }
 
   .display-m {
@@ -185,6 +192,12 @@ body {
     font-size: clamp(1.75rem, 1.5vw + 1rem, 2.5rem);
     font-weight: 700;
     line-height: 1.15;
+    @media (max-width: 768px) {
+      font-size: clamp(1.5rem, 1.5vw + 1rem, 2.25rem);
+    }
+    @media (max-width: 480px) {
+      font-size: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+    }
   }
 
   .display-s {
@@ -192,6 +205,13 @@ body {
     font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
     font-weight: 600;
     line-height: 1.15;
+
+    @media (max-width: 768px) {
+      font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
+    }
+    @media (max-width: 480px) {
+      font-size: clamp(1rem, 1vw + 1rem, 1.5rem);
+    }
   }
 
   .heading-1 {
@@ -627,6 +647,102 @@ body {
   }
 }
 
+/* SlideCarousel — enter animations (keyed remount on slide change). Vars: --slide-carousel-duration, --slide-carousel-autoplay-ms */
+@keyframes slide-carousel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-carousel-slide-next {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-carousel-slide-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-carousel-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-carousel-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes slide-carousel-autoplay-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Easing: smooth deceleration (no harsh snap at the end) */
+.slide-carousel-anim-fade {
+  animation: slide-carousel-fade-in var(--slide-carousel-duration, 680ms)
+    cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-carousel-anim-slide-next {
+  animation: slide-carousel-slide-next var(--slide-carousel-duration, 680ms)
+    cubic-bezier(0.22, 1, 0.4, 1) forwards;
+}
+
+.slide-carousel-anim-slide-prev {
+  animation: slide-carousel-slide-prev var(--slide-carousel-duration, 680ms)
+    cubic-bezier(0.22, 1, 0.4, 1) forwards;
+}
+
+.slide-carousel-anim-scale {
+  animation: slide-carousel-scale-in var(--slide-carousel-duration, 680ms)
+    cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-carousel-anim-blur {
+  animation: slide-carousel-blur-in var(--slide-carousel-duration, 680ms)
+    cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-carousel-autoplay-progress-fill {
+  transform-origin: left center;
+  animation: slide-carousel-autoplay-progress var(--slide-carousel-autoplay-ms, 8s) linear forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-accent,
   .hero-mask,
@@ -655,5 +771,21 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .slide-carousel-anim-fade,
+  .slide-carousel-anim-slide-next,
+  .slide-carousel-anim-slide-prev,
+  .slide-carousel-anim-scale,
+  .slide-carousel-anim-blur {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .slide-carousel-autoplay-progress-fill {
+    animation: none;
+    transform: scaleX(1);
   }
 }

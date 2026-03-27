@@ -19,6 +19,11 @@ export const testimonialSliderSection = defineType({
         },
       ],
     }),
+    defineField({
+      name: "carouselSettings",
+      title: "Carousel",
+      type: "carouselSettings",
+    }),
   ],
 });
 

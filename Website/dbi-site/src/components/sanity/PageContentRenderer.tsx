@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import type { CarouselSettings } from "@/components/carousel";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { ContentCard } from "@/components/ContentCard";
@@ -51,6 +52,11 @@ type ContentBlock = {
     quote?: string;
     attribution?: string;
   }>;
+  // textHighlightSection (multi-slide)
+  highlightItems?: Array<{
+    text?: string;
+  }>;
+  carouselSettings?: CarouselSettings | null;
   // cardGridSection
   cardItems?: Array<{
     title?: string;
@@ -105,8 +111,20 @@ function renderBlock(
         />
       );
 
-    case "textHighlightSection":
-      return <TextHighlightSection key={index} text={block.text} />;
+    case "textHighlightSection": {
+      const highlightItems =
+        block.highlightItems
+          ?.map((h) => ({ text: h.text ?? "" }))
+          .filter((h) => h.text.trim().length > 0) ?? [];
+      return (
+        <TextHighlightSection
+          key={index}
+          text={block.text}
+          items={highlightItems.length ? highlightItems : undefined}
+          carousel={block.carouselSettings}
+        />
+      );
+    }
 
     case "programCardsSection": {
       const items = (block.programItems ?? []).map((item) => ({
@@ -148,6 +166,7 @@ function renderBlock(
       return (
         <Section key={index}>
           <TestimonialSlider
+            carousel={block.carouselSettings}
             items={
               block.testimonialItems?.map((t) => ({
                 quote: t.quote ?? "",

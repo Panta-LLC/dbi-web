@@ -58,6 +58,14 @@ export const pageByPathQuery = groq`
       },
       "impactMetrics": metrics[]{ value, label, href },
       "testimonialItems": items[]{ quote, attribution },
+      "highlightItems": items[]{ text },
+      carouselSettings{
+        transition,
+        transitionDurationMs,
+        autoPlayMs,
+        showPagination,
+        showProgress
+      },
       "cardItems": items[]{ title, description },
       "imageItems": items[]{
         title,
@@ -104,6 +112,13 @@ export const siteQuery = groq`
         "logoSrc": logo.asset->url,
         logoAlt,
         tagline
+      },
+      sponsorCarousel{
+        transition,
+        transitionDurationMs,
+        autoPlayMs,
+        showPagination,
+        showProgress
       }
     }
   }

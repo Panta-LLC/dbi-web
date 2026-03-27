@@ -5,6 +5,7 @@ import { contactForm } from "./objects/contactForm";
 import { ctaButtonSection } from "./objects/ctaButtonSection";
 import { cta } from "./objects/cta";
 import { cardGridSection } from "./objects/cardGridSection";
+import { carouselSettings } from "./objects/carouselSettings";
 import { heroSection } from "./objects/heroSection";
 import { imageCardGridSection } from "./objects/imageCardGridSection";
 import { hero } from "./objects/hero";
@@ -22,6 +23,7 @@ import { textHighlightSection } from "./objects/textHighlightSection";
 import { testimonialSliderSection } from "./objects/testimonialSliderSection";
 
 export const schemaTypes = [
+  carouselSettings,
   cta,
   hero,
   impactCard,

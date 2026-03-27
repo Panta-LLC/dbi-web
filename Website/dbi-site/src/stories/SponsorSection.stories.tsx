@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { SponsorSection } from "@/components/SponsorSection";
 
 const meta: Meta<typeof SponsorSection> = {
@@ -35,7 +35,7 @@ export const WithLogos: Story = {
   },
 };
 
-export const Carousel: Story = {
+export const ManyPartners: Story = {
   args: {
     titleLine1: "Special Thanks to",
     titleLine2: "Our Sponsors",
@@ -44,5 +44,22 @@ export const Carousel: Story = {
       { name: "Fourth Sponsor" },
       { name: "Fifth Sponsor" },
     ],
+  },
+};
+
+export const WithSanityCarouselOptions: Story = {
+  args: {
+    titleLine1: "Special Thanks to",
+    titleLine2: "Our Sponsors",
+    items: [
+      ...defaultItems,
+      { name: "Fourth Sponsor" },
+      { name: "Fifth Sponsor" },
+    ],
+    carousel: {
+      showPagination: true,
+      showProgress: true,
+      autoPlayMs: 12000,
+    },
   },
 };

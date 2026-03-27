@@ -92,6 +92,7 @@ export async function Footer() {
         <SponsorSection
           titleLine1="Special Thanks to"
           titleLine2={content.partnersTitle ?? "Our Sponsors"}
+          carousel={content.sponsorCarousel}
           items={content.partners.map((p: { name: string; logoSrc?: string; logoAlt?: string; tagline?: string }) => ({
             name: p.name,
             logoSrc: p.logoSrc,

@@ -80,6 +80,12 @@ const documents = [
         ],
         "footer-partner",
       ),
+      sponsorCarousel: {
+        transition: "fade",
+        transitionDurationMs: 680,
+        showPagination: true,
+        showProgress: false,
+      },
       newsletterSignup: {
         title: "Keep up with our Work!",
         description: "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
@@ -417,8 +423,25 @@ const documents = [
         },
         {
           _type: "textHighlightSection",
-          text:
-            "Right now, African American students in Contra Costa County are building confidence, excelling academically, and discovering their potential—because of mentorship, advocacy, and community support that works.",
+          items: withKeys(
+            [
+              {
+                text:
+                  "Right now, African American students in Contra Costa County are building confidence, excelling academically, and discovering their potential—because of mentorship, advocacy, and community support that works.",
+              },
+              {
+                text:
+                  "Together with schools and families, we open doors to belonging, academic growth, and lasting opportunity for every young person we serve.",
+              },
+            ],
+            "highlight-line",
+          ),
+          carouselSettings: {
+            transition: "fade",
+            transitionDurationMs: 680,
+            showPagination: true,
+            showProgress: false,
+          },
         },
         {
           _type: "programCardsSection",
@@ -463,6 +486,27 @@ const documents = [
         },
         {
           _type: "testimonialSliderSection",
+          items: withKeys(
+            [
+              {
+                quote:
+                  "Delta Bay Impact has changed my life. The mentors have helped me tremendously.",
+                attribution: "- Former Mentee",
+              },
+              {
+                quote:
+                  "A truly transformative experience for our family. We are grateful for this community.",
+                attribution: "- Parent",
+              },
+            ],
+            "testimonial",
+          ),
+          carouselSettings: {
+            transition: "fade",
+            transitionDurationMs: 680,
+            showPagination: true,
+            showProgress: false,
+          },
         },
       ],
       "home-page-content",
