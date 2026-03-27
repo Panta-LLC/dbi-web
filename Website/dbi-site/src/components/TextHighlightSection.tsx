@@ -16,7 +16,9 @@ export function TextHighlightSection({
   const content =
     children ??
     (text ? (
-      <h2 className="display-s font-semibold mx-auto max-w-4xl text-balance">{text}</h2>
+      <h2 className="display-m font-semibold mx-auto max-w-4xl text-balance text-center px-2 md:px-0">
+        {text}
+      </h2>
     ) : null);
 
   if (!content) return null;

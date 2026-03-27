@@ -49,9 +49,7 @@ export function MeasurableImpact({
 
             const content = (
               <>
-                <span className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
-                  {metric.value}
-                </span>
+                <span className="display-l font-bold text-slate-900">{metric.value}</span>
                 <span className="mt-1 text-sm md:text-base text-slate-700 font-normal">
                   {metric.label}
                 </span>
