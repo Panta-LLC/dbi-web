@@ -207,15 +207,15 @@ export function SponsorSection({
               </div>
             </div>
 
-            {/* Desktop: static row of 3 */}
-            <div className="hidden md:flex flex-1 flex-row items-start justify-center gap-6 lg:gap-10 min-w-0 max-w-5xl">
+            {/* Desktop: static row of 3 — equal column height; logos centered in shared vertical space */}
+            <div className="hidden md:flex flex-1 flex-row items-stretch justify-center gap-6 lg:gap-10 min-w-0 max-w-5xl">
               {visibleItemsDesktop.map((item, i) => (
                 <div
                   key={`${item.name}-${index}-${i}`}
-                  className="flex-1 min-w-0 flex flex-col items-center justify-start text-center px-4"
+                  className="flex min-h-0 min-w-0 flex-1 flex-col items-center text-center px-4"
                 >
                   {item.logoSrc ? (
-                    <div className="flex w-full max-w-[240px] mx-auto items-center justify-center">
+                    <div className="flex min-h-12 w-full max-w-[240px] flex-1 flex-col items-center justify-center mx-auto">
                       <Image
                         src={item.logoSrc}
                         alt={item.logoAlt ?? item.name}
@@ -226,13 +226,13 @@ export function SponsorSection({
                       />
                     </div>
                   ) : (
-                    <div className="flex w-full min-h-16 max-w-[240px] mx-auto items-center justify-center bg-slate-100 rounded px-3 py-4 text-slate-500 text-sm font-semibold">
+                    <div className="flex min-h-16 w-full max-w-[240px] flex-1 flex-col items-center justify-center mx-auto bg-slate-100 rounded px-3 py-4 text-slate-500 text-sm font-semibold">
                       {item.name}
                     </div>
                   )}
-                  <p className="mt-3 text-sm lg:text-base font-bold text-slate-900">{item.name}</p>
+                  <p className="mt-3 shrink-0 text-sm font-bold text-slate-900 lg:text-base">{item.name}</p>
                   {item.tagline ? (
-                    <p className="mt-1 text-xs lg:text-sm text-slate-600">{item.tagline}</p>
+                    <p className="mt-1 shrink-0 text-xs text-slate-600 lg:text-sm">{item.tagline}</p>
                   ) : null}
                 </div>
               ))}

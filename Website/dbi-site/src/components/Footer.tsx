@@ -18,7 +18,10 @@ const defaultContent = {
   email: "info@deltabayimpact.org",
   partnersTitle: "Our Sponsors",
   partners: [
-    { name: "Community Health Fund", tagline: "John Muir Health · Building Bridges to Better Health" },
+    {
+      name: "Community Health Fund",
+      tagline: "John Muir Health · Building Bridges to Better Health",
+    },
     { name: "Keller Canyon Mitigation Fund" },
     { name: "Antioch Community Foundation" },
   ],
@@ -57,9 +60,11 @@ export async function Footer() {
   const siteData = await sanityClient.fetch(siteQuery).catch(() => null);
   const data = siteData?.footer ?? defaultContent;
   const donateUrl = siteData?.donateUrl ?? null;
-  const rawSiteLinks = (data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks) as LinkItem[];
+  const rawSiteLinks = (
+    data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks
+  ) as LinkItem[];
   const siteLinks = rawSiteLinks.map((link) =>
-    link.label === "Donate" && donateUrl ? { ...link, href: donateUrl } : link
+    link.label === "Donate" && donateUrl ? { ...link, href: donateUrl } : link,
   );
   const content = {
     ...defaultContent,
@@ -93,12 +98,14 @@ export async function Footer() {
           titleLine1="Special Thanks to"
           titleLine2={content.partnersTitle ?? "Our Sponsors"}
           carousel={content.sponsorCarousel}
-          items={content.partners.map((p: { name: string; logoSrc?: string; logoAlt?: string; tagline?: string }) => ({
-            name: p.name,
-            logoSrc: p.logoSrc,
-            logoAlt: p.logoAlt,
-            tagline: p.tagline,
-          }))}
+          items={content.partners.map(
+            (p: { name: string; logoSrc?: string; logoAlt?: string; tagline?: string }) => ({
+              name: p.name,
+              logoSrc: p.logoSrc,
+              logoAlt: p.logoAlt,
+              tagline: p.tagline,
+            }),
+          )}
         />
       ) : null}
       <footer className="bg-white border-t-4 md:border-t-5 border-orange-400">
@@ -116,13 +123,13 @@ export async function Footer() {
               <p className="display-s text-balance">{content.description}</p>
             </div>
             <div className="col-span-1 md:col-span-2 space-y-4 md:space-y-5 content-end">
-              <div className="flex flex-wrap gap-x-3 gap-y-2 md:gap-x-4 text-slate-700 border-b-2 border-slate-200 pb-4">
+              <div className="flex flex-wrap gap-x-3 gap-y-2 md:gap-x-4 text-slate-700 border-b-2 border-slate-200 pb-4 flex-col md:flex-row">
                 {content.siteLinks.map((link: LinkItem) => (
                   <div key={link.href} className="inline-block">
                     <Link
                       href={link.href}
                       variant="nav"
-                      className="touch-target text-sm md:text-base font-semibold"
+                      className="touch-target text-md md:text-sm font-semibold"
                     >
                       {link.label}
                     </Link>
