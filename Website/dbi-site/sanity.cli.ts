@@ -1,4 +1,10 @@
+import { config as loadEnv } from "dotenv";
+import { resolve } from "node:path";
 import { defineCliConfig } from "sanity/cli";
+
+// CLI commands do not load `.env.local` automatically (Next.js does). Match local dev.
+loadEnv({ path: resolve(process.cwd(), ".env") });
+loadEnv({ path: resolve(process.cwd(), ".env.local") });
 
 const projectId =
   process.env.SANITY_STUDIO_API_PROJECT_ID ?? process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;

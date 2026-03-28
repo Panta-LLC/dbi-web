@@ -4,6 +4,7 @@ import { contactDetails } from "./objects/contactDetails";
 import { contactForm } from "./objects/contactForm";
 import { ctaButtonSection } from "./objects/ctaButtonSection";
 import { cta } from "./objects/cta";
+import { ctaAction } from "./objects/ctaAction";
 import { cardGridSection } from "./objects/cardGridSection";
 import { carouselSettings } from "./objects/carouselSettings";
 import { heroSection } from "./objects/heroSection";
@@ -33,6 +34,7 @@ export const schemaTypes = [
   tabItem,
   contactDetails,
   contactForm,
+  ctaAction,
   page,
   site,
   heroSection,

@@ -5,6 +5,28 @@ const ctaFields = `
   href
 `;
 
+const contactFormFields = `
+  firstNamePlaceholder,
+  lastNamePlaceholder,
+  emailPlaceholder,
+  organizationPlaceholder,
+  messagePlaceholder,
+  submitLabel
+`;
+
+const ctaActionFields = `
+  kind,
+  label,
+  href,
+  formId,
+  messageContext,
+  modalTitle,
+  modalDescription,
+  presentation,
+  successMessage,
+  contactForm{${contactFormFields}}
+`;
+
 export const pageByPathQuery = groq`
   *[_type == "page" && path == $path] | order(_updatedAt desc)[0]{
     title,
@@ -26,7 +48,7 @@ export const pageByPathQuery = groq`
       imageAlt,
       primaryCta{${ctaFields}},
       secondaryCta{${ctaFields}},
-      cta{${ctaFields}},
+      cta{${ctaActionFields}},
       items[]{
         title,
         description,
@@ -47,14 +69,15 @@ export const pageByPathQuery = groq`
         label,
         href,
       },
-      "programCta": cta{${ctaFields}},
+      "programCta": cta{${ctaActionFields}},
       "programItems": items[]{
         title,
         description,
         "imageSrc": image.asset->url,
         imageAlt,
         href,
-        hoverColor
+        hoverColor,
+        "cardCta": cardCta{${ctaActionFields}}
       },
       "impactMetrics": metrics[]{ value, label, href },
       "testimonialItems": items[]{ quote, attribution },
@@ -66,12 +89,18 @@ export const pageByPathQuery = groq`
         showPagination,
         showProgress
       },
-      "cardItems": items[]{ title, description },
+      "cardItems": items[]{
+        title,
+        description,
+        href,
+        "cardCta": cardCta{${ctaActionFields}}
+      },
       "imageItems": items[]{
         title,
         subtitle,
         "imageSrc": image.asset->url,
-        imageAlt
+        imageAlt,
+        "cardCta": cardCta{${ctaActionFields}}
       },
       "textCta": cta{${ctaFields}},
       "ctaButton": cta{${ctaFields}}

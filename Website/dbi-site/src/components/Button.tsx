@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
-type ButtonVariant = "cta-primary" | "cta-secondary" | "cta-knockout" | "nav-primary" | "nav-secondary";
+export type ButtonVariant = "cta-primary" | "cta-secondary" | "cta-knockout" | "nav-primary" | "nav-secondary";
 
 type ButtonProps = {
   children: ReactNode;
@@ -24,14 +24,10 @@ const variantStyles: Record<ButtonVariant, string> = {
   "nav-secondary": "px-2 py-1.5 text-xs sm:text-sm text-slate-700 hover:text-primary",
 };
 
-export function Button({
-  children,
-  href,
-  variant = "cta-primary",
-  className = "",
-  type = "button",
-  ...rest
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { children, href, variant = "cta-primary", className = "", type = "button", ...rest },
+  ref,
+) {
   const classes = `${baseStyles} ${variantStyles[variant]} ${className}`.trim();
   const isSlanted =
     variant === "cta-primary" || variant === "cta-secondary" || variant === "cta-knockout" || variant === "nav-primary";
@@ -57,6 +53,7 @@ export function Button({
 
   return (
     <button
+      ref={ref}
       type={type}
       className={`${classes} ${
         isSlanted
@@ -68,4 +65,4 @@ export function Button({
       <span className="relative z-[1]">{children}</span>
     </button>
   );
-}
+});

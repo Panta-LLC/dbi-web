@@ -49,3 +49,30 @@ export const CustomHoverColors: Story = {
     ],
   },
 };
+
+export const LinkCtaLabels: Story = {
+  args: {
+    items: [
+      {
+        title: "Mentorship",
+        imageSrc: "https://picsum.photos/600/400?random=10",
+        imageAlt: "Mentor and mentee",
+        href: "/programs/mentorship",
+        linkCtaLabel: "Explore program",
+      },
+      {
+        title: "Family Engagement",
+        imageSrc: "https://picsum.photos/600/400?random=11",
+        imageAlt: "Families together",
+        href: "/programs/family-engagement",
+        linkCtaLabel: "See how we help",
+      },
+      {
+        title: "Community",
+        imageSrc: "https://picsum.photos/600/400?random=12",
+        imageAlt: "Community event",
+        href: "/programs/community-engagement",
+      },
+    ],
+  },
+};

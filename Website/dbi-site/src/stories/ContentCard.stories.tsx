@@ -22,6 +22,6 @@ export const WithCta: Story = {
     title: "Family Engagement",
     description:
       "We strengthen communication and partnership between schools and families through events and outreach.",
-    cta: { label: "Learn more", href: "/programs" },
+    cta: { kind: "link", label: "Learn more", href: "/programs" },
   },
 };

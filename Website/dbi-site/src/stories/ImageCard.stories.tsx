@@ -31,3 +31,13 @@ export const NoImage: Story = {
     subtitle: "Volunteer position",
   },
 };
+
+export const WithCta: Story = {
+  args: {
+    title: "Tiffany Francies",
+    subtitle: "Executive Director",
+    imageSrc: "https://picsum.photos/400/300",
+    imageAlt: "Portrait",
+    cta: { kind: "link", label: "Contact", href: "/contact" },
+  },
+};

@@ -7,8 +7,10 @@ export const programCardsSection = defineType({
   fields: [
     defineField({
       name: "cta",
-      title: "Section CTA (fallback link for cards)",
-      type: "cta",
+      title: "Section CTA (fallback for cards without their own action)",
+      type: "ctaAction",
+      description:
+        "Used when a card has no card-level CTA, or as the default link when a card only has a URL. Choose a link or the contact form.",
     }),
     defineField({
       name: "items",
@@ -28,10 +30,18 @@ export const programCardsSection = defineType({
             }),
             defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
             defineField({
+              name: "cardCta",
+              title: "Card CTA",
+              type: "ctaAction",
+              description:
+                "Optional. Sets this card’s action: link (internal or external) or contact form modal. When empty, the card link URL below and section CTA are used.",
+            }),
+            defineField({
               name: "href",
-              title: "Card Link URL",
+              title: "Card link URL (legacy)",
               type: "string",
-              description: "Optional; falls back to section CTA",
+              description:
+                "Optional fallback path when Card CTA is not set, or when Card CTA is a link without its own URL.",
             }),
             defineField({
               name: "hoverColor",

@@ -362,7 +362,6 @@ body {
   }
 
   .slant-clip-content-card {
-    transform: skewX(-4deg);
     border-radius: 4px;
   }
 
@@ -398,7 +397,6 @@ body {
 
   .reveal .content-card {
     opacity: 0;
-    transform: translateY(28px) skewX(0deg);
     transition:
       opacity 0.6s var(--animation-effect) 0.15s,
       transform 0.6s var(--animation-effect) 0.15s;
@@ -406,10 +404,6 @@ body {
 
   .reveal.is-visible .content-card {
     opacity: 1;
-    transform: translateY(0) skewX(-4deg);
-  }
-  .reveal.is-visible .content-card > * {
-    transform: skewX(4deg);
   }
 
   /* Responsive utilities */

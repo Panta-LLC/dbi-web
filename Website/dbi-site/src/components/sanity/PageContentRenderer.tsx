@@ -6,10 +6,19 @@ import { ContentCard } from "@/components/ContentCard";
 import { Hero } from "@/components/Hero";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
+import type { ProgramCardItem } from "@/components/ProgramCards";
 import { ProgramCards } from "@/components/ProgramCards";
 import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
 import { TextHighlightSection } from "@/components/TextHighlightSection";
+import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
+import {
+  contactFormPlaceholdersFromSanity,
+  isContactFormCta,
+  isLinkCta,
+  presentationFromSanity,
+  type SanityCtaAction,
+} from "@/lib/sanity-cta-action";
 
 type Cta = {
   label?: string;
@@ -32,7 +41,9 @@ type ContentBlock = {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   // programCardsSection
-  programCta?: Cta;
+  programCta?: SanityCtaAction | Cta;
+  /** Section-level CTA (card grid / image card grid fallbacks). */
+  cta?: SanityCtaAction;
   programItems?: Array<{
     title?: string;
     description?: string;
@@ -40,6 +51,7 @@ type ContentBlock = {
     imageAlt?: string;
     href?: string;
     hoverColor?: string;
+    cardCta?: SanityCtaAction;
   }>;
   // measurableImpactSection
   impactMetrics?: Array<{
@@ -61,6 +73,8 @@ type ContentBlock = {
   cardItems?: Array<{
     title?: string;
     description?: string;
+    href?: string;
+    cardCta?: SanityCtaAction;
   }>;
   // imageCardGridSection
   imageItems?: Array<{
@@ -68,6 +82,7 @@ type ContentBlock = {
     subtitle?: string;
     imageSrc?: string;
     imageAlt?: string;
+    cardCta?: SanityCtaAction;
   }>;
   // textAndCtaSection
   textCta?: Cta;
@@ -82,6 +97,132 @@ function resolveHref(
   if (!href) return undefined;
   if (href === "/donate" && donateUrl) return donateUrl;
   return href;
+}
+
+function sectionCtaLinkFallback(
+  cta: SanityCtaAction | Cta | undefined,
+  donateUrl: string | null | undefined,
+): string | undefined {
+  if (!cta) return undefined;
+  if ("kind" in cta && cta.kind === "contactForm") return undefined;
+  const href = typeof cta.href === "string" ? cta.href.trim() : "";
+  if (!href) return undefined;
+  return resolveHref(href, donateUrl);
+}
+
+function mapProgramCardItem(
+  item: NonNullable<ContentBlock["programItems"]>[number],
+  block: ContentBlock,
+  donateUrl: string | null | undefined,
+): ProgramCardItem {
+  const sectionHref = sectionCtaLinkFallback(block.programCta, donateUrl);
+  const fallback =
+    resolveHref(item.href ?? undefined, donateUrl) ?? sectionHref ?? "/services";
+
+  const cardCta = item.cardCta;
+
+  if (cardCta && isContactFormCta(cardCta)) {
+    const cf = cardCta.contactForm;
+    return {
+      title: item.title ?? "",
+      imageSrc: item.imageSrc,
+      imageAlt: item.imageAlt,
+      hoverColor: item.hoverColor,
+      href: fallback,
+      contactModal: {
+        formId: cardCta.formId.trim(),
+        triggerLabel: cardCta.label.trim(),
+        presentation: presentationFromSanity(cardCta.presentation ?? undefined),
+        messageContext: cardCta.messageContext ?? undefined,
+        title: cardCta.modalTitle ?? undefined,
+        description: cardCta.modalDescription ?? undefined,
+        placeholders: contactFormPlaceholdersFromSanity(cf),
+        submitLabel: cf.submitLabel?.trim() || "Send",
+        successMessage: cardCta.successMessage ?? undefined,
+      },
+    };
+  }
+
+  let href = fallback;
+  let linkCtaLabel: string | undefined;
+  if (cardCta && isLinkCta(cardCta)) {
+    href = resolveHref(cardCta.href, donateUrl) ?? fallback;
+    linkCtaLabel = cardCta.label.trim();
+  }
+
+  return {
+    title: item.title ?? "",
+    imageSrc: item.imageSrc,
+    imageAlt: item.imageAlt,
+    hoverColor: item.hoverColor,
+    href,
+    linkCtaLabel,
+  };
+}
+
+function mapGridCardCta(
+  item: { cardCta?: SanityCtaAction; href?: string },
+  sectionCta: SanityCtaAction | undefined,
+  donateUrl: string | null | undefined,
+): GridCardCtaResolved | undefined {
+  const sectionHref = sectionCtaLinkFallback(sectionCta, donateUrl);
+  const fallback = resolveHref(item.href, donateUrl) ?? sectionHref;
+
+  const cardCta = item.cardCta;
+
+  if (cardCta && isContactFormCta(cardCta)) {
+    const cf = cardCta.contactForm;
+    return {
+      kind: "contactForm",
+      formId: cardCta.formId.trim(),
+      triggerLabel: cardCta.label.trim(),
+      presentation: presentationFromSanity(cardCta.presentation ?? undefined),
+      messageContext: cardCta.messageContext ?? undefined,
+      title: cardCta.modalTitle ?? undefined,
+      description: cardCta.modalDescription ?? undefined,
+      placeholders: contactFormPlaceholdersFromSanity(cf),
+      submitLabel: cf.submitLabel?.trim() || "Send",
+      successMessage: cardCta.successMessage ?? undefined,
+    };
+  }
+
+  let href = fallback;
+  if (cardCta && isLinkCta(cardCta)) {
+    href = resolveHref(cardCta.href, donateUrl) ?? fallback;
+  }
+
+  if (cardCta && isLinkCta(cardCta)) {
+    if (!href) return undefined;
+    return { kind: "link", label: cardCta.label.trim(), href };
+  }
+
+  if (sectionCta && isContactFormCta(sectionCta)) {
+    const cf = sectionCta.contactForm;
+    return {
+      kind: "contactForm",
+      formId: sectionCta.formId.trim(),
+      triggerLabel: sectionCta.label.trim(),
+      presentation: presentationFromSanity(sectionCta.presentation ?? undefined),
+      messageContext: sectionCta.messageContext ?? undefined,
+      title: sectionCta.modalTitle ?? undefined,
+      description: sectionCta.modalDescription ?? undefined,
+      placeholders: contactFormPlaceholdersFromSanity(cf),
+      submitLabel: cf.submitLabel?.trim() || "Send",
+      successMessage: sectionCta.successMessage ?? undefined,
+    };
+  }
+
+  if (sectionCta && isLinkCta(sectionCta)) {
+    const h = resolveHref(sectionCta.href, donateUrl) ?? fallback;
+    if (!h) return undefined;
+    return { kind: "link", label: sectionCta.label.trim(), href: h };
+  }
+
+  if (href) {
+    return { kind: "link", label: "Learn more", href };
+  }
+
+  return undefined;
 }
 
 function renderBlock(
@@ -127,15 +268,9 @@ function renderBlock(
     }
 
     case "programCardsSection": {
-      const items = (block.programItems ?? []).map((item) => ({
-        title: item.title ?? "",
-        description: item.description,
-        imageSrc: item.imageSrc,
-        imageAlt: item.imageAlt,
-        href:
-          resolveHref(item.href ?? block.programCta?.href ?? "/services", donateUrl) ?? "/services",
-        hoverColor: item.hoverColor,
-      }));
+      const items = (block.programItems ?? []).map((item) =>
+        mapProgramCardItem(item, block, donateUrl),
+      );
 
       return (
         <Section className="bg-light-gray" key={index}>
@@ -182,12 +317,18 @@ function renderBlock(
         <Section className="bg-white my-10" key={index}>
           <Container>
             <h2 className="heading-2 text-center">{block.title}</h2>
+            {block.description ? (
+              <p className="body-md mx-auto mt-6 max-w-3xl text-center text-slate-600 whitespace-pre-line">
+                {block.description}
+              </p>
+            ) : null}
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {(block.cardItems ?? []).map((item, i) => (
                 <ContentCard
                   key={`${item.title ?? "card"}-${i}`}
                   title={item.title ?? ""}
                   description={item.description}
+                  cta={mapGridCardCta(item, block.cta, donateUrl)}
                 />
               ))}
             </div>
@@ -208,6 +349,7 @@ function renderBlock(
                   subtitle={item.subtitle}
                   imageSrc={item.imageSrc}
                   imageAlt={item.imageAlt}
+                  cta={mapGridCardCta(item, block.cta, donateUrl)}
                 />
               ))}
             </div>
