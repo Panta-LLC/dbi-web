@@ -28,7 +28,7 @@ type SponsorSectionProps = {
 };
 
 const ORANGE = "var(--color-2, #ff7900)";
-const VISIBLE_COUNT_DESKTOP = 4;
+const VISIBLE_COUNT_DESKTOP = 3;
 
 const MOBILE_VISIBLE = 1;
 
@@ -122,10 +122,13 @@ export function SponsorSection({
     });
   }, [needsCarouselDesktop, needsCarouselMobile, n]);
 
-  const goToSlide = useCallback((i: number) => {
-    if (i < 0 || i >= n) return;
-    setSlideIndex(i);
-  }, [n]);
+  const goToSlide = useCallback(
+    (i: number) => {
+      if (i < 0 || i >= n) return;
+      setSlideIndex(i);
+    },
+    [n],
+  );
 
   useEffect(() => {
     if (!resolved.autoPlayMs || paused || !multi) return;
@@ -210,7 +213,7 @@ export function SponsorSection({
                           width={320}
                           height={240}
                           sizes="(max-width: 768px) 85vw, 240px"
-                          className="h-auto max-h-[200px] w-full max-w-full object-contain"
+                          className="h-auto max-h-[150px] w-full max-w-full object-contain"
                         />
                       </div>
                     ) : (
@@ -261,7 +264,7 @@ export function SponsorSection({
                           width={320}
                           height={240}
                           sizes="(max-width: 1024px) 28vw, 240px"
-                          className="h-auto max-h-[200px] w-full max-w-full object-contain"
+                          className="h-auto max-h-[120px] w-full max-w-full object-contain"
                         />
                       </div>
                     ) : (
@@ -269,9 +272,13 @@ export function SponsorSection({
                         {item.name}
                       </div>
                     )}
-                    <p className="mt-3 shrink-0 text-sm font-bold text-slate-900 lg:text-base">{item.name}</p>
+                    <p className="mt-3 shrink-0 text-sm font-bold text-slate-900 lg:text-base">
+                      {item.name}
+                    </p>
                     {item.tagline ? (
-                      <p className="mt-1 shrink-0 text-xs text-slate-600 lg:text-sm">{item.tagline}</p>
+                      <p className="mt-1 shrink-0 text-xs text-slate-600 lg:text-sm">
+                        {item.tagline}
+                      </p>
                     ) : null}
                   </div>
                 ))}
