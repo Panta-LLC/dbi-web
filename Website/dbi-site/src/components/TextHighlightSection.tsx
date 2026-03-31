@@ -43,8 +43,6 @@ function TextHighlightCarousel({ slides, carousel, className }: TextHighlightCar
   const regionId = `${baseId}-region`;
   const labelId = `${baseId}-label`;
 
-  const current = slides[c.activeIndex];
-
   return (
     <Section className={className + " bg-light-gray"}>
       <Container className="py-12 sm:py-16 flex flex-col items-center justify-center lg:items-center">
@@ -75,9 +73,9 @@ function TextHighlightCarousel({ slides, carousel, className }: TextHighlightCar
             theme="light"
             className="relative flex flex-col items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm w-full"
             contentWrapperClassName="min-h-[12rem] sm:min-h-56 flex items-center justify-center py-4"
-            renderSlide={() => (
+            renderSlide={(index) => (
               <h2 className="display-m font-semibold mx-auto max-w-4xl text-balance text-center w-full">
-                {current.text}
+                {slides[index]?.text ?? ""}
               </h2>
             )}
           />

@@ -81,8 +81,7 @@ export function TestimonialSlider({
   const regionId = `${baseId}-region`;
   const labelId = `${baseId}-label`;
 
-  const current = list[c.activeIndex];
-  if (!current) return null;
+  if (!list.length) return null;
 
   return (
     <SlideCarousel
@@ -91,6 +90,8 @@ export function TestimonialSlider({
       activeIndex={c.activeIndex}
       direction={c.direction}
       transition={resolved.transition}
+      transitionMode={resolved.transition === "fade" ? "crossfade" : "enter"}
+      matchTallestSlide={resolved.transition !== "fade"}
       transitionDurationMs={resolved.transitionDurationMs}
       autoPlayMs={resolved.autoPlayMs}
       showPagination={showDots}
@@ -111,32 +112,35 @@ export function TestimonialSlider({
       theme="testimonialDark"
       className={`relative flex flex-col items-center justify-center py-10 md:py-14 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] rounded-sm ${className}`}
       style={{ backgroundColor: BLUE_BG }}
-      contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm min-h-48 md:min-h-56"
-      renderSlide={() => (
-        <div className="flex w-full flex-1 items-start">
-          <span
-            className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
-            style={{
-              color: "var(--color-2, #ff7900)",
-              // fontSize: "9rem",
-              lineHeight: ".35em",
-            }}
-            aria-hidden
-          >
-            “
-          </span>
-          <div className="flex-1 min-w-0">
-            <blockquote className="display-m font-bold text-white leading-snug text-left">
-              {current.quote}
-            </blockquote>
-            {current.attribution ? (
-              <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
-                {current.attribution}
-              </p>
-            ) : null}
+      contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm"
+      renderSlide={(index) => {
+        const item = list[index];
+        if (!item) return null;
+        return (
+          <div className="flex w-full flex-1 items-start">
+            <span
+              className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
+              style={{
+                color: "var(--color-2, #ff7900)",
+                lineHeight: ".35em",
+              }}
+              aria-hidden
+            >
+              “
+            </span>
+            <div className="flex-1 min-w-0">
+              <blockquote className="display-m font-bold text-white leading-snug text-left">
+                {item.quote}
+              </blockquote>
+              {item.attribution ? (
+                <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
+                  {item.attribution}
+                </p>
+              ) : null}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      }}
     />
   );
 }

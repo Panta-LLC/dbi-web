@@ -48,8 +48,8 @@ function SlideCarouselDemo() {
         theme="light"
         className="relative flex flex-col items-center justify-center max-w-3xl mx-auto outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm w-full"
         contentWrapperClassName="min-h-32 flex items-center justify-center py-4"
-        renderSlide={() => (
-          <p className="display-m font-semibold text-center text-balance">{slides[c.activeIndex]}</p>
+        renderSlide={(index) => (
+          <p className="display-m font-semibold text-center text-balance">{slides[index]}</p>
         )}
       />
     </div>

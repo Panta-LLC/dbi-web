@@ -1,12 +1,15 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CarouselArrows } from "./CarouselArrows";
 import { CarouselDotNav } from "./CarouselDotNav";
 import { CarouselProgressBar } from "./CarouselProgressBar";
 import { animClass, type CarouselTransition } from "./types";
 
 export type SlideCarouselTheme = "testimonialDark" | "light";
+
+export type SlideCarouselTransitionMode = "enter" | "crossfade";
 
 const THEME = {
   testimonialDark: {
@@ -43,6 +46,10 @@ export type SlideCarouselProps = {
   direction: "next" | "prev";
   transition: CarouselTransition;
   transitionDurationMs: number;
+  /** `enter` = keyed enter animation; `crossfade` = opacity crossfade + tallest-slide height (multi only). */
+  transitionMode?: SlideCarouselTransitionMode;
+  /** When multi and `enter` mode, grid-measure all slides so the area stays as tall as the tallest slide. */
+  matchTallestSlide?: boolean;
   autoPlayMs?: number;
   showPagination: boolean;
   showProgress: boolean;
@@ -66,8 +73,8 @@ export type SlideCarouselProps = {
   style?: CSSProperties;
   /** Min-height area wrapping the animated slide */
   contentWrapperClassName?: string;
-  /** Renders the active slide’s body (inside keyed animated div). */
-  renderSlide: () => ReactNode;
+  /** Renders slide content for a given index (0-based). */
+  renderSlide: (index: number) => ReactNode;
 };
 
 export function SlideCarousel({
@@ -77,6 +84,8 @@ export function SlideCarousel({
   direction,
   transition,
   transitionDurationMs,
+  transitionMode = "enter",
+  matchTallestSlide = false,
   autoPlayMs,
   showPagination,
   showProgress,
@@ -103,6 +112,125 @@ export function SlideCarousel({
   const enterClass = multi ? animClass(transition, direction) : "";
   const showBar = showProgress && !!autoPlayMs && multi;
   const showDots = showPagination && multi;
+
+  const crossfade = multi && transitionMode === "crossfade";
+  const tallestRail = multi && (crossfade || matchTallestSlide);
+
+  const prevActiveRef = useRef(activeIndex);
+  const [outgoing, setOutgoing] = useState<{ idx: number } | null>(null);
+  const [navGen, setNavGen] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!crossfade) return;
+    if (prevActiveRef.current !== activeIndex) {
+      setOutgoing({ idx: prevActiveRef.current });
+      setNavGen((n) => n + 1);
+      prevActiveRef.current = activeIndex;
+    }
+  }, [activeIndex, crossfade]);
+
+  useEffect(() => {
+    if (!crossfade || !outgoing) return;
+    const idx = outgoing.idx;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) {
+      setOutgoing(null);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setOutgoing((prev) => (prev?.idx === idx ? null : prev));
+    }, transitionDurationMs);
+    return () => window.clearTimeout(timer);
+  }, [crossfade, outgoing, transitionDurationMs]);
+
+  const durationStyle = {
+    "--slide-carousel-duration": `${transitionDurationMs}ms`,
+  } as CSSProperties;
+
+  let slideContent: ReactNode;
+
+  if (!multi) {
+    slideContent = (
+      <div className="relative h-full min-h-0 w-full overflow-hidden" aria-live="polite" aria-atomic="true">
+        {renderSlide(0)}
+      </div>
+    );
+  } else if (crossfade) {
+    slideContent = (
+      <div className="grid w-full grid-cols-1 grid-rows-1">
+        {Array.from({ length: count }, (_, i) => (
+          <div
+            key={`h-${i}`}
+            className="invisible col-start-1 row-start-1 min-w-0 w-full wrap-anywhere pointer-events-none"
+            aria-hidden
+          >
+            {renderSlide(i)}
+          </div>
+        ))}
+        <div
+          className="relative col-start-1 row-start-1 flex min-h-0 min-w-0 w-full flex-col justify-center self-stretch"
+          style={durationStyle}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {outgoing != null && outgoing.idx !== activeIndex ? (
+            <div
+              key={`out-${outgoing.idx}`}
+              className="slide-carousel-crossfade-out pointer-events-none absolute inset-0 z-0 flex w-full flex-col justify-center"
+              aria-hidden
+            >
+              {renderSlide(outgoing.idx)}
+            </div>
+          ) : null}
+          <div
+            key={`in-${activeIndex}`}
+            className={`relative z-1 w-full min-h-0 ${navGen > 0 ? "slide-carousel-crossfade-in" : ""}`}
+          >
+            {renderSlide(activeIndex)}
+          </div>
+        </div>
+      </div>
+    );
+  } else if (tallestRail) {
+    slideContent = (
+      <div className="grid w-full grid-cols-1 grid-rows-1">
+        {Array.from({ length: count }, (_, i) => (
+          <div
+            key={`h-${i}`}
+            className="invisible col-start-1 row-start-1 min-w-0 w-full wrap-anywhere pointer-events-none"
+            aria-hidden
+          >
+            {renderSlide(i)}
+          </div>
+        ))}
+        <div
+          className="col-start-1 row-start-1 flex min-h-0 min-w-0 w-full flex-col justify-center self-stretch overflow-hidden"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <div
+            key={activeIndex}
+            className={`slide-carousel-content relative min-h-0 w-full ${enterClass}`}
+            style={durationStyle}
+          >
+            {renderSlide(activeIndex)}
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    slideContent = (
+      <div
+        key={activeIndex}
+        className={`slide-carousel-content relative h-full min-h-0 w-full ${enterClass}`}
+        style={durationStyle}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {renderSlide(activeIndex)}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -133,27 +261,7 @@ export function SlideCarousel({
           nextButtonClassName={t.arrowNext}
         />
 
-        <div className={`relative min-h-0 w-full flex-1 min-w-0 ${contentWrapperClassName}`}>
-          <div
-            key={multi ? activeIndex : "single"}
-            className={
-              multi
-                ? `slide-carousel-content relative h-full min-h-0 w-full ${enterClass}`
-                : "relative h-full min-h-0 w-full overflow-hidden"
-            }
-            style={
-              multi
-                ? ({
-                    "--slide-carousel-duration": `${transitionDurationMs}ms`,
-                  } as CSSProperties)
-                : undefined
-            }
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {renderSlide()}
-          </div>
-        </div>
+        <div className={`relative min-h-0 w-full flex-1 min-w-0 ${contentWrapperClassName}`}>{slideContent}</div>
       </div>
 
       <CarouselProgressBar
