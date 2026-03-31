@@ -1,9 +1,12 @@
 import type { ReactElement } from "react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { urlForSanityImage } from "@/lib/sanity-image";
 import { sanityClient } from "@/sanity/client";
 import { siteQuery } from "@/sanity/queries";
+import type { SanityImageSource } from "@sanity/image-url";
 import { Container } from "./Container";
 import { EmailActions } from "./EmailActions";
+import { PhoneActions } from "./PhoneActions";
 import { NewsletterSignup } from "./NewsletterSignup";
 import { SponsorSection } from "./SponsorSection";
 import { Link } from "./Link";
@@ -16,6 +19,7 @@ const defaultContent = {
   description:
     "Building opportunity through community partnerships, programs, and impact-driven work.",
   email: "info@deltabayimpact.org",
+  phone: "",
   partnersTitle: "Our Sponsors",
   partners: [
     {
@@ -28,12 +32,12 @@ const defaultContent = {
   newsletterSignup: {
     title: "Keep up with our Work!",
     description: "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
-    placeholder: "Your email address",
-    buttonLabel: "Sign-up",
+    buttonLabel: "Sign up for our Newsletter",
     legalText:
       "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
     imageAlt: "Community",
   },
+  servingLine: "Serving Bay Point, Concord, and Pittsburg schools since 2023",
   siteLinks: [
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
@@ -51,9 +55,9 @@ const defaultContent = {
 };
 
 const SOCIAL_ICONS: Record<string, IconComponent> = {
-  instagram: () => <FaInstagram className="h-7 w-7" />,
-  facebook: () => <FaFacebookF className="h-7 w-7" />,
-  linkedin: () => <FaLinkedinIn className="h-7 w-7" />,
+  instagram: () => <FaInstagram className="h-5 w-5 shrink-0" />,
+  facebook: () => <FaFacebookF className="h-5 w-5 shrink-0" />,
+  linkedin: () => <FaLinkedinIn className="h-5 w-5 shrink-0" />,
 };
 
 export async function Footer() {
@@ -66,15 +70,21 @@ export async function Footer() {
   const siteLinks = rawSiteLinks.map((link) =>
     link.label === "Donate" && donateUrl ? { ...link, href: donateUrl } : link,
   );
+  const rawPartners = (data.partners?.length ? data.partners : defaultContent.partners) as {
+    name: string;
+    logo?: SanityImageSource;
+    logoSrc?: string;
+    logoAlt?: string;
+    tagline?: string;
+  }[];
+
   const content = {
     ...defaultContent,
     ...data,
-    partners: (data.partners?.length ? data.partners : defaultContent.partners) as {
-      name: string;
-      logoSrc?: string;
-      logoAlt?: string;
-      tagline?: string;
-    }[],
+    partners: rawPartners.map((p) => ({
+      ...p,
+      logoSrc: urlForSanityImage(p.logo) ?? p.logoSrc,
+    })),
     siteLinks,
     socialLinks: (data.socialLinks?.length
       ? data.socialLinks
@@ -86,12 +96,14 @@ export async function Footer() {
       <NewsletterSignup
         title={content.newsletterSignup?.title}
         description={content.newsletterSignup?.description}
-        placeholder={content.newsletterSignup?.placeholder}
         buttonLabel={content.newsletterSignup?.buttonLabel}
         legalText={content.newsletterSignup?.legalText}
-        imageSrc={content.newsletterSignup?.imageSrc}
+        imageSrc={
+          urlForSanityImage(
+            (content.newsletterSignup as { image?: SanityImageSource } | undefined)?.image,
+          ) ?? content.newsletterSignup?.imageSrc
+        }
         imageAlt={content.newsletterSignup?.imageAlt}
-        mailchimp={content.newsletterSignup?.mailchimp}
       />
       {content.partners.length ? (
         <SponsorSection
@@ -122,7 +134,7 @@ export async function Footer() {
               </div>
               <p className="display-s text-balance">{content.description}</p>
             </div>
-            <div className="col-span-1 md:col-span-2 space-y-4 md:space-y-5 content-end">
+            <div className="col-span-1 md:col-span-2 space-y-4 md:space-y-5 content-start">
               <div className="flex flex-wrap gap-x-3 gap-y-2 md:gap-x-4 text-slate-700 border-b-2 border-slate-200 pb-4 flex-col md:flex-row">
                 {content.siteLinks.map((link: LinkItem) => (
                   <div key={link.href} className="inline-block">
@@ -136,30 +148,43 @@ export async function Footer() {
                   </div>
                 ))}
               </div>
-              <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-slate-700">
                 <EmailActions email={content.email} />
-                <div className="space-y-3">
-                  <ul className="flex items-center">
-                    {content.socialLinks.map((link: LinkItem) => {
-                      const Icon =
-                        SOCIAL_ICONS[link.label.toLowerCase()] ??
-                        (() => <FaInstagram className="h-5 w-5 md:h-6 md:w-6" />);
-                      return (
-                        <li key={link.label}>
-                          <a
-                            href={link.href}
-                            className="touch-target inline-flex items-center justify-center transition hover:-translate-x-[2px] hover:-translate-y-[2px] hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={link.label}
-                          >
-                            <Icon />
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+                {content.phone?.trim() ? (
+                  <>
+                    <span className="text-slate-400 select-none shrink-0" aria-hidden>
+                      |
+                    </span>
+                    <PhoneActions phone={content.phone.trim()} />
+                  </>
+                ) : null}
+                {content.socialLinks.length > 0 ? (
+                  <>
+                    <span className="text-slate-400 select-none shrink-0" aria-hidden>
+                      |
+                    </span>
+                    <ul className="flex items-center gap-1">
+                      {content.socialLinks.map((link: LinkItem) => {
+                        const Icon =
+                          SOCIAL_ICONS[link.label.toLowerCase()] ??
+                          (() => <FaInstagram className="h-5 w-5 shrink-0" />);
+                        return (
+                          <li key={link.label}>
+                            <a
+                              href={link.href}
+                              className="touch-target inline-flex items-center justify-center transition hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
+                              target="_blank"
+                              rel="noreferrer"
+                              aria-label={link.label}
+                            >
+                              <Icon />
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                ) : null}
               </div>
             </div>
           </div>
@@ -167,9 +192,11 @@ export async function Footer() {
             <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
               © {new Date().getFullYear()} Delta Bay Impact | Nonprofit youth organization
             </p>
-            <p className="mt-1 text-xs md:text-sm text-slate-600 leading-relaxed">
-              Serving Bay Point, Concord, and Pittsburg schools since 2023
-            </p>
+            {content.servingLine ? (
+              <p className="mt-1 text-xs md:text-sm text-slate-600 leading-relaxed">
+                {content.servingLine}
+              </p>
+            ) : null}
           </div>
         </Container>
       </footer>

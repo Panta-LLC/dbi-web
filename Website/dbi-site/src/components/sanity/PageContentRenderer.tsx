@@ -12,6 +12,8 @@ import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
 import { TextHighlightSection } from "@/components/TextHighlightSection";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
+import { urlForSanityImage } from "@/lib/sanity-image";
+import type { SanityImageSource } from "@sanity/image-url";
 import {
   contactFormPlaceholdersFromSanity,
   isContactFormCta,
@@ -36,6 +38,8 @@ type ContentBlock = {
   legalText?: string;
   imageSrc?: string;
   imageAlt?: string;
+  /** Full image field (crop/hotspot); prefer `urlForSanityImage` over raw `imageSrc`. */
+  image?: SanityImageSource;
   ctaVariant?: "primary" | "secondary";
   buttonVariant?: "primary" | "secondary";
   primaryCta?: Cta;
@@ -47,6 +51,7 @@ type ContentBlock = {
   programItems?: Array<{
     title?: string;
     description?: string;
+    image?: SanityImageSource;
     imageSrc?: string;
     imageAlt?: string;
     href?: string;
@@ -58,6 +63,15 @@ type ContentBlock = {
     value?: string;
     label?: string;
     href?: string;
+  }>;
+  // heroSection (left strip + gallery)
+  leftImage?: SanityImageSource;
+  leftImageSrc?: string;
+  leftImageAlt?: string;
+  galleryImages?: Array<{
+    image?: SanityImageSource;
+    imageSrc?: string;
+    imageAlt?: string;
   }>;
   // testimonialSliderSection
   testimonialItems?: Array<{
@@ -80,6 +94,7 @@ type ContentBlock = {
   imageItems?: Array<{
     title?: string;
     subtitle?: string;
+    image?: SanityImageSource;
     imageSrc?: string;
     imageAlt?: string;
     cardCta?: SanityCtaAction;
@@ -125,7 +140,7 @@ function mapProgramCardItem(
     const cf = cardCta.contactForm;
     return {
       title: item.title ?? "",
-      imageSrc: item.imageSrc,
+      imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
       imageAlt: item.imageAlt,
       hoverColor: item.hoverColor,
       href: fallback,
@@ -152,7 +167,7 @@ function mapProgramCardItem(
 
   return {
     title: item.title ?? "",
-    imageSrc: item.imageSrc,
+    imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
     imageAlt: item.imageAlt,
     hoverColor: item.hoverColor,
     href,
@@ -225,6 +240,21 @@ function mapGridCardCta(
   return undefined;
 }
 
+function heroGallerySlides(block: ContentBlock): { src: string; alt?: string }[] {
+  const fromGallery: { src: string; alt?: string }[] = [];
+  for (const g of block.galleryImages ?? []) {
+    const src = urlForSanityImage(g.image) ?? g.imageSrc;
+    if (src) fromGallery.push({ src, alt: g.imageAlt });
+  }
+  if (fromGallery.length) return fromGallery;
+
+  const legacySrc = urlForSanityImage(block.image) ?? block.imageSrc;
+  if (legacySrc) {
+    return [{ src: legacySrc, alt: block.imageAlt }];
+  }
+  return [];
+}
+
 function renderBlock(
   block: ContentBlock,
   index: number,
@@ -235,8 +265,10 @@ function renderBlock(
       return (
         <Hero
           key={index}
-          imageSrc={block.imageSrc}
-          imageAlt={block.imageAlt || "Hero"}
+          leftImageSrc={urlForSanityImage(block.leftImage) ?? block.leftImageSrc}
+          leftImageAlt={block.leftImageAlt}
+          galleryImages={heroGallerySlides(block)}
+          carousel={block.carouselSettings}
           title={block.title}
           subtitle={block.subtitle}
           primaryCta={
@@ -347,7 +379,7 @@ function renderBlock(
                   key={`${item.title ?? "image-card"}-${i}`}
                   title={item.title ?? ""}
                   subtitle={item.subtitle}
-                  imageSrc={item.imageSrc}
+                  imageSrc={urlForSanityImage(item.image) ?? item.imageSrc}
                   imageAlt={item.imageAlt}
                   cta={mapGridCardCta(item, block.cta, donateUrl)}
                 />

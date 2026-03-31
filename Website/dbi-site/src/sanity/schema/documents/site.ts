@@ -40,6 +40,12 @@ export const site = defineType({
         defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
         defineField({ name: "email", title: "Email", type: "string" }),
         defineField({
+          name: "phone",
+          title: "Phone",
+          type: "string",
+          description: "Shown in the footer below the email. Leave empty to hide.",
+        }),
+        defineField({
           name: "siteLinks",
           title: "Site Links",
           type: "array",
@@ -83,6 +89,14 @@ export const site = defineType({
           title: "Sponsor carousel",
           type: "carouselSettings",
           description: "Autoplay, dots, and progress for the partner strip.",
+        }),
+        defineField({
+          name: "servingLine",
+          title: "Service area line",
+          type: "string",
+          description:
+            "Shown under the copyright (e.g. cities or schools served). Leave empty to hide.",
+          initialValue: "Serving Bay Point, Concord, and Pittsburg schools since 2023",
         }),
       ],
     }),

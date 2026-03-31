@@ -27,7 +27,6 @@ export const CustomContent: Story = {
   args: {
     title: "Stay in the loop!",
     description: "Get the latest news and stories from our community.",
-    placeholder: "Enter your email",
     buttonLabel: "Subscribe",
   },
 };

@@ -12,10 +12,29 @@ const meta: Meta<typeof Hero> = {
 export default meta;
 type Story = StoryObj<typeof Hero>;
 
+const sampleGallery = [
+  {
+    src: "https://picsum.photos/882/548",
+    alt: "Youth in rehearsal space",
+  },
+  {
+    src: "https://picsum.photos/882/547",
+    alt: "Community gathering",
+  },
+];
+
 export const Default: Story = {
   args: {
-    imageSrc: "https://picsum.photos/1600/600",
-    imageAlt: "Youth standing on stage",
+    leftImageSrc: "https://picsum.photos/159/548",
+    leftImageAlt: "Balloons and celebration",
+    galleryImages: sampleGallery,
+    carousel: {
+      transition: "fade",
+      transitionDurationMs: 680,
+      autoPlayMs: 6000,
+      showPagination: true,
+      showProgress: true,
+    },
     title: "EDUCATE.\nADVOCATE.\nELEVATE.",
     subtitle: "Supporting African American youth in West Contra Costa County.",
     primaryCta: {
@@ -28,4 +47,3 @@ export const Default: Story = {
     },
   },
 };
-

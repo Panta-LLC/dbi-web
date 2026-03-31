@@ -15,24 +15,7 @@ export const homePage = defineType({
     defineField({
       name: "hero",
       title: "Hero",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "subtitle", title: "Subtitle", type: "text", rows: 3 }),
-        defineField({ name: "primaryCta", title: "Primary CTA", type: "cta" }),
-        defineField({ name: "secondaryCta", title: "Secondary CTA", type: "cta" }),
-        defineField({
-          name: "image",
-          title: "Hero Image",
-          type: "image",
-          options: { hotspot: true },
-        }),
-        defineField({
-          name: "imageAlt",
-          title: "Hero Image Alt Text",
-          type: "string",
-        }),
-      ],
+      type: "hero",
       validation: (Rule) => Rule.required(),
     }),
     defineField({

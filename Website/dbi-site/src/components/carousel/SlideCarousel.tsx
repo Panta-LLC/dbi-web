@@ -12,9 +12,9 @@ const THEME = {
   testimonialDark: {
     accent: "var(--color-2, #ff7900)",
     arrowPrev:
-      "absolute left-2 md:left-4 z-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] shrink-0",
+      "absolute left-2 md:left-4 top-1/2 z-10 w-10 h-10 md:w-12 md:h-12 -translate-y-1/2 flex items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] shrink-0",
     arrowNext:
-      "absolute right-2 md:right-4 z-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] shrink-0",
+      "absolute right-2 md:right-4 top-1/2 z-10 w-10 h-10 md:w-12 md:h-12 -translate-y-1/2 flex items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] shrink-0",
     dotActive: "bg-white scale-110",
     dotInactive: "bg-white/40 hover:bg-white/70",
     dotButton:
@@ -31,7 +31,8 @@ const THEME = {
     dotInactive: "bg-slate-300 hover:bg-slate-400",
     dotButton:
       "touch-target rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-    progressTrack: "w-full max-w-md mx-auto px-4 mt-4 h-1 rounded-full overflow-hidden bg-slate-200",
+    progressTrack:
+      "w-full max-w-md mx-auto px-4 mt-4 h-1 rounded-full overflow-hidden bg-slate-200",
   },
 } as const;
 
@@ -120,7 +121,7 @@ export function SlideCarousel({
         {srLabel}
       </span>
 
-      <div className="relative flex w-full items-center justify-center">
+      <div className="relative flex min-h-0 w-full flex-1 items-stretch justify-center">
         <CarouselArrows
           show={multi}
           onPrev={goPrev}
@@ -132,10 +133,14 @@ export function SlideCarousel({
           nextButtonClassName={t.arrowNext}
         />
 
-        <div className={`relative w-full flex-1 min-w-0 ${contentWrapperClassName}`}>
+        <div className={`relative min-h-0 w-full flex-1 min-w-0 ${contentWrapperClassName}`}>
           <div
             key={multi ? activeIndex : "single"}
-            className={multi ? `slide-carousel-content ${enterClass}` : undefined}
+            className={
+              multi
+                ? `slide-carousel-content relative h-full min-h-0 w-full ${enterClass}`
+                : "relative h-full min-h-0 w-full overflow-hidden"
+            }
             style={
               multi
                 ? ({

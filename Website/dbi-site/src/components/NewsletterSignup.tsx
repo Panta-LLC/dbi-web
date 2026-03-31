@@ -1,152 +1,64 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { Button } from "./Button";
-
-type MailchimpConfig = {
-  listId?: string;
-};
+import { CtaModalForm } from "@/components/cta-modal-form";
+import { NEWSLETTER_FORM_ID } from "@/lib/contact-submission";
 
 type NewsletterSignupProps = {
   title?: string;
   description?: string;
-  placeholder?: string;
   buttonLabel?: string;
   legalText?: string;
   imageSrc?: string;
   imageAlt?: string;
-  mailchimp?: MailchimpConfig | null;
   className?: string;
 };
 
 export function NewsletterSignup({
   title = "Keep up with our Work!",
   description = "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
-  placeholder = "Your email address",
-  buttonLabel = "Sign-up",
+  buttonLabel = "Sign up for our Newsletter",
   legalText,
   imageSrc,
   imageAlt = "Community",
-  mailchimp,
   className = "",
 }: NewsletterSignupProps) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || status === "loading") return;
-
-    setStatus("loading");
-    setMessage("");
-
-    try {
-      const res = await fetch("/api/newsletter/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          firstName: firstName.trim() || undefined,
-          lastName: lastName.trim() || undefined,
-          ...(mailchimp?.listId && { listId: mailchimp.listId }),
-        }),
-      });
-
-      const data = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
-
-      if (res.ok) {
-        setStatus("success");
-        setMessage(data.message ?? "Thanks for subscribing!");
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-      } else {
-        setStatus("error");
-        setMessage(data.error ?? "Something went wrong. Please try again.");
-      }
-    } catch {
-      setStatus("error");
-      setMessage("Something went wrong. Please try again.");
-    }
-  };
-
   return (
     <div
       className={`flex flex-col lg:flex-row min-h-[320px] lg:min-h-[380px] overflow-hidden bg-white ${className}`}
     >
       {/* Left: orange slanted panel with content */}
       <div className="relative flex items-stretch flex-1 px-8">
-        {/* Orange background (slanted on lg+, rectangular on small) */}
         <div
           className="absolute inset-0 newsletter-panel-left"
           style={{ backgroundColor: "var(--color-2, #ff7900)" }}
           aria-hidden
         />
 
-        {/* Content */}
         <div className="relative flex flex-col justify-center py-12">
           <h2 className="display-m text-white leading-tight max-w-md">{title}</h2>
           <p className="mt-4 text-base md:text-lg text-white/95 max-w-md">{description}</p>
 
-          <form className="mt-6 md:mt-8 gap-1 max-w-lg" onSubmit={handleSubmit}>
-            {/* First and last name row */}
-            <div className="flex gap-3 mb-3">
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First name"
-                disabled={status === "loading"}
-                className="touch-target flex-1 w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
-                aria-label="First name"
-              />
-              <input
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last name"
-                disabled={status === "loading"}
-                className="touch-target flex-1 w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
-                aria-label="Last name"
-              />
-            </div>
-            {/* Email field */}
-            <div className="mb-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={placeholder}
-                disabled={status === "loading"}
-                className="touch-target w-full bg-white px-4 py-3.5 text-slate-900 placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-70"
-                aria-label="Email address"
-                required
-              />
-            </div>
-            {message ? (
-              <p
-                className={`mb-3 text-sm ${status === "success" ? "text-white" : "text-white/90"}`}
-                role="status"
-              >
-                {message}
-              </p>
-            ) : null}
-            {/* Slanted CTA button */}
-            <Button
-              type="submit"
-              variant="cta-primary"
-              disabled={status === "loading"}
+          <div className="mt-6 md:mt-8 max-w-lg">
+            <CtaModalForm
+              presentation={{ mode: "dialog", placement: "center" }}
+              formId={NEWSLETTER_FORM_ID}
+              triggerLabel={buttonLabel}
+              messageContext="Footer — newsletter"
+              title={title}
+              description={description}
+              placeholders={{
+                firstName: "First name",
+                lastName: "Last name",
+                email: "Email address",
+                organization: "Organization",
+              }}
+              submitLabel="Subscribe"
+              successMessage="Thanks — you're on the list."
+              fieldVariant="newsletter"
               className="touch-target w-full sm:w-auto relative inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              <span className="relative z-10">
-                {status === "loading" ? "Subscribing…" : buttonLabel}
-              </span>
-            </Button>
-          </form>
+            />
+          </div>
 
           {legalText ? (
             <p className="mt-2 text-xs text-white/80 leading-relaxed max-w-md">{legalText}</p>
@@ -154,7 +66,6 @@ export function NewsletterSignup({
         </div>
       </div>
 
-      {/* Right: image (slanted on lg+, rectangular on small) */}
       <div className="relative flex items-stretch flex-1 min-h-[350px] lg:min-h-full lg:-ml-41">
         {imageSrc ? (
           <div className="absolute inset-0 newsletter-panel-right">

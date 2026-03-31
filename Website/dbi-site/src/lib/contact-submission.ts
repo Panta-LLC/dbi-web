@@ -2,6 +2,18 @@
 
 export const CONTACT_API_PATH = "/api/contact";
 
+/** Form id for newsletter signups via CtaModalForm (see NewsletterSignup). */
+export const NEWSLETTER_FORM_ID = "newsletter-signup";
+
+/** Fixed choices for newsletter self-identification (must match UI submit values). */
+export const NEWSLETTER_SELF_IDENTIFICATION_OPTIONS = [
+  "Student",
+  "Parent",
+  "Community Member",
+  "School Staff or Administration",
+  "Other",
+] as const;
+
 export const MAX_LEN = {
   firstName: 120,
   lastName: 120,
@@ -11,6 +23,7 @@ export const MAX_LEN = {
   formId: 64,
   triggerLabel: 160,
   messageContext: 240,
+  selfIdentification: 120,
 } as const;
 
 export type ContactPayload = {
@@ -23,6 +36,8 @@ export type ContactPayload = {
   lastName: string;
   email: string;
   organization: string;
+  /** Role / audience (required for newsletter form; optional elsewhere). */
+  selfIdentification: string;
   message: string;
   /** Honeypot — must be empty */
   website?: string;
@@ -59,7 +74,10 @@ export function validateContactBody(body: unknown): ContactValidationResult {
   const lastName = trimStr(o.lastName, MAX_LEN.lastName);
   const email = trimStr(o.email, MAX_LEN.email).toLowerCase();
   const organization = trimStr(o.organization, MAX_LEN.organization);
+  const selfIdentification = trimStr(o.selfIdentification, MAX_LEN.selfIdentification);
   const message = trimStr(o.message, MAX_LEN.message);
+
+  const isNewsletter = formId === NEWSLETTER_FORM_ID;
 
   if (!formId) {
     return { ok: false, error: "Form identifier is required.", status: 400 };
@@ -79,7 +97,11 @@ export function validateContactBody(body: unknown): ContactValidationResult {
   if (!emailRegex.test(email)) {
     return { ok: false, error: "Please enter a valid email address.", status: 400 };
   }
-  if (!message) {
+  if (isNewsletter) {
+    if (!selfIdentification) {
+      return { ok: false, error: "Please select how you identify.", status: 400 };
+    }
+  } else if (!message) {
     return { ok: false, error: "Message is required.", status: 400 };
   }
 
@@ -93,6 +115,7 @@ export function validateContactBody(body: unknown): ContactValidationResult {
       lastName,
       email,
       organization,
+      selfIdentification,
       message,
     },
   };
@@ -120,15 +143,26 @@ export function buildContactEmailParts(data: ContactPayload): {
     ...(data.messageContext ? [`Context: ${data.messageContext}`] : []),
     `Name: ${data.firstName} ${data.lastName}`,
     `Email: ${data.email}`,
+    ...(data.selfIdentification
+      ? [`Self-identification: ${data.selfIdentification}`]
+      : []),
     data.organization ? `Organization: ${data.organization}` : "Organization: (not provided)",
-    "",
-    "Message:",
-    data.message,
+    ...(data.message
+      ? ["", "Message:", data.message]
+      : []),
   ];
 
   const text = lines.join("\n");
 
   const esc = escapeHtml;
+  const selfIdRow = data.selfIdentification
+    ? `<tr><td style="padding:4px 8px;font-weight:bold;vertical-align:top;">Self-identification</td><td style="padding:4px 8px;">${esc(data.selfIdentification)}</td></tr>`
+    : "";
+  const messageBlock =
+    data.message.trim().length > 0
+      ? `<p style="font-family:sans-serif;font-size:14px;font-weight:bold;margin-top:16px;">Message</p>
+<pre style="font-family:sans-serif;font-size:14px;white-space:pre-wrap;margin:0;">${esc(data.message)}</pre>`
+      : "";
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
 <table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
 <tr><td style="padding:4px 8px;font-weight:bold;">Form</td><td style="padding:4px 8px;">${esc(data.formId)}</td></tr>
@@ -140,10 +174,10 @@ ${
 }
 <tr><td style="padding:4px 8px;font-weight:bold;">Name</td><td style="padding:4px 8px;">${esc(data.firstName)} ${esc(data.lastName)}</td></tr>
 <tr><td style="padding:4px 8px;font-weight:bold;">Email</td><td style="padding:4px 8px;"><a href="mailto:${esc(data.email)}">${esc(data.email)}</a></td></tr>
+${selfIdRow}
 <tr><td style="padding:4px 8px;font-weight:bold;vertical-align:top;">Organization</td><td style="padding:4px 8px;">${data.organization ? esc(data.organization) : "<em>Not provided</em>"}</td></tr>
 </table>
-<p style="font-family:sans-serif;font-size:14px;font-weight:bold;margin-top:16px;">Message</p>
-<pre style="font-family:sans-serif;font-size:14px;white-space:pre-wrap;margin:0;">${esc(data.message)}</pre>
+${messageBlock}
 </body></html>`;
 
   return { subject, text, html };

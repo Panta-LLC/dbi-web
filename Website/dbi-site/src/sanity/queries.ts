@@ -44,8 +44,17 @@ export const pageByPathQuery = groq`
       legalText,
       ctaVariant,
       buttonVariant,
+      "image": image{ crop, hotspot, asset },
       "imageSrc": image.asset->url,
       imageAlt,
+      "leftImage": leftImage{ crop, hotspot, asset },
+      "leftImageSrc": leftImage.asset->url,
+      leftImageAlt,
+      "galleryImages": galleryImages[]{
+        "image": image{ crop, hotspot, asset },
+        "imageSrc": image.asset->url,
+        imageAlt
+      },
       primaryCta{${ctaFields}},
       secondaryCta{${ctaFields}},
       cta{${ctaActionFields}},
@@ -57,6 +66,7 @@ export const pageByPathQuery = groq`
         label,
         quote,
         attribution,
+        "image": image{ crop, hotspot, asset },
         "imageSrc": image.asset->url,
         imageAlt,
         href,
@@ -73,6 +83,7 @@ export const pageByPathQuery = groq`
       "programItems": items[]{
         title,
         description,
+        "image": image{ crop, hotspot, asset },
         "imageSrc": image.asset->url,
         imageAlt,
         href,
@@ -98,6 +109,7 @@ export const pageByPathQuery = groq`
       "imageItems": items[]{
         title,
         subtitle,
+        "image": image{ crop, hotspot, asset },
         "imageSrc": image.asset->url,
         imageAlt,
         "cardCta": cardCta{${ctaActionFields}}
@@ -121,23 +133,22 @@ export const siteQuery = groq`
       heading,
       description,
       email,
+      phone,
       siteLinks[]{ label, href },
       socialLinks[]{ label, href },
       partnersTitle,
       newsletterSignup{
         title,
         description,
-        placeholder,
         buttonLabel,
         legalText,
+        "image": image{ crop, hotspot, asset },
         "imageSrc": image.asset->url,
-        imageAlt,
-        mailchimp{
-          listId
-        }
+        imageAlt
       },
       partners[]{
         name,
+        "logo": logo{ crop, hotspot, asset },
         "logoSrc": logo.asset->url,
         logoAlt,
         tagline
@@ -148,7 +159,8 @@ export const siteQuery = groq`
         autoPlayMs,
         showPagination,
         showProgress
-      }
+      },
+      servingLine
     }
   }
 `;

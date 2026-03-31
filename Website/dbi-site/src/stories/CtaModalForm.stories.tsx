@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useEffect } from "react";
 import { CtaModalForm } from "@/components/cta-modal-form";
+import { NEWSLETTER_FORM_ID } from "@/lib/contact-submission";
 
 const placeholders = {
   firstName: "First name",
@@ -155,5 +156,22 @@ export const ExplicitMessagePlaceholder: Story = {
       ...placeholders,
       message: "Tell us how you’d like to volunteer (custom placeholder).",
     },
+  },
+};
+
+/** Newsletter signup: self-identification select, no message field (POST /api/contact). */
+export const NewsletterFieldVariant: Story = {
+  args: {
+    presentation: { mode: "dialog" },
+    defaultOpen: true,
+    formId: NEWSLETTER_FORM_ID,
+    fieldVariant: "newsletter",
+    triggerLabel: "Sign up for our Newsletter",
+    messageContext: "Footer — newsletter",
+    title: "Keep up with our Work!",
+    description: "Subscribe to our newsletter and receive periodic updates.",
+    placeholders,
+    submitLabel: "Subscribe",
+    successMessage: "Thanks — you're on the list.",
   },
 };

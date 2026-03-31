@@ -41,13 +41,17 @@ export function CtaModalForm({
   className = "",
   defaultOpen = false,
   customTrigger,
+  fieldVariant = "default",
 }: CtaModalFormProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   const mergedPlaceholders = {
     ...defaultPlaceholders,
     ...placeholders,
-    message: resolveMessagePlaceholder(triggerLabel, messageContext, placeholders.message),
+    message:
+      fieldVariant === "newsletter"
+        ? ""
+        : resolveMessagePlaceholder(triggerLabel, messageContext, placeholders.message),
   };
 
   const trigger =
@@ -74,6 +78,7 @@ export function CtaModalForm({
         placeholders={mergedPlaceholders}
         submitLabel={submitLabel}
         successMessage={successMessage}
+        fieldVariant={fieldVariant}
         onSuccess={() => {
           window.setTimeout(() => setOpen(false), 2000);
         }}

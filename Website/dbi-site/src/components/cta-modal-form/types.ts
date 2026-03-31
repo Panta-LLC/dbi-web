@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { ButtonVariant } from "@/components/Button";
 
+export type ContactFieldVariant = "default" | "newsletter";
+
 export type Presentation =
   | { mode: "dialog"; placement?: "center" }
   | { mode: "slide"; edge: "bottom" | "top" | "left" | "right" }
@@ -39,4 +41,6 @@ export type CtaModalFormProps = {
   className?: string;
   /** Useful for Storybook or deep-link previews */
   defaultOpen?: boolean;
+  /** Newsletter: first/last/email + self-identification; hides org and message. */
+  fieldVariant?: ContactFieldVariant;
 };

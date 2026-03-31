@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans, Noto_Serif } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
+import { AppToaster } from "@/components/AppToaster";
 import { StructuredData } from "@/components/StructuredData";
 import "./globals.css";
 
@@ -72,6 +73,7 @@ export default function RootLayout({
       >
         <StructuredData />
         <Analytics />
+        <AppToaster />
         {children}
       </body>
     </html>

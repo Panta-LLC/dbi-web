@@ -51,6 +51,7 @@ const documents = [
       heading: "Delta Bay Impact",
       description: "Building opportunity through community partnerships, programs, and impact-driven work.",
       email: "info@deltabayimpact.org",
+      phone: "",
       siteLinks: withKeys(
         [
           { label: "About", href: "/about" },
@@ -80,6 +81,7 @@ const documents = [
         ],
         "footer-partner",
       ),
+      servingLine: "Serving Bay Point, Concord, and Pittsburg schools since 2023",
       sponsorCarousel: {
         transition: "fade",
         transitionDurationMs: 680,
@@ -89,8 +91,7 @@ const documents = [
       newsletterSignup: {
         title: "Keep up with our Work!",
         description: "Subscribe to our newsletter and receive periodic updates from Delta Bay Impact.",
-        placeholder: "Your email address",
-        buttonLabel: "Sign-up",
+        buttonLabel: "Sign up for our Newsletter",
         legalText:
           "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
         imageAlt: "Community",
@@ -420,6 +421,13 @@ const documents = [
             "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
           primaryCta: { label: "See How We Support Students", href: "/services" },
           secondaryCta: { label: "Partner with Delta Bay Impact", href: "/contact" },
+          carouselSettings: {
+            transition: "fade",
+            transitionDurationMs: 680,
+            autoPlayMs: 6000,
+            showPagination: true,
+            showProgress: true,
+          },
         },
         {
           _type: "textHighlightSection",
@@ -549,7 +557,16 @@ const documents = [
           title: "Our Leadership",
           items: withKeys(
             [
-              { title: "Tiffany Francies", subtitle: "Executive Director" },
+              {
+                title: "Tiffany Francies",
+                subtitle: "Executive Director",
+                cardCta: {
+                  _type: "ctaAction",
+                  kind: "link",
+                  label: "Learn more",
+                  href: "/about",
+                },
+              },
               { title: "Tiffany Francies", subtitle: "Executive Director" },
               { title: "Tiffany Francies", subtitle: "Executive Director" },
               { title: "Tiffany Francies", subtitle: "Executive Director" },
@@ -589,6 +606,12 @@ const documents = [
                 title: "School-Based Mentorship and Advocacy",
                 description:
                   "DBI mentors build trusted relationships with students, providing academic support, goal-setting, and personal development while advocating for students' educational needs.",
+                cardCta: {
+                  _type: "ctaAction",
+                  kind: "link",
+                  label: "Explore program",
+                  href: "/services",
+                },
               },
               {
                 title: "Academic Support and Tutoring Connections",
@@ -678,15 +701,38 @@ const documents = [
         {
           _type: "cardGridSection",
           title: "Ways to Engage",
+          description:
+            "At Delta Bay Impact, we believe lasting impact happens through partnership. Whether you're an educator, community leader, organization, or supporter, there's a place for you in this work. Together, we can create stronger systems of support for African American students and their families.",
           items: withKeys(
             [
-              { title: "School and district partnerships" },
-              { title: "Community and nonprofit partnerships" },
-              { title: "Board and advisory involvement" },
-              { title: "Corporate sponsorships and in-kind support" },
+              {
+                title: "School & District Partnerships",
+                description:
+                  "We partner with schools and districts to support African American student success through mentorship, advocacy, and culturally responsive programming.\n\nOur work is tailored to meet the unique needs of each school community—helping to strengthen student outcomes, family engagement, and equity-focused initiatives.",
+              },
+              {
+                title: "Community & Nonprofit Partnerships",
+                description:
+                  "Collaboration is at the heart of what we do.\n\nWe work alongside community organizations and nonprofits to expand resources, co-host events, and provide wraparound support for students and families. Together, we amplify impact and reach more youth in meaningful ways.",
+              },
+              {
+                title: "Board & Advisory Involvement",
+                description:
+                  "Help guide and strengthen our mission.\n\nWe welcome passionate leaders, professionals, and community members to serve on our board or advisory committees. Your insight, expertise, and voice can help shape strategy, expand our reach, and deepen our impact.",
+              },
+              {
+                title: "Corporate Sponsorships & In-Kind Support",
+                description:
+                  "Partner with us to invest in the next generation.\n\nCorporate partners play a vital role in advancing our work through financial sponsorships, donations of goods or services, and employee engagement opportunities. Together, we can create pathways to opportunity for African American students while aligning with meaningful community impact.",
+              },
             ],
             "pathway-card",
           ),
+        },
+        {
+          _type: "textAndCtaSection",
+          description:
+            '"No matter how you choose to engage, your partnership helps create equitable opportunities and brighter futures for African American students."',
         },
         {
           _type: "ctaButtonSection",

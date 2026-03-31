@@ -1,4 +1,9 @@
 export { CtaModalForm } from "./CtaModalForm";
 export { ContactFormFields } from "./ContactFormFields";
 export { FormModalShell } from "./FormModalShell";
-export type { CtaModalFormProps, ContactPlaceholders, Presentation } from "./types";
+export type {
+  ContactFieldVariant,
+  CtaModalFormProps,
+  ContactPlaceholders,
+  Presentation,
+} from "./types";

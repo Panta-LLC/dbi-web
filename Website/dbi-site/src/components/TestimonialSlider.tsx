@@ -113,7 +113,7 @@ export function TestimonialSlider({
       style={{ backgroundColor: BLUE_BG }}
       contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm min-h-48 md:min-h-56"
       renderSlide={() => (
-        <div className="flex w-full">
+        <div className="flex w-full flex-1 items-start">
           <span
             className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
             style={{

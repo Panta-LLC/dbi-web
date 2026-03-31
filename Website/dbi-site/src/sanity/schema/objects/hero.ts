@@ -1,4 +1,10 @@
 import { defineField, defineType } from "sanity";
+import {
+  heroGalleryImageHotspotOptions,
+  leftStripImageHotspotOptions,
+  validateHeroGalleryCropAspect,
+  validateLeftStripCropAspect,
+} from "../validation/heroGalleryImageAspect";
 
 export const hero = defineType({
   name: "hero",
@@ -32,15 +38,54 @@ export const hero = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "image",
-      title: "Image",
+      name: "leftImage",
+      title: "Left strip image (balloon)",
+      description: "Crop must match 159×548.",
       type: "image",
-      options: { hotspot: true },
+      options: leftStripImageHotspotOptions,
+      validation: (Rule) => Rule.custom(validateLeftStripCropAspect),
     }),
     defineField({
-      name: "imageAlt",
-      title: "Image Alt Text",
+      name: "leftImageAlt",
+      title: "Left image alt text",
       type: "string",
+    }),
+    defineField({
+      name: "galleryImages",
+      title: "Hero gallery (right)",
+      description: "Recommended 882×548px per image.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "image",
+              title: "Image",
+              type: "image",
+              description: "Crop must match 882×548. The hotspot tool shows that frame.",
+              options: heroGalleryImageHotspotOptions,
+              validation: (Rule) => Rule.custom(validateHeroGalleryCropAspect),
+            }),
+            defineField({
+              name: "imageAlt",
+              title: "Alt text",
+              type: "string",
+            }),
+          ],
+          preview: {
+            select: { alt: "imageAlt", media: "image" },
+            prepare({ alt, media }) {
+              return { title: alt || "Gallery image", media };
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: "carouselSettings",
+      title: "Gallery carousel",
+      type: "carouselSettings",
     }),
   ],
 });

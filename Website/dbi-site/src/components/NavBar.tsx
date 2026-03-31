@@ -28,7 +28,7 @@ export function NavBar({ donateUrl }: NavBarProps) {
 
   return (
     <>
-      <header className="nav-entrance nav-solid fixed max-w-7xl mx-auto inset-x-0 top-0 z-[100] font-inter text-slate-900 transition-colors duration-300">
+      <header className="nav-entrance nav-solid fixed max-w-7xl mx-auto inset-x-0 top-0 z-[100] font-inter text-slate-900 transition-colors duration-300 border-b-4 md:border-b-5 border-orange-400">
         {/* <Container className="flex items-center justify-start gap-3 lg:gap-6"> */}
         <div className="flex items-center justify-start max-w-5xl mx-auto">
           <div className="flex grow items-center justify-start gap-3 lg:gap-6">

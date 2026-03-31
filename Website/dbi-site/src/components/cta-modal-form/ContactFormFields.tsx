@@ -2,8 +2,12 @@
 
 import { useId, useState } from "react";
 import { Button } from "@/components/Button";
-import { CONTACT_API_PATH, validateContactBody } from "@/lib/contact-submission";
-import type { ContactPlaceholders } from "./types";
+import {
+  CONTACT_API_PATH,
+  NEWSLETTER_SELF_IDENTIFICATION_OPTIONS,
+  validateContactBody,
+} from "@/lib/contact-submission";
+import type { ContactFieldVariant, ContactPlaceholders } from "./types";
 
 type ContactFormFieldsProps = {
   formId: string;
@@ -12,6 +16,7 @@ type ContactFormFieldsProps = {
   placeholders: ContactPlaceholders & { message: string };
   submitLabel: string;
   successMessage?: string;
+  fieldVariant?: ContactFieldVariant;
   onSuccess?: () => void;
 };
 
@@ -22,6 +27,7 @@ export function ContactFormFields({
   placeholders,
   submitLabel,
   successMessage = "Thanks — your message has been sent.",
+  fieldVariant = "default",
   onSuccess,
 }: ContactFormFieldsProps) {
   const baseId = useId();
@@ -30,6 +36,7 @@ export function ContactFormFields({
   const [email, setEmail] = useState("");
   const [organization, setOrganization] = useState("");
   const [message, setMessage] = useState("");
+  const [selfIdentification, setSelfIdentification] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [feedback, setFeedback] = useState("");
@@ -50,8 +57,9 @@ export function ContactFormFields({
       firstName,
       lastName,
       email,
-      organization,
-      message,
+      organization: fieldVariant === "newsletter" ? "" : organization,
+      selfIdentification: fieldVariant === "newsletter" ? selfIdentification : "",
+      message: fieldVariant === "newsletter" ? "" : message,
       website: honeypot,
     };
 
@@ -82,6 +90,7 @@ export function ContactFormFields({
         setEmail("");
         setOrganization("");
         setMessage("");
+        setSelfIdentification("");
         setHoneypot("");
         onSuccess?.();
       } else {
@@ -146,37 +155,64 @@ export function ContactFormFields({
           className={inputClass}
         />
       </div>
-      <div>
-        <label htmlFor={`${baseId}-org`} className="sr-only">
-          Organization
-        </label>
-        <input
-          id={`${baseId}-org`}
-          type="text"
-          name="organization"
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          placeholder={placeholders.organization}
-          disabled={status === "loading"}
-          autoComplete="organization"
-          className={inputClass}
-        />
-      </div>
-      <div>
-        <label htmlFor={`${baseId}-msg`} className="sr-only">
-          Message
-        </label>
-        <textarea
-          id={`${baseId}-msg`}
-          name="message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder={placeholders.message}
-          disabled={status === "loading"}
-          rows={5}
-          className={`${inputClass} min-h-[120px] resize-y`}
-        />
-      </div>
+      {fieldVariant === "newsletter" ? (
+        <div>
+          <label htmlFor={`${baseId}-self-id`} className="sr-only">
+            Self-identification
+          </label>
+          <select
+            id={`${baseId}-self-id`}
+            name="selfIdentification"
+            value={selfIdentification}
+            onChange={(e) => setSelfIdentification(e.target.value)}
+            disabled={status === "loading"}
+            className={`${inputClass} cursor-pointer pr-10`}
+            autoComplete="off"
+          >
+            <option value="">{"I am a(n)..."}</option>
+            {NEWSLETTER_SELF_IDENTIFICATION_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {fieldVariant === "default" ? (
+        <>
+          <div>
+            <label htmlFor={`${baseId}-org`} className="sr-only">
+              Organization
+            </label>
+            <input
+              id={`${baseId}-org`}
+              type="text"
+              name="organization"
+              value={organization}
+              onChange={(e) => setOrganization(e.target.value)}
+              placeholder={placeholders.organization}
+              disabled={status === "loading"}
+              autoComplete="organization"
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${baseId}-msg`} className="sr-only">
+              Message
+            </label>
+            <textarea
+              id={`${baseId}-msg`}
+              name="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={placeholders.message}
+              disabled={status === "loading"}
+              rows={5}
+              className={`${inputClass} min-h-[120px] resize-y`}
+            />
+          </div>
+        </>
+      ) : null}
 
       <input
         type="text"
