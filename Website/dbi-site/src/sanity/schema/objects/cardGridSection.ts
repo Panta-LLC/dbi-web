@@ -14,11 +14,28 @@ export const cardGridSection = defineType({
       description: "Optional. Shown below the title and above the cards. Use line breaks between paragraphs.",
     }),
     defineField({
+      name: "columnsPerRow",
+      title: "Cards per row (large screens)",
+      type: "number",
+      initialValue: 2,
+      options: {
+        list: [
+          { title: "2", value: 2 },
+          { title: "3", value: 3 },
+          { title: "4", value: 4 },
+        ],
+        layout: "radio",
+      },
+      validation: (Rule) => Rule.integer().min(2).max(4),
+      description:
+        "How many cards appear in one row on large viewports. Smaller screens stack to one or two columns automatically.",
+    }),
+    defineField({
       name: "cta",
       title: "Section CTA (fallback for cards without their own action)",
-      type: "ctaAction",
+      type: "ctaActionOptional",
       description:
-        "Used when a card has no card-level CTA, or as the default link when a card only has a URL. Choose a link or the contact form.",
+        "Used when a card has no card-level CTA, or as the default link when a card only has a URL. Choose a link or the contact form. All fields are optional.",
     }),
     defineField({
       name: "items",
@@ -55,9 +72,9 @@ export const cardGridSection = defineType({
             defineField({
               name: "cardCta",
               title: "Card CTA",
-              type: "ctaAction",
+              type: "ctaActionOptional",
               description:
-                "Optional. Link (internal or external) or contact form modal. When empty, the card link URL below and section CTA are used.",
+                "Optional. Link (internal or external) or contact form modal. When empty, the card link URL below and section CTA are used. All fields are optional.",
             }),
             defineField({
               name: "href",

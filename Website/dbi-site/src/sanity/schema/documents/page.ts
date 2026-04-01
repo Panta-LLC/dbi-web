@@ -74,11 +74,13 @@ export const page = defineType({
       type: "array",
       of: [
         { type: "heroSection" },
+        { type: "heroSplitSection" },
         { type: "textHighlightSection" },
         { type: "programCardsSection" },
         { type: "measurableImpactSection" },
         { type: "testimonialSliderSection" },
         { type: "cardGridSection" },
+        { type: "collectionArticleSection" },
         { type: "imageCardGridSection" },
         { type: "supportSection" },
         { type: "textAndCtaSection" },

@@ -3,10 +3,12 @@ import type { CarouselSettings } from "@/components/carousel";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
+import { HeroSplitStatic, type HeroSplitPalette } from "@/components/HeroSplitStatic";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
 import type { ProgramCardItem } from "@/components/ProgramCards";
 import { ProgramCards } from "@/components/ProgramCards";
+import { CollectionArticleSection } from "@/components/CollectionArticleSection";
 import { ServiceCardTabSection } from "@/components/ServiceCardTabSection";
 import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
@@ -84,6 +86,8 @@ type ContentBlock = {
   }>;
   carouselSettings?: CarouselSettings | null;
   // cardGridSection
+  /** Max columns on large screens (2–4); responsive breakpoints stack fewer on small viewports. */
+  columnsPerRow?: number;
   cardItems?: Array<{
     title?: string;
     description?: string;
@@ -92,6 +96,23 @@ type ContentBlock = {
     imageSrc?: string;
     imageAlt?: string;
     hoverColor?: string;
+    href?: string;
+    cardCta?: SanityCtaAction;
+  }>;
+  // collectionArticleSection
+  expandedMode?: boolean;
+  sectionLayout?: "cardGrid" | "explorer";
+  defaultView?: "grid" | "explorer";
+  cardSize?: "sm" | "md" | "lg";
+  /** Max columns on large screens (2–5). */
+  collectionArticleItems?: Array<{
+    heading?: string;
+    summary?: string;
+    subtitle?: string;
+    description?: string;
+    image?: SanityImageSource;
+    imageSrc?: string;
+    imageAlt?: string;
     href?: string;
     cardCta?: SanityCtaAction;
   }>;
@@ -108,7 +129,26 @@ type ContentBlock = {
   textCta?: Cta;
   // ctaButtonSection
   ctaButton?: Cta;
+  // heroSplitSection
+  imagePosition?: "left" | "right";
+  backgroundColor?: string;
+  ctas?: Cta[];
 };
+
+const HERO_SPLIT_PALETTES: HeroSplitPalette[] = [
+  "color-1",
+  "color-2",
+  "color-3",
+  "color-4",
+  "color-5",
+];
+
+function heroSplitPalette(value: string | undefined): HeroSplitPalette {
+  if (value && HERO_SPLIT_PALETTES.includes(value as HeroSplitPalette)) {
+    return value as HeroSplitPalette;
+  }
+  return "color-1";
+}
 
 function resolveHref(
   href: string | undefined,
@@ -289,6 +329,28 @@ function renderBlock(
         />
       );
 
+    case "heroSplitSection": {
+      const imageSrc = urlForSanityImage(block.image) ?? block.imageSrc;
+      if (!block.title?.trim()) return null;
+      const ctas =
+        block.ctas
+          ?.map((c) =>
+            c.href ? { ...c, href: resolveHref(c.href, donateUrl) ?? c.href } : c,
+          )
+          .filter((c) => c.label?.trim()) ?? [];
+      return (
+        <HeroSplitStatic
+          key={index}
+          {...(imageSrc ? { imageSrc, imageAlt: block.imageAlt } : {})}
+          title={block.title}
+          description={block.description}
+          backgroundPalette={heroSplitPalette(block.backgroundColor)}
+          imagePosition={block.imagePosition === "right" ? "right" : "left"}
+          ctas={ctas}
+        />
+      );
+    }
+
     case "textHighlightSection": {
       const highlightItems =
         block.highlightItems
@@ -365,7 +427,36 @@ function renderBlock(
             <ServiceCardTabSection
               title={block.title}
               description={block.description}
+              columnsPerRow={block.columnsPerRow}
               items={serviceTabItems}
+            />
+          </Container>
+        </Section>
+      );
+    }
+
+    case "collectionArticleSection": {
+      const collectionItems = (block.collectionArticleItems ?? []).map((item) => ({
+        heading: item.heading ?? "",
+        summary: item.summary,
+        subtitle: item.subtitle,
+        description: item.description,
+        imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
+        imageAlt: item.imageAlt,
+        cta: mapGridCardCta(item, block.cta, donateUrl),
+      }));
+      return (
+        <Section className="bg-white my-10" key={index}>
+          <Container>
+            <CollectionArticleSection
+              title={block.title}
+              description={block.description}
+              columnsPerRow={block.columnsPerRow}
+              expandedMode={block.expandedMode !== false}
+              sectionLayout={block.sectionLayout === "explorer" ? "explorer" : "cardGrid"}
+              defaultView={block.defaultView === "explorer" ? "explorer" : "grid"}
+              cardSize={block.cardSize === "sm" || block.cardSize === "lg" ? block.cardSize : "md"}
+              items={collectionItems}
             />
           </Container>
         </Section>

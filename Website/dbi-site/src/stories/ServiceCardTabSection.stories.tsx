@@ -68,3 +68,17 @@ export const WithoutImages: Story = {
     })),
   },
 };
+
+export const ThreeColumns: Story = {
+  args: {
+    ...Default.args,
+    columnsPerRow: 3,
+  },
+};
+
+export const FourColumns: Story = {
+  args: {
+    ...Default.args,
+    columnsPerRow: 4,
+  },
+};

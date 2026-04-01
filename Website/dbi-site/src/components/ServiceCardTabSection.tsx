@@ -18,9 +18,24 @@ export type ServiceCardTabItem = {
   cta?: GridCardCtaResolved;
 };
 
+export type CardGridColumnsPerRow = 2 | 3 | 4;
+
+const GRID_COLS_CLASS: Record<CardGridColumnsPerRow, string> = {
+  2: "grid-cols-1 sm:grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+  4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+};
+
+function columnsPerRowFromCms(value: number | undefined): CardGridColumnsPerRow {
+  if (value === 3 || value === 4) return value;
+  return 2;
+}
+
 type ServiceCardTabSectionProps = {
   title?: string;
   description?: string;
+  /** Cards per row on large screens (default 2). */
+  columnsPerRow?: number;
   items: ServiceCardTabItem[];
 };
 
@@ -59,11 +74,17 @@ function panelBody(item: ServiceCardTabItem): string | undefined {
   return item.description?.trim();
 }
 
-export function ServiceCardTabSection({ title, description, items }: ServiceCardTabSectionProps) {
+export function ServiceCardTabSection({
+  title,
+  description,
+  columnsPerRow: columnsPerRowProp,
+  items,
+}: ServiceCardTabSectionProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const reactId = useId();
   const idPrefix = useMemo(() => reactId.replace(/:/g, ""), [reactId]);
   const tabId = (i: number) => `${idPrefix}-tab-${i}`;
+  const gridColsClass = GRID_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
 
   if (!items.length) return null;
 
@@ -77,7 +98,7 @@ export function ServiceCardTabSection({ title, description, items }: ServiceCard
       ) : null}
 
       {selectedIndex === null ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <div className={`mt-8 grid gap-4 ${gridColsClass}`}>
           {items.map((item, i) => (
             <div
               key={`${item.title}-${i}`}
@@ -143,7 +164,9 @@ export function ServiceCardTabSection({ title, description, items }: ServiceCard
                 {isShown ? (
                   <>
                     <h3 className="display-s text-slate-900">{item.title}</h3>
-                    {body ? <p className="mt-3 text-md whitespace-pre-line text-slate-700">{body}</p> : null}
+                    {body ? (
+                      <p className="mt-3 text-md whitespace-pre-line text-slate-700">{body}</p>
+                    ) : null}
                     {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
                   </>
                 ) : null}
