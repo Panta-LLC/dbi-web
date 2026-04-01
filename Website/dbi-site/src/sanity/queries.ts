@@ -103,6 +103,11 @@ export const pageByPathQuery = groq`
       "cardItems": items[]{
         title,
         description,
+        detail,
+        "image": image{ crop, hotspot, asset },
+        "imageSrc": image.asset->url,
+        imageAlt,
+        hoverColor,
         href,
         "cardCta": cardCta{${ctaActionFields}}
       },

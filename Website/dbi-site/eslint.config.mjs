@@ -15,6 +15,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated bundles (Sanity build, Storybook static export) — linting them OOMs CI/deploy.
+    "dist/**",
+    "storybook-static/**",
+    "coverage/**",
+    "scripts/**",
   ]),
   ...storybook.configs["flat/recommended"]
 ]);

@@ -2,12 +2,12 @@ import type { ReactElement } from "react";
 import type { CarouselSettings } from "@/components/carousel";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
-import { ContentCard } from "@/components/ContentCard";
 import { Hero } from "@/components/Hero";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
 import type { ProgramCardItem } from "@/components/ProgramCards";
 import { ProgramCards } from "@/components/ProgramCards";
+import { ServiceCardTabSection } from "@/components/ServiceCardTabSection";
 import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
 import { TextHighlightSection } from "@/components/TextHighlightSection";
@@ -87,6 +87,11 @@ type ContentBlock = {
   cardItems?: Array<{
     title?: string;
     description?: string;
+    detail?: string;
+    image?: SanityImageSource;
+    imageSrc?: string;
+    imageAlt?: string;
+    hoverColor?: string;
     href?: string;
     cardCta?: SanityCtaAction;
   }>;
@@ -344,29 +349,28 @@ function renderBlock(
         </Section>
       );
 
-    case "cardGridSection":
+    case "cardGridSection": {
+      const serviceTabItems = (block.cardItems ?? []).map((item) => ({
+        title: item.title ?? "",
+        description: item.description,
+        detail: item.detail,
+        imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
+        imageAlt: item.imageAlt,
+        hoverColor: item.hoverColor,
+        cta: mapGridCardCta(item, block.cta, donateUrl),
+      }));
       return (
         <Section className="bg-white my-10" key={index}>
           <Container>
-            <h2 className="heading-2 text-center">{block.title}</h2>
-            {block.description ? (
-              <p className="body-md mx-auto mt-6 max-w-3xl text-center text-slate-600 whitespace-pre-line">
-                {block.description}
-              </p>
-            ) : null}
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {(block.cardItems ?? []).map((item, i) => (
-                <ContentCard
-                  key={`${item.title ?? "card"}-${i}`}
-                  title={item.title ?? ""}
-                  description={item.description}
-                  cta={mapGridCardCta(item, block.cta, donateUrl)}
-                />
-              ))}
-            </div>
+            <ServiceCardTabSection
+              title={block.title}
+              description={block.description}
+              items={serviceTabItems}
+            />
           </Container>
         </Section>
       );
+    }
 
     case "imageCardGridSection":
       return (

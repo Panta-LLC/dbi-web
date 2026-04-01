@@ -134,7 +134,7 @@ export function SlideCarousel({
     const idx = outgoing.idx;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
-      setOutgoing(null);
+      queueMicrotask(() => setOutgoing(null));
       return;
     }
     const timer = window.setTimeout(() => {

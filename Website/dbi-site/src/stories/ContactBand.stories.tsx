@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { ContactBand } from "@/components/ContactBand";
 
 const meta: Meta<typeof ContactBand> = {

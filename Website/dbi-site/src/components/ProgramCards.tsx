@@ -188,6 +188,92 @@ function ProgramCard({ item }: { item: ProgramCardItem }) {
   );
 }
 
+/** Compact program-style card for tab strips (e.g. services). */
+export function ProgramCardCompactTab({
+  title,
+  imageSrc,
+  imageAlt,
+  hoverColor = DEFAULT_HOVER_COLOR,
+  selected,
+  onClick,
+  tabId,
+}: {
+  title: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  hoverColor?: string;
+  selected: boolean;
+  onClick: () => void;
+  tabId: string;
+}) {
+  return (
+    <div
+      role="tab"
+      id={tabId}
+      tabIndex={0}
+      aria-selected={selected}
+      aria-controls={`${tabId}-panel`}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      className={`group relative flex min-h-[120px] w-[min(100%,200px)] flex-1 shrink-0 cursor-pointer flex-col overflow-hidden rounded-md bg-white touch-target transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 sm:min-h-[140px] sm:w-auto sm:min-w-[140px] md:min-h-[160px] md:min-w-[160px] ${
+        selected ? "ring-2 ring-[#ff7900] ring-offset-2" : "ring-1 ring-slate-200 hover:ring-slate-300"
+      }`}
+      style={
+        {
+          "--program-card-hover": hoverColor,
+        } as React.CSSProperties
+      }
+    >
+      <div className="absolute inset-0 bg-slate-300">
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? title}
+            fill
+            sizes="(max-width: 768px) 45vw, 180px"
+            className="object-cover"
+            unoptimized
+          />
+        ) : null}
+      </div>
+
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, transparent 10%, rgba(255,255,255,0.1) 55%, rgba(255,255,255,1) 100%)",
+        }}
+        aria-hidden
+      />
+
+      <div
+        className={`pointer-events-none absolute inset-0 transition-opacity duration-200 ${
+          selected ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+        }`}
+        style={{
+          background: `linear-gradient(to top, var(--program-card-hover) 0%, transparent 70%)`,
+        }}
+        aria-hidden
+      />
+
+      <div className="relative flex w-full flex-1 flex-col justify-end px-3 py-3 sm:px-4 sm:py-4">
+        <h3
+          className={`heading-3 text-center text-sm leading-tight sm:text-base ${
+            selected ? "text-white" : "text-slate-900 transition-colors group-hover:text-white group-focus-visible:text-white"
+          }`}
+        >
+          {title}
+        </h3>
+      </div>
+    </div>
+  );
+}
+
 type ProgramCardsProps = {
   items: ProgramCardItem[];
   className?: string;

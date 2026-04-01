@@ -31,6 +31,28 @@ export const cardGridSection = defineType({
             defineField({ name: "title", title: "Title", type: "string" }),
             defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
             defineField({
+              name: "detail",
+              title: "Detail (expanded panel)",
+              type: "text",
+              rows: 8,
+              description:
+                "Optional. Shown in the tab detail panel when this card is selected. If empty, the Description is used in the panel.",
+            }),
+            defineField({
+              name: "image",
+              title: "Image (tab strip)",
+              type: "image",
+              options: { hotspot: true },
+              description: "Optional. Used for the compact program-style tab row when a service is selected.",
+            }),
+            defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
+            defineField({
+              name: "hoverColor",
+              title: "Hover Overlay Color (CSS color)",
+              type: "string",
+              description: "Optional; e.g. rgba(234, 88, 12, 0.92)",
+            }),
+            defineField({
               name: "cardCta",
               title: "Card CTA",
               type: "ctaAction",

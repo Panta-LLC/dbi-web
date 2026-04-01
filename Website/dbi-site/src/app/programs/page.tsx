@@ -10,7 +10,7 @@ export default async function ProgramsPage() {
     sanityClient.fetch(pageByPathQuery, { path: "/programs" }).catch(() => null),
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
   ]);
-  let cmsPage = cmsPageResult;
+  const cmsPage = cmsPageResult;
   if (!cmsPage?.content?.length) {
     const servicesPage = await sanityClient.fetch(pageByPathQuery, { path: "/services" }).catch(() => null);
     if (servicesPage?.content?.length) {

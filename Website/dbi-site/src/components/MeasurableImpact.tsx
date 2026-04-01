@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type MeasurableImpactMetric = {
   value: string;
@@ -64,7 +64,9 @@ export function MeasurableImpact({
 }: MeasurableImpactProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const metricsRef = useRef(metrics);
-  metricsRef.current = metrics;
+  useLayoutEffect(() => {
+    metricsRef.current = metrics;
+  }, [metrics]);
   const [revealed, setRevealed] = useState(false);
 
   const [displayValues, setDisplayValues] = useState<string[]>(() =>

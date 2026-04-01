@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { ContentCard } from "@/components/ContentCard";
 
 const meta: Meta<typeof ContentCard> = {
