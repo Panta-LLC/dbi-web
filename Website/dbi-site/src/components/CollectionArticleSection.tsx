@@ -509,7 +509,7 @@ export function CollectionArticleSection({
           {/* Large screens: sidebar + article */}
           <motion.div layout className="hidden gap-0 lg:grid lg:grid-cols-6">
             <div
-              className="flex flex-col gap-0 lg:col-span-3"
+              className="flex flex-col gap-2 lg:col-span-3"
               role="listbox"
               aria-label={title ?? "Collection items"}
             >
