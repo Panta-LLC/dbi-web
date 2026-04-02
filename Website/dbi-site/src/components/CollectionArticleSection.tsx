@@ -68,7 +68,7 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
 const EXPLORER_LIST_THUMB = "relative size-28 shrink-0 overflow-hidden rounded-none sm:size-36";
 
 /** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
-const EXPLORER_FULL_BLEED = "relative left-1/2 w-7xl -translate-x-1/2 overflow-x-hidden";
+const EXPLORER_FULL_BLEED = "relative overflow-x-hidden";
 
 function columnsPerRowFromCms(value: number | undefined): CollectionArticleColumnsPerRow {
   if (value === 3 || value === 4 || value === 5) return value;
@@ -166,7 +166,11 @@ function PreviewBlock({
   ) : null;
 
   const explorerListThumb = item.imageSrc ? (
-    <div className={EXPLORER_LIST_THUMB + " mr-2 border-r-8 border-r-white"}>{imageInner}</div>
+    <div
+      className={EXPLORER_LIST_THUMB + `${item.imageSrc ? "mr-2" : ""} border-r-8 border-r-white`}
+    >
+      {imageInner}
+    </div>
   ) : null;
 
   /** Right-pointing tab (same fill as --color-2), flush with the preview body like a speech-bubble tail */
@@ -189,7 +193,9 @@ function PreviewBlock({
           <div className="flex w-full items-stretch">
             <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)]">
               {explorerListThumb}
-              <div className="min-w-0 flex-1 px-3 py-6 justify-center flex flex-col">
+              <div
+                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} py-6 justify-center flex flex-col ${item.imageSrc ? "px-8 py-6" : ""}`}
+              >
                 <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
                   <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-3)]/95">
@@ -202,10 +208,12 @@ function PreviewBlock({
           </div>
         ) : (
           <div
-            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-3 py-6"}`}
+            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-8 py-6"}`}
           >
             {explorerListThumb}
-            <div className={`min-w-0 flex-1 justify-center ${item.imageSrc ? "px-3 py-6" : ""}`}>
+            <div
+              className={`min-w-0 flex-1 justify-center justify-center flex flex-col ${item.imageSrc ? "px-4 py-6" : ""}`}
+            >
               <h3 className="heading-3 text-[var(--color-4)]">{item.heading}</h3>
               {item.summary ? (
                 <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-5)]">
@@ -388,7 +396,7 @@ export function CollectionArticleSection({
     <>
       {title ? <h2 className="heading-2 text-center">{title}</h2> : null}
       {description ? (
-        <p className="body-md mx-auto mt-6 max-w-3xl text-center text-slate-600 whitespace-pre-line">
+        <p className="body-md mx-auto mt-6 mb-4 max-w-3xl text-center text-slate-600 whitespace-pre-line">
           {description}
         </p>
       ) : null}
@@ -435,7 +443,7 @@ export function CollectionArticleSection({
           ))}
         </motion.div>
       ) : showExplorer && selectedIndex !== null && selected ? (
-        <div className={`${EXPLORER_FULL_BLEED} mt-10`}>
+        <div className={`${EXPLORER_FULL_BLEED} mt-12`}>
           {/* Small screens: accordion (preview header + expandable article) */}
           <div className="lg:hidden">
             {showClose ? (

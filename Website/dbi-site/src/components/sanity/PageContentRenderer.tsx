@@ -176,8 +176,7 @@ function mapProgramCardItem(
   donateUrl: string | null | undefined,
 ): ProgramCardItem {
   const sectionHref = sectionCtaLinkFallback(block.programCta, donateUrl);
-  const fallback =
-    resolveHref(item.href ?? undefined, donateUrl) ?? sectionHref ?? "/services";
+  const fallback = resolveHref(item.href ?? undefined, donateUrl) ?? sectionHref ?? "/services";
 
   const cardCta = item.cardCta;
 
@@ -334,9 +333,7 @@ function renderBlock(
       if (!block.title?.trim()) return null;
       const ctas =
         block.ctas
-          ?.map((c) =>
-            c.href ? { ...c, href: resolveHref(c.href, donateUrl) ?? c.href } : c,
-          )
+          ?.map((c) => (c.href ? { ...c, href: resolveHref(c.href, donateUrl) ?? c.href } : c))
           .filter((c) => c.label?.trim()) ?? [];
       return (
         <HeroSplitStatic
@@ -446,19 +443,19 @@ function renderBlock(
         cta: mapGridCardCta(item, block.cta, donateUrl),
       }));
       return (
-        <Section className="bg-white my-10" key={index}>
-          <Container>
-            <CollectionArticleSection
-              title={block.title}
-              description={block.description}
-              columnsPerRow={block.columnsPerRow}
-              expandedMode={block.expandedMode !== false}
-              sectionLayout={block.sectionLayout === "explorer" ? "explorer" : "cardGrid"}
-              defaultView={block.defaultView === "explorer" ? "explorer" : "grid"}
-              cardSize={block.cardSize === "sm" || block.cardSize === "lg" ? block.cardSize : "md"}
-              items={collectionItems}
-            />
-          </Container>
+        <Section className="bg-white mt-10" key={index}>
+          {/* <Container> */}
+          <CollectionArticleSection
+            title={block.title}
+            description={block.description}
+            columnsPerRow={block.columnsPerRow}
+            expandedMode={block.expandedMode !== false}
+            sectionLayout={block.sectionLayout === "explorer" ? "explorer" : "cardGrid"}
+            defaultView={block.defaultView === "explorer" ? "explorer" : "grid"}
+            cardSize={block.cardSize === "sm" || block.cardSize === "lg" ? block.cardSize : "md"}
+            items={collectionItems}
+          />
+          {/* </Container> */}
         </Section>
       );
     }
