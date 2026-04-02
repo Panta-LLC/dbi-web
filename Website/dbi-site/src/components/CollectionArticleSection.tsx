@@ -283,7 +283,11 @@ function ExplorerArticleBody({
   embedded?: boolean;
   heroLayoutId?: string;
 }) {
-  const shellClass = embedded ? "relative max-md:px-6 max-md:py-6 py-12" : "relative pb-10";
+  /** Align with Container: px-4 sm:px-6 lg:px-8 */
+  const containerPad = "px-4 sm:px-6 lg:px-8";
+  const shellClass = embedded
+    ? `relative ${containerPad} pb-10 sm:pb-12 pt-2 sm:pt-0`
+    : `relative ${containerPad} pb-10 pt-10 sm:pt-0 lg:pr-12`;
 
   const heroBoxClass = `relative aspect-21/9 w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
 
@@ -298,12 +302,12 @@ function ExplorerArticleBody({
   ) : null;
 
   return (
-    <div className={shellClass + " ml-2"}>
+    <div className={shellClass}>
       {showInsetClose && onClose ? (
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-2 top-2 z-10 p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)]"
+          className={`absolute top-4 z-10 p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)] ${embedded ? "right-4 sm:right-6 lg:right-8" : "right-2 sm:right-6 lg:right-8"}`}
           aria-label="Close"
         >
           <X className="h-6 w-6" aria-hidden />
@@ -319,7 +323,7 @@ function ExplorerArticleBody({
           <div className={heroBoxClass}>{heroInner}</div>
         )
       ) : null}
-      <div className="px-6 py-3">
+      <div className={embedded ? "pt-2" : ""}>
         <h3
           className={`text-[var(--color-4)] ${embedded ? "text-xl font-semibold tracking-tight sm:text-2xl" : "display-s"} ${showInsetClose ? "pr-10" : ""}`}
         >
@@ -376,6 +380,11 @@ export function CollectionArticleSection({
   const [selectedIndex, setSelectedIndex] = useState<number | null>(() =>
     initialSelectedIndex(sectionLayout, expandedMode, defaultView),
   );
+  /** Mobile accordion (lg:hidden): multiple panels can be open; desktop uses `selectedIndex` only */
+  const [accordionOpen, setAccordionOpen] = useState<Set<number>>(() => {
+    const idx = initialSelectedIndex(sectionLayout, expandedMode, defaultView);
+    return idx !== null ? new Set([idx]) : new Set();
+  });
   const reactId = useId();
   const idPrefix = useMemo(() => reactId.replace(/:/g, ""), [reactId]);
   const gridColsClass = GRID_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
@@ -423,11 +432,15 @@ export function CollectionArticleSection({
               key={`${idPrefix}-grid-${i}`}
               role="button"
               tabIndex={0}
-              onClick={() => setSelectedIndex(i)}
+              onClick={() => {
+                setSelectedIndex(i);
+                setAccordionOpen((prev) => new Set(prev).add(i));
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   setSelectedIndex(i);
+                  setAccordionOpen((prev) => new Set(prev).add(i));
                 }
               }}
               className="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
@@ -447,10 +460,13 @@ export function CollectionArticleSection({
           {/* Small screens: accordion (preview header + expandable article) */}
           <div className="lg:hidden">
             {showClose ? (
-              <div className="flex w-full justify-end">
+              <div className="flex w-full justify-end px-4 sm:px-6">
                 <button
                   type="button"
-                  onClick={() => setSelectedIndex(null)}
+                  onClick={() => {
+                    setSelectedIndex(null);
+                    setAccordionOpen(new Set());
+                  }}
                   className="p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)]"
                   aria-label="Back to grid"
                 >
@@ -459,12 +475,12 @@ export function CollectionArticleSection({
               </div>
             ) : null}
             <div
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-0"
               role="list"
               aria-label={title ?? "Collection items"}
             >
               {items.map((item, i) => {
-                const open = selectedIndex === i;
+                const open = accordionOpen.has(i);
                 const headingId = `${idPrefix}-acc-h-${i}`;
                 const panelId = `${idPrefix}-acc-p-${i}`;
                 return (
@@ -474,7 +490,14 @@ export function CollectionArticleSection({
                       id={headingId}
                       aria-expanded={open}
                       aria-controls={panelId}
-                      onClick={() => setSelectedIndex(i)}
+                      onClick={() => {
+                        setAccordionOpen((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(i)) next.delete(i);
+                          else next.add(i);
+                          return next;
+                        });
+                      }}
                       className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
                     >
                       <PreviewBlock
@@ -485,21 +508,22 @@ export function CollectionArticleSection({
                         explorerTone={open ? "active" : "inactive"}
                       />
                     </button>
-                    <AnimatePresence initial={false}>
-                      {open ? (
-                        <motion.div
-                          id={panelId}
-                          role="region"
-                          aria-labelledby={headingId}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={transition}
-                        >
-                          <ExplorerArticleBody item={item} embedded showInsetClose={false} />
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={headingId}
+                      aria-hidden={!open}
+                      className={
+                        reduceMotion
+                          ? "grid"
+                          : "grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none"
+                      }
+                      style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+                    >
+                      <div className="min-h-0 overflow-hidden">
+                        <ExplorerArticleBody item={item} embedded showInsetClose={false} />
+                      </div>
+                    </div>
                   </div>
                 );
               })}
@@ -557,7 +581,10 @@ export function CollectionArticleSection({
                     item={selected}
                     heroLayoutId={`${idPrefix}-collection-hero-${selectedIndex}`}
                     showInsetClose={showClose}
-                    onClose={() => setSelectedIndex(null)}
+                    onClose={() => {
+                      setSelectedIndex(null);
+                      setAccordionOpen(new Set());
+                    }}
                   />
                 </motion.article>
               </AnimatePresence>
