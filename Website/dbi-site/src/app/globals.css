@@ -200,6 +200,13 @@ body {
     }
   }
 
+  .display-xs {
+    font-family: var(--font-noto-serif), Georgia, serif;
+    font-size: clamp(1rem, 1vw + 1rem, 1.5rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
   .display-s {
     font-family: var(--font-noto-serif), Georgia, serif;
     font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);

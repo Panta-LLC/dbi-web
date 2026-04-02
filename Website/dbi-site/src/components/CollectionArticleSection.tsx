@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useId, useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/Button";
 import { CtaModalForm } from "@/components/cta-modal-form";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
+import { Container } from "./Container";
 
 export type CollectionArticleItem = {
   heading: string;
@@ -35,8 +35,8 @@ const GRID_COLS_CLASS: Record<CollectionArticleColumnsPerRow, string> = {
 };
 
 const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
-  sm: "p-4 px-2",
-  md: "p-10 px-3",
+  sm: "p-8",
+  md: "p-8 p-12",
   lg: "p-12 px-4",
 };
 
@@ -47,9 +47,9 @@ const GRID_IMAGE_BOX: Record<CollectionArticleCardSize, string> = {
 };
 
 const GRID_TITLE: Record<CollectionArticleCardSize, string> = {
-  sm: "text-base font-semibold",
-  md: "heading-3",
-  lg: "text-2xl font-semibold tracking-tight",
+  sm: "display-xs font-semibold",
+  md: "display-xs",
+  lg: "display-l tracking-tight",
 };
 
 const GRID_SUMMARY: Record<CollectionArticleCardSize, string> = {
@@ -65,7 +65,8 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
 };
 
 /** Explorer sidebar / accordion: one thumbnail size active + inactive; flush edge, no padding on image */
-const EXPLORER_LIST_THUMB = "relative size-28 shrink-0 overflow-hidden rounded-none sm:size-36";
+const EXPLORER_LIST_THUMB =
+  "relative size-28 shrink-0 overflow-hidden rounded-none sm:size-36 h-full";
 
 /** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
 const EXPLORER_FULL_BLEED = "relative overflow-x-hidden";
@@ -133,7 +134,6 @@ function PreviewBlock({
   variant,
   cardSize,
   footer,
-  imageLayoutId,
   explorerTone,
 }: {
   item: CollectionArticleItem;
@@ -141,19 +141,22 @@ function PreviewBlock({
   variant: "grid" | "sidebar";
   cardSize: CollectionArticleCardSize;
   footer?: ReactNode;
-  /** Shared with article hero for grid → explorer transition */
-  imageLayoutId?: string;
   /** Explorer sidebar: inactive = color-3; active = color-2 + color-3 text + right-pointing tab */
   explorerTone?: "inactive" | "active";
 }) {
   const padding = variant === "sidebar" ? "p-3" : GRID_PADDING[cardSize];
   const imageBoxClass =
     variant === "sidebar" ? `aspect-4/3 ${SIDEBAR_IMAGE_MAX[cardSize]}` : GRID_IMAGE_BOX[cardSize];
-  const titleClass = variant === "sidebar" ? "text-base" : `${GRID_TITLE[cardSize]} text-slate-900`;
+  const titleClass = variant === "sidebar" ? "" : `${GRID_TITLE[cardSize]} text-slate-900`;
   const summaryClass =
     variant === "sidebar"
       ? "text-sm line-clamp-4"
       : `mt-2 text-slate-700 whitespace-pre-line ${GRID_SUMMARY[cardSize]}`;
+  /** Card grid only: light gray surface → orange on hover */
+  const gridCardSurface = "group bg-[#f8f8f8] hover:bg-[var(--color-2)]";
+  const gridCardTitleHover = "group-hover:text-[var(--color-3)]";
+  const gridCardSummaryHover = "group-hover:text-[var(--color-3)]/95";
+  const gridCardFooterRule = "border-t border-slate-200/80 group-hover:border-[var(--color-3)]/25";
 
   const imageInner = item.imageSrc ? (
     <Image
@@ -194,7 +197,7 @@ function PreviewBlock({
             <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)]">
               {explorerListThumb}
               <div
-                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} py-6 justify-center flex flex-col ${item.imageSrc ? "px-8 py-6" : ""}`}
+                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} justify-center flex flex-col ${item.imageSrc ? "px-8 py-4" : ""}`}
               >
                 <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
@@ -229,30 +232,25 @@ function PreviewBlock({
 
   return (
     <div
-      className={`content-card relative flex h-full min-h-0 flex-col bg-white ${padding} ${footer ? "pb-0" : ""}`}
+      className={`content-card relative flex h-full min-h-0 flex-col ${gridCardSurface} ${item.imageSrc ? "" : padding} ${footer ? "pb-0" : ""}`}
     >
       <div className={`flex min-h-0 flex-col ${footer ? "flex-1" : ""}`}>
         {item.imageSrc ? (
-          imageLayoutId ? (
-            <motion.div
-              layoutId={imageLayoutId}
-              className={`relative w-full overflow-hidden rounded-md ${imageBoxClass}`}
-            >
-              {imageInner}
-            </motion.div>
-          ) : (
-            <div className={`relative w-full overflow-hidden rounded-md ${imageBoxClass}`}>
-              {imageInner}
-            </div>
-          )
+          <div className={`relative w-full overflow-hidden ${imageBoxClass}`}>{imageInner}</div>
         ) : null}
-        <h3 className={`text-slate-900 ${item.imageSrc ? "mt-4" : ""} ${titleClass}`}>
-          {item.heading}
-        </h3>
-        {item.summary ? <p className={summaryClass}>{item.summary}</p> : null}
+        <div className={item.imageSrc ? padding : ""}>
+          <h2
+            className={`text-slate-900 display-l text-center ${gridCardTitleHover} ${item.imageSrc ? "mt-4" : ""} ${titleClass}`}
+          >
+            {item.heading}
+          </h2>
+          {item.summary ? (
+            <p className={`${summaryClass} ${gridCardSummaryHover}`}>{item.summary}</p>
+          ) : null}
+        </div>
       </div>
       {footer ? (
-        <div className="mt-auto border-t border-slate-100 px-0 pb-4 pt-4">{footer}</div>
+        <div className={`mt-auto px-0 pb-4 pt-4 ${gridCardFooterRule}`}>{footer}</div>
       ) : null}
     </div>
   );
@@ -274,14 +272,11 @@ function ExplorerArticleBody({
   showInsetClose,
   onClose,
   embedded = false,
-  /** Set on desktop split view only so grid→explorer layout morph stays unique in the tree */
-  heroLayoutId,
 }: {
   item: CollectionArticleItem;
   showInsetClose: boolean;
   onClose?: () => void;
   embedded?: boolean;
-  heroLayoutId?: string;
 }) {
   /** Align with Container: px-4 sm:px-6 lg:px-8 */
   const containerPad = "px-4 sm:px-6 lg:px-8";
@@ -314,15 +309,7 @@ function ExplorerArticleBody({
         </button>
       ) : null}
 
-      {item.imageSrc ? (
-        heroLayoutId ? (
-          <motion.div layoutId={heroLayoutId} className={heroBoxClass}>
-            {heroInner}
-          </motion.div>
-        ) : (
-          <div className={heroBoxClass}>{heroInner}</div>
-        )
-      ) : null}
+      {item.imageSrc ? <div className={heroBoxClass}>{heroInner}</div> : null}
       <div className={embedded ? "pt-2" : ""}>
         <h3
           className={`text-[var(--color-4)] ${embedded ? "text-xl font-semibold tracking-tight sm:text-2xl" : "display-s"} ${showInsetClose ? "pr-10" : ""}`}
@@ -374,8 +361,6 @@ export function CollectionArticleSection({
   cardSize: cardSizeProp,
   items,
 }: CollectionArticleSectionProps) {
-  const reduceMotion = useReducedMotion();
-  const duration = reduceMotion ? 0 : 0.22;
   const cardSize = cardSizeFromProps(cardSizeProp);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(() =>
     initialSelectedIndex(sectionLayout, expandedMode, defaultView),
@@ -399,8 +384,6 @@ export function CollectionArticleSection({
   const showCardGrid = !tiledOnly && !isExplorerLayout && expandedMode && selectedIndex === null;
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
 
-  const transition = { duration };
-
   return (
     <>
       {title ? <h2 className="heading-2 text-center">{title}</h2> : null}
@@ -411,7 +394,7 @@ export function CollectionArticleSection({
       ) : null}
 
       {tiledOnly ? (
-        <motion.div layout className={`mt-8 grid gap-4 ${gridColsClass}`}>
+        <div className={`mt-8 grid gap-4 ${gridColsClass}`}>
           {items.map((item, i) => (
             <div key={`${idPrefix}-tile-${i}`} className="h-full min-h-0">
               <PreviewBlock
@@ -423,38 +406,38 @@ export function CollectionArticleSection({
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       ) : showCardGrid ? (
-        <motion.div layout className={`mt-8 grid gap-4 ${gridColsClass}`}>
-          {items.map((item, i) => (
-            <motion.div
-              layout
-              key={`${idPrefix}-grid-${i}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                setSelectedIndex(i);
-                setAccordionOpen((prev) => new Set(prev).add(i));
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
+        <Container>
+          <div className={`mt-8 grid gap-4 ${gridColsClass}`}>
+            {items.map((item, i) => (
+              <div
+                key={`${idPrefix}-grid-${i}`}
+                role="button"
+                tabIndex={0}
+                onClick={() => {
                   setSelectedIndex(i);
                   setAccordionOpen((prev) => new Set(prev).add(i));
-                }
-              }}
-              className="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
-            >
-              <PreviewBlock
-                item={item}
-                variant="grid"
-                cardSize={cardSize}
-                imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                imageLayoutId={`${idPrefix}-collection-hero-${i}`}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setSelectedIndex(i);
+                    setAccordionOpen((prev) => new Set(prev).add(i));
+                  }
+                }}
+                className="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+              >
+                <PreviewBlock
+                  item={item}
+                  variant="grid"
+                  cardSize={cardSize}
+                  imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </div>
+            ))}
+          </div>
+        </Container>
       ) : showExplorer && selectedIndex !== null && selected ? (
         <div className={`${EXPLORER_FULL_BLEED} mt-12`}>
           {/* Small screens: accordion (preview header + expandable article) */}
@@ -513,11 +496,7 @@ export function CollectionArticleSection({
                       role="region"
                       aria-labelledby={headingId}
                       aria-hidden={!open}
-                      className={
-                        reduceMotion
-                          ? "grid"
-                          : "grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none"
-                      }
+                      className="grid"
                       style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
                     >
                       <div className="min-h-0 overflow-hidden">
@@ -531,9 +510,9 @@ export function CollectionArticleSection({
           </div>
 
           {/* Large screens: sidebar + article */}
-          <motion.div layout className="hidden gap-0 lg:grid lg:grid-cols-6">
+          <div className="hidden gap-0 lg:grid lg:grid-cols-6">
             <div
-              className="flex flex-col gap-2 lg:col-span-3"
+              className="flex flex-col gap-2 lg:col-span-2"
               role="listbox"
               aria-label={title ?? "Collection items"}
             >
@@ -566,30 +545,19 @@ export function CollectionArticleSection({
               })}
             </div>
 
-            <div className="relative min-h-48 lg:col-span-3">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.article
-                  key={selectedIndex}
-                  role="article"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={transition}
-                  className="relative"
-                >
-                  <ExplorerArticleBody
-                    item={selected}
-                    heroLayoutId={`${idPrefix}-collection-hero-${selectedIndex}`}
-                    showInsetClose={showClose}
-                    onClose={() => {
-                      setSelectedIndex(null);
-                      setAccordionOpen(new Set());
-                    }}
-                  />
-                </motion.article>
-              </AnimatePresence>
+            <div className="relative min-h-48 lg:col-span-4">
+              <article key={selectedIndex} role="article" className="relative">
+                <ExplorerArticleBody
+                  item={selected}
+                  showInsetClose={showClose}
+                  onClose={() => {
+                    setSelectedIndex(null);
+                    setAccordionOpen(new Set());
+                  }}
+                />
+              </article>
             </div>
-          </motion.div>
+          </div>
         </div>
       ) : null}
     </>
