@@ -1,3 +1,7 @@
+/**
+ * Canonical seed payloads for Sanity. Run `pnpm seed:sanity` (requires write token + env).
+ * Do not duplicate marketing copy in `src/data`; extend documents here instead.
+ */
 require("dotenv").config({ path: ".env.local" });
 require("dotenv").config({ path: ".env" });
 

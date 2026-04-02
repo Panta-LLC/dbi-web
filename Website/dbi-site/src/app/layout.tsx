@@ -3,6 +3,7 @@ import { Inter, Noto_Sans, Noto_Serif } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { AppToaster } from "@/components/AppToaster";
 import { StructuredData } from "@/components/StructuredData";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const notoSans = Noto_Sans({
@@ -21,6 +22,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "Delta Bay Impact | Every African American Student Deserves to Thrive",
   description:
     "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth in Contra Costa County.",
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://dbi-site.vercel.app",
+    url: getSiteUrl(),
     siteName: "Delta Bay Impact",
     title: "Every African American Student in Contra Costa County Deserves to Thrive",
     description:

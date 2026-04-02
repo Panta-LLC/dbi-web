@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
@@ -12,7 +13,7 @@ export default async function ServicesPage() {
   ]);
   const cmsPage = servicesPage?.content?.length ? servicesPage : programsPage;
   if (!cmsPage?.content?.length) {
-    return null;
+    notFound();
   }
   const donateUrl = siteSettings?.donateUrl ?? null;
 

@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { absoluteUrl } from "@/lib/site-url";
 
 export function StructuredData() {
   const organizationSchema = {
@@ -7,8 +8,8 @@ export function StructuredData() {
     name: "Delta Bay Impact",
     description:
       "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth in Contra Costa County.",
-    url: "https://dbi-site.vercel.app",
-    logo: "https://dbi-site.vercel.app/dbi_logo.png",
+    url: absoluteUrl("/"),
+    logo: absoluteUrl("/dbi_logo.png"),
     foundingDate: "2023",
     areaServed: {
       "@type": "Place",

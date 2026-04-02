@@ -9,7 +9,7 @@
  *
  * @see `src/sanity/schema/objects/testimonialSliderSection.ts`
  * @see `src/sanity/queries.ts`
- * @see `src/components/sanity/PageContentRenderer.tsx` (`testimonialSliderSection` case)
+ * @see `src/components/sanity/pageContent/renderPageContentBlock.tsx` (`testimonialSliderSection` case)
  */
 import { useId } from "react";
 import {

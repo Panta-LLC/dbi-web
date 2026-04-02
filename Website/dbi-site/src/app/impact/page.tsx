@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
@@ -10,7 +11,7 @@ export default async function ImpactPage() {
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
   ]);
   if (!cmsPage?.content?.length) {
-    return null;
+    notFound();
   }
   const donateUrl = siteSettings?.donateUrl ?? null;
 

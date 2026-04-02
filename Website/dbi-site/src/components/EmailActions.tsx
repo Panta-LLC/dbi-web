@@ -1,6 +1,7 @@
 "use client";
 
-import { FaCopy, FaEnvelope } from "react-icons/fa";
+import type { MouseEvent } from "react";
+import { Copy, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 type EmailActionsProps = {
@@ -8,7 +9,7 @@ type EmailActionsProps = {
 };
 
 export function EmailActions({ email }: EmailActionsProps) {
-  const handleCopy = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCopy = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
       await navigator.clipboard.writeText(email);
@@ -25,7 +26,7 @@ export function EmailActions({ email }: EmailActionsProps) {
         className="flex items-center gap-2 text-lg font-semibold transition hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
         aria-label={`Email ${email}`}
       >
-        <FaEnvelope className="h-5 w-5 shrink-0" />
+        <Mail className="h-5 w-5 shrink-0" />
         {email}
       </a>
       <button
@@ -35,7 +36,7 @@ export function EmailActions({ email }: EmailActionsProps) {
         aria-label="Copy email address"
         title="Copy email"
       >
-        <FaCopy className="h-4 w-4" aria-hidden />
+        <Copy className="h-4 w-4" aria-hidden />
       </button>
     </div>
   );

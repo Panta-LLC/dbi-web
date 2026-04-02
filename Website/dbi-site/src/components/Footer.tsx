@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { urlForSanityImage } from "@/lib/sanity-image";
 import { sanityClient } from "@/sanity/client";
 import { siteQuery } from "@/sanity/queries";
@@ -55,9 +55,9 @@ const defaultContent = {
 };
 
 const SOCIAL_ICONS: Record<string, IconComponent> = {
-  instagram: () => <FaInstagram className="h-5 w-5 shrink-0" />,
-  facebook: () => <FaFacebookF className="h-5 w-5 shrink-0" />,
-  linkedin: () => <FaLinkedinIn className="h-5 w-5 shrink-0" />,
+  instagram: () => <Instagram className="h-5 w-5 shrink-0" />,
+  facebook: () => <Facebook className="h-5 w-5 shrink-0" />,
+  linkedin: () => <Linkedin className="h-5 w-5 shrink-0" />,
 };
 
 export async function Footer() {
@@ -167,7 +167,7 @@ export async function Footer() {
                       {content.socialLinks.map((link: LinkItem) => {
                         const Icon =
                           SOCIAL_ICONS[link.label.toLowerCase()] ??
-                          (() => <FaInstagram className="h-5 w-5 shrink-0" />);
+                          (() => <Instagram className="h-5 w-5 shrink-0" />);
                         return (
                           <li key={link.label}>
                             <a

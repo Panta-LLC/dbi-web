@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
@@ -16,7 +16,7 @@ export default async function ProgramsPage() {
     if (servicesPage?.content?.length) {
       redirect("/services");
     }
-    return null;
+    notFound();
   }
   const donateUrl = siteSettings?.donateUrl ?? null;
 

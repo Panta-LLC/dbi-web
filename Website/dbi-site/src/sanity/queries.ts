@@ -144,6 +144,11 @@ export const pageByPathQuery = groq`
   }
 `;
 
+/** Paths for published `page` documents (used by sitemap). */
+export const publishedPagePathsQuery = groq`
+  *[_type == "page" && defined(path) && path != ""].path
+`;
+
 export const siteSettingsQuery = groq`
   *[_type == "site"][0]{ donateUrl }
 `;
