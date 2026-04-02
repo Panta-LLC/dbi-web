@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ChevronRight, X } from "lucide-react";
+import { X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useId, useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/Button";
@@ -63,6 +63,9 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
   md: "max-h-32",
   lg: "max-h-40",
 };
+
+/** Explorer sidebar / accordion: one thumbnail size active + inactive; flush edge, no padding on image */
+const EXPLORER_LIST_THUMB = "relative size-28 shrink-0 overflow-hidden rounded-none sm:size-36";
 
 /** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
 const EXPLORER_FULL_BLEED = "relative left-1/2 w-7xl -translate-x-1/2 overflow-x-hidden";
@@ -140,7 +143,7 @@ function PreviewBlock({
   footer?: ReactNode;
   /** Shared with article hero for grid → explorer transition */
   imageLayoutId?: string;
-  /** Explorer sidebar: inactive = color-3; active = color-2 + color-3 text + caret */
+  /** Explorer sidebar: inactive = color-3; active = color-2 + color-3 text + right-pointing tab */
   explorerTone?: "inactive" | "active";
 }) {
   const padding = variant === "sidebar" ? "p-3" : GRID_PADDING[cardSize];
@@ -162,49 +165,54 @@ function PreviewBlock({
     />
   ) : null;
 
-  const explorerInactiveThumb = (
-    <div className={`relative w-full overflow-hidden rounded-none ${imageBoxClass}`}>
-      {imageInner}
-    </div>
-  );
+  const explorerListThumb = item.imageSrc ? (
+    <div className={EXPLORER_LIST_THUMB + " mr-2 border-r-8 border-r-white"}>{imageInner}</div>
+  ) : null;
 
-  const explorerActiveThumb = (
-    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-none sm:h-16 sm:w-16">
-      {imageInner}
+  /** Right-pointing tab (same fill as --color-2), flush with the preview body like a speech-bubble tail */
+  const explorerActiveRightTab = (
+    <div
+      className=" absolute right-[-13px] top-0 bottom-0 m-auto z-50 flex shrink-0 self-stretch"
+      aria-hidden
+    >
+      <span className="h-0 w-0 absolute top-0 bottom-0 m-auto right-[-4px] border-y-[16px] border-l-[14px] border-y-transparent border-l-[var(--color-3)] sm:border-y-[16px] sm:border-l-[14px]" />
+      <span className="h-0 w-0 absolute top-0 bottom-0 m-auto right-[4px] border-y-[14px] border-l-[12px] border-y-transparent border-l-[var(--color-4)] sm:border-y-[16px] sm:border-l-[14px]" />
     </div>
   );
 
   if (explorerTone === "active" || explorerTone === "inactive") {
     const active = explorerTone === "active";
-    const shell = active ? "bg-[var(--color-2)] text-[var(--color-3)]" : "bg-[var(--color-3)]";
+    const shell = active ? "" : "bg-[var(--color-3)]";
     return (
-      <div className={`relative w-full rounded-none border-0 px-3 py-6 shadow-none ${shell}`}>
+      <div className={`relative w-full rounded-none border-0 shadow-none ${active ? "" : shell}`}>
         {active ? (
-          <div className="flex items-center gap-3">
-            {item.imageSrc ? explorerActiveThumb : null}
-            <div className="min-w-0 flex-1">
-              <h3 className="text-base font-semibold text-[var(--color-3)]">{item.heading}</h3>
+          <div className="flex w-full items-stretch">
+            <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)]">
+              {explorerListThumb}
+              <div className="min-w-0 flex-1 px-3 py-6 justify-center flex flex-col">
+                <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
+                {item.summary ? (
+                  <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-3)]/95">
+                    {item.summary}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            {explorerActiveRightTab}
+          </div>
+        ) : (
+          <div
+            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-3 py-6"}`}
+          >
+            {explorerListThumb}
+            <div className={`min-w-0 flex-1 justify-center ${item.imageSrc ? "px-3 py-6" : ""}`}>
+              <h3 className="heading-3 text-[var(--color-4)]">{item.heading}</h3>
               {item.summary ? (
-                <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-3)]/95">
+                <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-5)]">
                   {item.summary}
                 </p>
               ) : null}
             </div>
-            <ChevronRight className="h-5 w-5 shrink-0 text-[var(--color-3)]" aria-hidden />
-          </div>
-        ) : (
-          <div className="flex min-h-0 flex-col">
-            {item.imageSrc ? explorerInactiveThumb : null}
-            <h3
-              className={`text-base font-semibold text-[var(--color-4)] ${item.imageSrc ? "mt-4" : ""}`}
-            >
-              {item.heading}
-            </h3>
-            {item.summary ? (
-              <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-5)]">
-                {item.summary}
-              </p>
-            ) : null}
           </div>
         )}
       </div>
@@ -267,9 +275,7 @@ function ExplorerArticleBody({
   embedded?: boolean;
   heroLayoutId?: string;
 }) {
-  const shellClass = embedded
-    ? "relative px-6 py-6 sm:px-12"
-    : "relative px-6 pb-10 sm:px-12 lg:pr-12";
+  const shellClass = embedded ? "relative max-md:px-6 max-md:py-6 py-12" : "relative pb-10";
 
   const heroBoxClass = `relative aspect-21/9 w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
 
@@ -284,7 +290,7 @@ function ExplorerArticleBody({
   ) : null;
 
   return (
-    <div className={shellClass}>
+    <div className={shellClass + " ml-2"}>
       {showInsetClose && onClose ? (
         <button
           type="button"
@@ -305,23 +311,26 @@ function ExplorerArticleBody({
           <div className={heroBoxClass}>{heroInner}</div>
         )
       ) : null}
+      <div className="px-6 py-3">
+        <h3
+          className={`text-[var(--color-4)] ${embedded ? "text-xl font-semibold tracking-tight sm:text-2xl" : "display-s"} ${showInsetClose ? "pr-10" : ""}`}
+        >
+          {item.heading}
+        </h3>
 
-      <h3
-        className={`text-[var(--color-4)] ${embedded ? "text-xl font-semibold tracking-tight sm:text-2xl" : "display-s"} ${showInsetClose ? "pr-10" : ""}`}
-      >
-        {item.heading}
-      </h3>
+        <ArticleTeaser
+          item={item}
+          className="body-md mt-4 whitespace-pre-line text-[var(--color-5)]"
+        />
 
-      <ArticleTeaser
-        item={item}
-        className="body-md mt-4 whitespace-pre-line text-[var(--color-5)]"
-      />
+        {item.description ? (
+          <p className="mt-6 text-md whitespace-pre-line text-[var(--color-5)]">
+            {item.description}
+          </p>
+        ) : null}
 
-      {item.description ? (
-        <p className="mt-6 text-md whitespace-pre-line text-[var(--color-5)]">{item.description}</p>
-      ) : null}
-
-      {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
+        {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
+      </div>
     </div>
   );
 }
@@ -393,7 +402,7 @@ export function CollectionArticleSection({
                 variant="grid"
                 cardSize={cardSize}
                 imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                footer={item.cta ? <DetailPanelCta cta={item.cta} className="mt-0" /> : undefined}
+                footer={item.cta ? <DetailPanelCta cta={item.cta} className="my-4" /> : undefined}
               />
             </div>
           ))}
@@ -442,7 +451,7 @@ export function CollectionArticleSection({
               </div>
             ) : null}
             <div
-              className="flex flex-col gap-0"
+              className="flex flex-col gap-2"
               role="list"
               aria-label={title ?? "Collection items"}
             >
@@ -492,7 +501,7 @@ export function CollectionArticleSection({
           {/* Large screens: sidebar + article */}
           <motion.div layout className="hidden gap-0 lg:grid lg:grid-cols-6">
             <div
-              className="flex flex-col gap-0 lg:col-span-2"
+              className="flex flex-col gap-0 lg:col-span-3"
               role="listbox"
               aria-label={title ?? "Collection items"}
             >
@@ -525,7 +534,7 @@ export function CollectionArticleSection({
               })}
             </div>
 
-            <div className="relative min-h-48 lg:col-span-4">
+            <div className="relative min-h-48 lg:col-span-3">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.article
                   key={selectedIndex}
