@@ -150,7 +150,7 @@ function PreviewBlock({
   const titleClass = variant === "sidebar" ? "" : `${GRID_TITLE[cardSize]} text-slate-900`;
   const summaryClass =
     variant === "sidebar"
-      ? "text-sm line-clamp-4"
+      ? "text-sm line-clamp-4 py-6"
       : `mt-2 text-slate-700 whitespace-pre-line ${GRID_SUMMARY[cardSize]}`;
   /** Card grid only: light gray surface → orange on hover */
   const gridCardSurface = "group bg-[#f8f8f8] hover:bg-[var(--color-2)]";
@@ -170,7 +170,10 @@ function PreviewBlock({
 
   const explorerListThumb = item.imageSrc ? (
     <div
-      className={EXPLORER_LIST_THUMB + `${item.imageSrc ? "mr-2" : ""} border-r-8 border-r-white`}
+      className={
+        EXPLORER_LIST_THUMB +
+        `${item.imageSrc ? "mr-2" : ""} border-r-8 border-r-white w-[45px] h-full`
+      }
     >
       {imageInner}
     </div>
@@ -194,10 +197,10 @@ function PreviewBlock({
       <div className={`relative w-full rounded-none border-0 shadow-none ${active ? "" : shell}`}>
         {active ? (
           <div className="flex w-full items-stretch">
-            <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)]">
+            <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)] h-full">
               {explorerListThumb}
               <div
-                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} justify-center flex flex-col ${item.imageSrc ? "px-8 py-4" : ""}`}
+                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} justify-center flex flex-col ${item.imageSrc ? "px-8 py-4" : "py-8"}`}
               >
                 <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
