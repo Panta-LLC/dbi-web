@@ -2,10 +2,25 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
-import { useId, useMemo, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { Button } from "@/components/Button";
 import { CtaModalForm } from "@/components/cta-modal-form";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
+import {
+  claimUnscopedFragment,
+  collectionArticleScrollTargetId,
+  parseCollectionArticleHash,
+  resetUnscopedHashClaims,
+  uniqueAnchorSlugsForItems,
+} from "@/lib/slugify-anchor";
 import { Container } from "./Container";
 
 export type CollectionArticleItem = {
@@ -64,9 +79,9 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
   lg: "max-h-40",
 };
 
-/** Explorer sidebar / accordion: one thumbnail size active + inactive; flush edge, no padding on image */
-const EXPLORER_LIST_THUMB =
-  "relative size-28 shrink-0 overflow-hidden rounded-none sm:size-36 h-full";
+/** Explorer sidebar / accordion: thumb stretches to preview row height; width from aspect ratio */
+const EXPLORER_THUMB_BOX =
+  "relative shrink-0 self-stretch overflow-hidden rounded-none aspect-[4/3] h-full min-h-0 min-w-0 w-auto";
 
 /** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
 const EXPLORER_FULL_BLEED = "relative overflow-x-hidden";
@@ -168,17 +183,6 @@ function PreviewBlock({
     />
   ) : null;
 
-  const explorerListThumb = item.imageSrc ? (
-    <div
-      className={
-        EXPLORER_LIST_THUMB +
-        `${item.imageSrc ? "mr-2" : ""} border-r-8 border-r-white w-[45px] h-full`
-      }
-    >
-      {imageInner}
-    </div>
-  ) : null;
-
   /** Right-pointing tab (same fill as --color-2), flush with the preview body like a speech-bubble tail */
   const explorerActiveRightTab = (
     <div
@@ -193,6 +197,18 @@ function PreviewBlock({
   if (explorerTone === "active" || explorerTone === "inactive") {
     const active = explorerTone === "active";
     const shell = active ? "" : "bg-[var(--color-3)]";
+    const explorerListThumb = item.imageSrc ? (
+      <div className={`${EXPLORER_THUMB_BOX} border-r-8 border-r-white mr-2`}>
+        <Image
+          src={item.imageSrc}
+          alt={item.imageAlt ?? item.heading}
+          fill
+          sizes={imageSizes}
+          className="object-cover"
+        />
+      </div>
+    ) : null;
+
     return (
       <div className={`relative w-full rounded-none border-0 shadow-none ${active ? "" : shell}`}>
         {active ? (
@@ -214,7 +230,7 @@ function PreviewBlock({
           </div>
         ) : (
           <div
-            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-8 py-6"}`}
+            className={`flex min-h-0 items-stretch justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-8 py-6"}`}
           >
             {explorerListThumb}
             <div
@@ -352,6 +368,8 @@ type CollectionArticleSectionProps = {
   defaultView?: CollectionArticleDefaultView;
   cardSize?: CollectionArticleCardSize;
   items: CollectionArticleItem[];
+  /** Sanity block `_key`; used for scoped hashes `#key:item-slug` and stable scroll target ids. */
+  sectionAnchorKey?: string;
 };
 
 export function CollectionArticleSection({
@@ -363,6 +381,7 @@ export function CollectionArticleSection({
   defaultView = "grid",
   cardSize: cardSizeProp,
   items,
+  sectionAnchorKey,
 }: CollectionArticleSectionProps) {
   const cardSize = cardSizeFromProps(cardSizeProp);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(() =>
@@ -373,14 +392,72 @@ export function CollectionArticleSection({
     const idx = initialSelectedIndex(sectionLayout, expandedMode, defaultView);
     return idx !== null ? new Set([idx]) : new Set();
   });
+  const [hashScrollNonce, setHashScrollNonce] = useState(0);
+  const pendingScrollIdxRef = useRef<number | null>(null);
   const reactId = useId();
   const idPrefix = useMemo(() => reactId.replace(/:/g, ""), [reactId]);
-  const gridColsClass = GRID_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
-
-  if (!items.length) return null;
+  const sectionAnchorKeyResolved = sectionAnchorKey ?? idPrefix;
+  const itemSlugs = useMemo(
+    () => uniqueAnchorSlugsForItems(items.map((i) => i.heading)),
+    [items],
+  );
 
   const isExplorerLayout = sectionLayout === "explorer";
   const tiledOnly = !isExplorerLayout && !expandedMode;
+
+  useEffect(() => {
+    if (!items.length || tiledOnly) return;
+
+    const applyHash = () => {
+      const parsed = parseCollectionArticleHash(
+        typeof window !== "undefined" ? window.location.hash : "",
+      );
+      if (!parsed) return;
+
+      if (parsed.scopedPrefix !== null) {
+        if (parsed.scopedPrefix !== sectionAnchorKeyResolved) return;
+        const idx = itemSlugs.indexOf(parsed.itemSlug);
+        if (idx === -1) return;
+        setSelectedIndex(idx);
+        setAccordionOpen((prev) => new Set(prev).add(idx));
+        pendingScrollIdxRef.current = idx;
+        setHashScrollNonce((n) => n + 1);
+        return;
+      }
+
+      if (!claimUnscopedFragment(parsed.itemSlug, sectionAnchorKeyResolved)) return;
+      const idx = itemSlugs.indexOf(parsed.itemSlug);
+      if (idx === -1) return;
+      setSelectedIndex(idx);
+      setAccordionOpen((prev) => new Set(prev).add(idx));
+      pendingScrollIdxRef.current = idx;
+      setHashScrollNonce((n) => n + 1);
+    };
+
+    applyHash();
+
+    const onHashChange = () => {
+      resetUnscopedHashClaims();
+      applyHash();
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [items.length, tiledOnly, itemSlugs, sectionAnchorKeyResolved]);
+
+  useLayoutEffect(() => {
+    if (hashScrollNonce === 0) return;
+    const idx = pendingScrollIdxRef.current;
+    if (idx === null) return;
+    pendingScrollIdxRef.current = null;
+    const slug = itemSlugs[idx];
+    if (!slug) return;
+    const id = collectionArticleScrollTargetId(sectionAnchorKeyResolved, slug);
+    document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
+  }, [hashScrollNonce, itemSlugs, sectionAnchorKeyResolved]);
+
+  const gridColsClass = GRID_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
+
+  if (!items.length) return null;
   const selected =
     selectedIndex !== null && items[selectedIndex] !== undefined ? items[selectedIndex] : null;
   const showExplorer = isExplorerLayout || (expandedMode && selectedIndex !== null && !tiledOnly);
@@ -442,7 +519,13 @@ export function CollectionArticleSection({
           </div>
         </Container>
       ) : showExplorer && selectedIndex !== null && selected ? (
-        <div className={`${EXPLORER_FULL_BLEED} mt-12`}>
+        <div
+          className={`${EXPLORER_FULL_BLEED} mt-12 collection-article-scroll-target`}
+          id={collectionArticleScrollTargetId(
+            sectionAnchorKeyResolved,
+            itemSlugs[selectedIndex] ?? "",
+          )}
+        >
           {/* Small screens: accordion (preview header + expandable article) */}
           <div className="lg:hidden">
             {showClose ? (

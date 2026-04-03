@@ -8,6 +8,7 @@ export type Cta = {
 };
 
 export type ContentBlock = {
+  _key?: string;
   _type: string;
   title?: string;
   subtitle?: string;

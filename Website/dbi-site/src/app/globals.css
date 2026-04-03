@@ -338,6 +338,17 @@ body {
     /* letter-spacing: 0.14em; */
   }
 
+  /** Fixed header (`NavBar`): keep programmatic scroll targets visible below the bar */
+  .collection-article-scroll-target {
+    scroll-margin-top: 5.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .collection-article-scroll-target {
+      scroll-margin-top: 6rem;
+    }
+  }
+
   .slanted-button {
     position: relative;
     overflow: hidden;

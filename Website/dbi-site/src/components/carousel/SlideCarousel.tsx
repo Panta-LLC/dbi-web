@@ -206,7 +206,7 @@ export function SlideCarousel({
         </div>
       </div>
     ) : (
-      <div className="relative w-full contain-[layout_paint]">{crossfadeLayers}</div>
+      <div className="relative w-full contain-[layout]">{crossfadeLayers}</div>
     );
   } else if (tallestRail) {
     slideContent = (

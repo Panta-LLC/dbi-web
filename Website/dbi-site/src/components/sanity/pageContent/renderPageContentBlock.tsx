@@ -175,6 +175,7 @@ export function renderPageContentBlock(
             defaultView={block.defaultView === "explorer" ? "explorer" : "grid"}
             cardSize={block.cardSize === "sm" || block.cardSize === "lg" ? block.cardSize : "md"}
             items={collectionItems}
+            sectionAnchorKey={block._key ?? `block-${index}`}
           />
         </Section>
       );

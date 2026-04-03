@@ -34,6 +34,7 @@ export const pageByPathQuery = groq`
     description,
     layout,
     content[]{
+      _key,
       _type,
       title,
       subtitle,

@@ -11,7 +11,7 @@
  * @see `src/sanity/queries.ts`
  * @see `src/components/sanity/pageContent/renderPageContentBlock.tsx` (`testimonialSliderSection` case)
  */
-import { useCallback, useId } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   resolveCarouselSettings,
   SlideCarousel,
@@ -78,10 +78,33 @@ export function TestimonialSlider({
   const list = items?.length ? items : DEFAULT_ITEMS;
   const count = list.length;
 
-  const c = useCarousel(count, { autoPlayMs: resolved.autoPlayMs });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  const shouldDeferAutoplay = !!resolved.autoPlayMs && count > 1;
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !shouldDeferAutoplay) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.2, rootMargin: "0px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [shouldDeferAutoplay]);
+
+  const effectiveAutoPlayMs = !resolved.autoPlayMs
+    ? undefined
+    : shouldDeferAutoplay
+      ? inView
+        ? resolved.autoPlayMs
+        : undefined
+      : resolved.autoPlayMs;
+
+  const c = useCarousel(count, { autoPlayMs: effectiveAutoPlayMs });
   const showDots = resolved.showPagination ?? c.multi;
   const showBar =
-    (resolved.showProgress ?? !!resolved.autoPlayMs) && !!resolved.autoPlayMs && c.multi;
+    (resolved.showProgress ?? !!resolved.autoPlayMs) && !!effectiveAutoPlayMs && c.multi;
 
   const baseId = useId();
   const regionId = `${baseId}-region`;
@@ -92,9 +115,9 @@ export function TestimonialSlider({
       const item = list[index];
       if (!item) return null;
       return (
-        <div className="flex w-full flex-1 items-start">
+        <div className="flex w-full flex-1 items-start gap-2 md:gap-3">
           <span
-            className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
+            className="block md:text-[9rem] text-6xl font-serif font-extrabold leading-none mb-2 select-none shrink-0"
             style={{
               color: "var(--color-2, #ff7900)",
               lineHeight: ".35em",
@@ -122,37 +145,39 @@ export function TestimonialSlider({
   if (!list.length) return null;
 
   return (
-    <SlideCarousel
-      count={count}
-      multi={c.multi}
-      activeIndex={c.activeIndex}
-      direction={c.direction}
-      transition={resolved.transition}
-      transitionMode={resolved.transition === "fade" ? "crossfade" : "enter"}
-      matchTallestSlide={resolved.transition !== "fade"}
-      crossfadeMeasureHeight={false}
-      transitionDurationMs={resolved.transitionDurationMs}
-      autoPlayMs={resolved.autoPlayMs}
-      showPagination={showDots}
-      showProgress={showBar}
-      regionId={regionId}
-      labelId={labelId}
-      srLabel={`Testimonials, slide ${c.activeIndex + 1} of ${count}`}
-      onKeyDown={c.onKeyDown}
-      onPointerEnter={() => c.setPaused(true)}
-      onPointerLeave={() => c.setPaused(false)}
-      goPrev={c.goPrev}
-      goNext={c.goNext}
-      goToIndex={c.goToIndex}
-      prevArrowLabel="Previous testimonial"
-      nextArrowLabel="Next testimonial"
-      dotNavLabel="Testimonial pagination"
-      getDotLabel={(i, n) => `Go to testimonial ${i + 1} of ${n}`}
-      theme="testimonialDark"
-      className={`relative flex flex-col items-center justify-center py-10 md:py-14 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] rounded-sm ${className}`}
-      style={{ backgroundColor: BLUE_BG }}
-      contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm"
-      renderSlide={renderSlide}
-    />
+    <div ref={containerRef} className="w-full">
+      <SlideCarousel
+        count={count}
+        multi={c.multi}
+        activeIndex={c.activeIndex}
+        direction={c.direction}
+        transition={resolved.transition}
+        transitionMode={resolved.transition === "fade" ? "crossfade" : "enter"}
+        matchTallestSlide={resolved.transition !== "fade"}
+        crossfadeMeasureHeight={false}
+        transitionDurationMs={resolved.transitionDurationMs}
+        autoPlayMs={effectiveAutoPlayMs}
+        showPagination={showDots}
+        showProgress={showBar}
+        regionId={regionId}
+        labelId={labelId}
+        srLabel={`Testimonials, slide ${c.activeIndex + 1} of ${count}`}
+        onKeyDown={c.onKeyDown}
+        onPointerEnter={() => c.setPaused(true)}
+        onPointerLeave={() => c.setPaused(false)}
+        goPrev={c.goPrev}
+        goNext={c.goNext}
+        goToIndex={c.goToIndex}
+        prevArrowLabel="Previous testimonial"
+        nextArrowLabel="Next testimonial"
+        dotNavLabel="Testimonial pagination"
+        getDotLabel={(i, n) => `Go to testimonial ${i + 1} of ${n}`}
+        theme="testimonialDark"
+        className={`relative flex flex-col items-center justify-center py-10 md:py-14 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] rounded-sm ${className}`}
+        style={{ backgroundColor: BLUE_BG }}
+        contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm min-h-min"
+        renderSlide={renderSlide}
+      />
+    </div>
   );
 }
