@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { sanityClient } from "@/sanity/client";
-import { publishedPagePathsQuery } from "@/sanity/queries";
+import { publishedPagesForSitemapQuery } from "@/sanity/queries";
 import { absoluteUrl } from "@/lib/site-url";
+
+type SanitySitemapRow = { path: string; _updatedAt: string };
 
 /** First-party routes that should appear even if not yet modeled as CMS `page` docs. */
 const MINIMUM_SITEMAP_PATHS = [
@@ -36,30 +38,38 @@ function changeFrequencyForPath(path: string): MetadataRoute.Sitemap[0]["changeF
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const lastModified = new Date();
+  const buildTime = new Date();
 
-  let cmsPaths: string[] = [];
+  let cmsRows: SanitySitemapRow[] = [];
   try {
-    cmsPaths = await sanityClient.fetch<string[]>(publishedPagePathsQuery);
+    cmsRows = await sanityClient.fetch<SanitySitemapRow[]>(publishedPagesForSitemapQuery);
   } catch {
-    cmsPaths = [];
+    cmsRows = [];
+  }
+
+  const lastModByPath = new Map<string, Date>();
+  for (const row of cmsRows) {
+    if (typeof row?.path !== "string" || !row.path.trim()) continue;
+    const p = normalizePath(row.path);
+    const d = new Date(row._updatedAt);
+    if (!Number.isNaN(d.getTime())) {
+      lastModByPath.set(p, d);
+    }
   }
 
   const pathSet = new Set<string>();
   for (const p of MINIMUM_SITEMAP_PATHS) {
     pathSet.add(normalizePath(p));
   }
-  for (const p of cmsPaths) {
-    if (typeof p === "string" && p.length > 0) {
-      pathSet.add(normalizePath(p));
-    }
+  for (const p of lastModByPath.keys()) {
+    pathSet.add(p);
   }
 
   const sorted = [...pathSet].sort((a, b) => a.localeCompare(b));
 
   return sorted.map((path) => ({
     url: absoluteUrl(path),
-    lastModified,
+    lastModified: lastModByPath.get(path) ?? buildTime,
     changeFrequency: changeFrequencyForPath(path),
     priority: priorityForPath(path),
   }));

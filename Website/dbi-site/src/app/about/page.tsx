@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
+import { createMetadataForPath } from "@/lib/page-metadata";
 import { sanityClient } from "@/sanity/client";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
+
+export const generateMetadata = createMetadataForPath("/about");
 
 export default async function AboutPage() {
   const [cmsPage, siteSettings] = await Promise.all([

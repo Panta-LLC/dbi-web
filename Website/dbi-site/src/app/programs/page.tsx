@@ -2,8 +2,11 @@ import { notFound, redirect } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
+import { createMetadataForPath } from "@/lib/page-metadata";
 import { sanityClient } from "@/sanity/client";
 import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
+
+export const generateMetadata = createMetadataForPath("/programs");
 
 export default async function ProgramsPage() {
   const [cmsPageResult, siteSettings] = await Promise.all([

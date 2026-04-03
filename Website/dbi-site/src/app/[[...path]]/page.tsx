@@ -1,21 +1,28 @@
+import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
+import { buildMetadataForPath, normalizePathSegments } from "@/lib/page-metadata";
 import { sanityClient } from "@/sanity/client";
 import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
 
-function normalizePath(segments?: string[]) {
-  if (!segments || segments.length === 0) return "/";
-  return `/${segments.join("/")}`;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ path?: string[] }>;
+}): Promise<Metadata> {
+  const { path: segments } = await params;
+  return buildMetadataForPath(normalizePathSegments(segments));
 }
 
 export default async function CmsCatchAllPage({
   params,
 }: {
-  params: { path?: string[] };
+  params: Promise<{ path?: string[] }>;
 }) {
-  const requestedPath = normalizePath(params.path);
+  const { path: segments } = await params;
+  const requestedPath = normalizePathSegments(segments);
 
   const [cmsPage, siteSettings] = await Promise.all([
     sanityClient.fetch(pageByPathQuery, { path: requestedPath }).catch(() => null),
@@ -33,23 +40,6 @@ export default async function CmsCatchAllPage({
       if (servicesPage?.content?.length) {
         redirect("/services");
       }
-    }
-
-    // Home page: show debug fallback when content is missing
-    if (requestedPath === "/") {
-      return (
-        <SiteLayout>
-          <div className="p-8">
-            <h1 className="text-xl font-semibold text-slate-900">Home page content not found</h1>
-            <p className="mt-2 text-sm text-slate-600">
-              No `page` document with usable `content[]` was resolved for path <code>/</code>.
-            </p>
-            <pre className="mt-4 max-w-full overflow-x-auto rounded bg-slate-900 p-3 text-xs text-slate-100">
-              {JSON.stringify(cmsPage, null, 2)}
-            </pre>
-          </div>
-        </SiteLayout>
-      );
     }
 
     notFound();

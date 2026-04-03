@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter, Noto_Sans, Noto_Serif } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { AppToaster } from "@/components/AppToaster";
@@ -23,7 +24,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
-  title: "Delta Bay Impact | Every African American Student Deserves to Thrive",
+  title: {
+    default: "Delta Bay Impact | Every African American Student Deserves to Thrive",
+    template: "%s | Delta Bay Impact",
+  },
   description:
     "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth in Contra Costa County.",
   keywords: [
@@ -45,21 +49,12 @@ export const metadata: Metadata = {
     title: "Every African American Student in Contra Costa County Deserves to Thrive",
     description:
       "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
-    images: [
-      {
-        url: "/dbi_logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Delta Bay Impact Logo",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Every African American Student Deserves to Thrive | Delta Bay Impact",
     description:
       "We partner with schools and families to provide mentorship, academic support, and advocacy that creates pathways to belonging, confidence, and success for African American youth.",
-    images: ["/dbi_logo.png"],
   },
 };
 
@@ -73,7 +68,9 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${notoSerif.variable} ${inter.variable} antialiased bg-primary`}
       >
-        <StructuredData />
+        <Suspense fallback={null}>
+          <StructuredData />
+        </Suspense>
         <Analytics />
         <AppToaster />
         {children}

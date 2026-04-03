@@ -1,9 +1,12 @@
 import { notFound, redirect } from "next/navigation";
+import { createMetadataForPath } from "@/lib/page-metadata";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import { sanityClient } from "@/sanity/client";
 import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
+
+export const generateMetadata = createMetadataForPath("/donate");
 
 export default async function DonatePage() {
   const [cmsPage, siteSettings] = await Promise.all([

@@ -50,6 +50,13 @@ export type SlideCarouselProps = {
   transitionMode?: SlideCarouselTransitionMode;
   /** When multi and `enter` mode, grid-measure all slides so the area stays as tall as the tallest slide. */
   matchTallestSlide?: boolean;
+  /**
+   * Crossfade only: when true (default), render every slide invisibly to size the track to the tallest slide.
+   * Set false for heavy slide content (e.g. testimonials) and use `crossfadeContentMinHeightClassName` instead.
+   */
+  crossfadeMeasureHeight?: boolean;
+  /** Crossfade + `crossfadeMeasureHeight` false: min-height on the animated track to limit layout shift. */
+  crossfadeContentMinHeightClassName?: string;
   autoPlayMs?: number;
   showPagination: boolean;
   showProgress: boolean;
@@ -86,6 +93,8 @@ export function SlideCarousel({
   transitionDurationMs,
   transitionMode = "enter",
   matchTallestSlide = false,
+  crossfadeMeasureHeight = true,
+  crossfadeContentMinHeightClassName = "min-h-[min(22rem,48vh)]",
   autoPlayMs,
   showPagination,
   showProgress,
@@ -131,17 +140,10 @@ export function SlideCarousel({
 
   useEffect(() => {
     if (!crossfade || !outgoing) return;
-    const idx = outgoing.idx;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      queueMicrotask(() => setOutgoing(null));
-      return;
-    }
-    const timer = window.setTimeout(() => {
-      setOutgoing((prev) => (prev?.idx === idx ? null : prev));
-    }, transitionDurationMs);
-    return () => window.clearTimeout(timer);
-  }, [crossfade, outgoing, transitionDurationMs]);
+    if (!mq.matches) return;
+    queueMicrotask(() => setOutgoing(null));
+  }, [crossfade, outgoing]);
 
   const durationStyle = {
     "--slide-carousel-duration": `${transitionDurationMs}ms`,
@@ -156,8 +158,40 @@ export function SlideCarousel({
       </div>
     );
   } else if (crossfade) {
-    slideContent = (
-      <div className="grid w-full grid-cols-1 grid-rows-1">
+    const crossfadeLayers = (
+      <div
+        className={`relative flex min-h-0 min-w-0 w-full flex-col justify-center self-stretch ${
+          crossfadeMeasureHeight ? "" : crossfadeContentMinHeightClassName
+        }`}
+        style={durationStyle}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {outgoing != null && outgoing.idx !== activeIndex ? (
+          <div
+            key={`out-${outgoing.idx}`}
+            className="slide-carousel-crossfade-out pointer-events-none absolute inset-0 z-0 flex w-full flex-col justify-center backface-hidden"
+            aria-hidden
+            onAnimationEnd={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+              setOutgoing(null);
+            }}
+          >
+            {renderSlide(outgoing.idx)}
+          </div>
+        ) : null}
+        <div
+          key={`in-${activeIndex}`}
+          className={`relative z-1 w-full min-h-0 backface-hidden ${navGen > 0 ? "slide-carousel-crossfade-in" : ""}`}
+        >
+          {renderSlide(activeIndex)}
+        </div>
+      </div>
+    );
+
+    slideContent = crossfadeMeasureHeight ? (
+      <div className="grid w-full grid-cols-1 grid-rows-1 contain-[layout_paint]">
         {Array.from({ length: count }, (_, i) => (
           <div
             key={`h-${i}`}
@@ -167,29 +201,12 @@ export function SlideCarousel({
             {renderSlide(i)}
           </div>
         ))}
-        <div
-          className="relative col-start-1 row-start-1 flex min-h-0 min-w-0 w-full flex-col justify-center self-stretch"
-          style={durationStyle}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {outgoing != null && outgoing.idx !== activeIndex ? (
-            <div
-              key={`out-${outgoing.idx}`}
-              className="slide-carousel-crossfade-out pointer-events-none absolute inset-0 z-0 flex w-full flex-col justify-center"
-              aria-hidden
-            >
-              {renderSlide(outgoing.idx)}
-            </div>
-          ) : null}
-          <div
-            key={`in-${activeIndex}`}
-            className={`relative z-1 w-full min-h-0 ${navGen > 0 ? "slide-carousel-crossfade-in" : ""}`}
-          >
-            {renderSlide(activeIndex)}
-          </div>
+        <div className="relative col-start-1 row-start-1 flex min-h-0 min-w-0 w-full flex-col justify-center self-stretch">
+          {crossfadeLayers}
         </div>
       </div>
+    ) : (
+      <div className="relative w-full contain-[layout_paint]">{crossfadeLayers}</div>
     );
   } else if (tallestRail) {
     slideContent = (

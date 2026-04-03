@@ -748,6 +748,11 @@ body {
 }
 
 /* Easing: smooth deceleration (no harsh snap at the end) */
+.slide-carousel-crossfade-in,
+.slide-carousel-crossfade-out {
+  will-change: opacity;
+}
+
 .slide-carousel-crossfade-in {
   animation: slide-carousel-crossfade-in var(--slide-carousel-duration, 520ms)
     cubic-bezier(0.4, 0, 0.2, 1) forwards;

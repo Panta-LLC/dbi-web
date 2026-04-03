@@ -144,9 +144,33 @@ export const pageByPathQuery = groq`
   }
 `;
 
-/** Paths for published `page` documents (used by sitemap). */
-export const publishedPagePathsQuery = groq`
-  *[_type == "page" && defined(path) && path != ""].path
+/** Paths + last update for sitemap `lastModified` (only pages with usable content). */
+export const publishedPagesForSitemapQuery = groq`
+  *[_type == "page" && defined(path) && path != "" && defined(content) && count(content) > 0]{
+    "path": path,
+    _updatedAt
+  }
+`;
+
+/** Lightweight fields for `generateMetadata` (no `content[]`). */
+export const pageMetadataByPathQuery = groq`
+  *[_type == "page" && path == $path] | order(_updatedAt desc)[0]{
+    title,
+    lead,
+    description,
+    _updatedAt
+  }
+`;
+
+/** Footer contact + social URLs for JSON-LD (sameAs, contactPoint). */
+export const siteStructuredDataQuery = groq`
+  *[_type == "site"][0]{
+    footer{
+      email,
+      phone,
+      socialLinks[]{ href }
+    }
+  }
 `;
 
 export const siteSettingsQuery = groq`

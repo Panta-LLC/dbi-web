@@ -11,7 +11,7 @@
  * @see `src/sanity/queries.ts`
  * @see `src/components/sanity/pageContent/renderPageContentBlock.tsx` (`testimonialSliderSection` case)
  */
-import { useId } from "react";
+import { useCallback, useId } from "react";
 import {
   resolveCarouselSettings,
   SlideCarousel,
@@ -30,6 +30,9 @@ export type TestimonialItem = {
 export type TestimonialTransition = CarouselTransition;
 
 const BLUE_BG = "#1e4d8b";
+
+/** Default crossfade duration when CMS/props omit `transitionDurationMs` (snappier than generic carousel default). */
+const TESTIMONIAL_DEFAULT_DURATION_MS = 420;
 
 const DEFAULT_ITEMS: TestimonialItem[] = [
   {
@@ -63,7 +66,10 @@ export function TestimonialSlider({
   const resolved = resolveCarouselSettings({
     ...carousel,
     ...(transition != null ? { transition } : {}),
-    ...(transitionDurationMs != null ? { transitionDurationMs } : {}),
+    transitionDurationMs:
+      transitionDurationMs ??
+      carousel?.transitionDurationMs ??
+      TESTIMONIAL_DEFAULT_DURATION_MS,
     ...(autoPlayMs !== undefined ? { autoPlayMs } : {}),
     ...(showPagination !== undefined ? { showPagination } : {}),
     ...(showProgress !== undefined ? { showProgress } : {}),
@@ -81,6 +87,38 @@ export function TestimonialSlider({
   const regionId = `${baseId}-region`;
   const labelId = `${baseId}-label`;
 
+  const renderSlide = useCallback(
+    (index: number) => {
+      const item = list[index];
+      if (!item) return null;
+      return (
+        <div className="flex w-full flex-1 items-start">
+          <span
+            className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
+            style={{
+              color: "var(--color-2, #ff7900)",
+              lineHeight: ".35em",
+            }}
+            aria-hidden
+          >
+            “
+          </span>
+          <div className="flex-1 min-w-0">
+            <blockquote className="display-m font-bold text-white leading-snug text-left">
+              {item.quote}
+            </blockquote>
+            {item.attribution ? (
+              <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
+                {item.attribution}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      );
+    },
+    [list],
+  );
+
   if (!list.length) return null;
 
   return (
@@ -92,6 +130,7 @@ export function TestimonialSlider({
       transition={resolved.transition}
       transitionMode={resolved.transition === "fade" ? "crossfade" : "enter"}
       matchTallestSlide={resolved.transition !== "fade"}
+      crossfadeMeasureHeight={false}
       transitionDurationMs={resolved.transitionDurationMs}
       autoPlayMs={resolved.autoPlayMs}
       showPagination={showDots}
@@ -113,34 +152,7 @@ export function TestimonialSlider({
       className={`relative flex flex-col items-center justify-center py-10 md:py-14 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151] rounded-sm ${className}`}
       style={{ backgroundColor: BLUE_BG }}
       contentWrapperClassName="max-w-4xl mx-4 md:mx-12 py-8 md:py-12 px-8 md:px-14 rounded-sm"
-      renderSlide={(index) => {
-        const item = list[index];
-        if (!item) return null;
-        return (
-          <div className="flex w-full flex-1 items-start">
-            <span
-              className="block md:text-[9rem] text-6xl ml-[-20px] md:ml-0 font-serif font-extrabold leading-none mb-2 mr-2 select-none shrink-0"
-              style={{
-                color: "var(--color-2, #ff7900)",
-                lineHeight: ".35em",
-              }}
-              aria-hidden
-            >
-              “
-            </span>
-            <div className="flex-1 min-w-0">
-              <blockquote className="display-m font-bold text-white leading-snug text-left">
-                {item.quote}
-              </blockquote>
-              {item.attribution ? (
-                <p className="mt-4 text-base md:text-lg text-white font-normal text-right">
-                  {item.attribution}
-                </p>
-              ) : null}
-            </div>
-          </div>
-        );
-      }}
+      renderSlide={renderSlide}
     />
   );
 }
