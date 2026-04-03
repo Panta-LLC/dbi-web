@@ -11,6 +11,12 @@ import {
 } from "@/lib/sanity-cta-action";
 import type { ContentBlock, Cta } from "./pageContentTypes";
 
+/** Hero gallery (882×548) and left strip (159×548); 2× for sharp retina CDN output. */
+export const heroSectionImageUrlOptions = {
+  gallery: { width: 1764, height: 1096 },
+  leftStrip: { width: 318, height: 1096 },
+} as const;
+
 const HERO_SPLIT_PALETTES: HeroSplitPalette[] = [
   "color-1",
   "color-2",
@@ -162,13 +168,14 @@ export function mapGridCardCta(
 
 export function heroGallerySlides(block: ContentBlock): { src: string; alt?: string }[] {
   const fromGallery: { src: string; alt?: string }[] = [];
+  const { gallery: galleryOpts } = heroSectionImageUrlOptions;
   for (const g of block.galleryImages ?? []) {
-    const src = urlForSanityImage(g.image) ?? g.imageSrc;
+    const src = urlForSanityImage(g.image, galleryOpts) ?? g.imageSrc;
     if (src) fromGallery.push({ src, alt: g.imageAlt });
   }
   if (fromGallery.length) return fromGallery;
 
-  const legacySrc = urlForSanityImage(block.image) ?? block.imageSrc;
+  const legacySrc = urlForSanityImage(block.image, galleryOpts) ?? block.imageSrc;
   if (legacySrc) {
     return [{ src: legacySrc, alt: block.imageAlt }];
   }

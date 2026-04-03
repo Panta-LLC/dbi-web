@@ -53,11 +53,21 @@ export const pageByPathQuery = groq`
       "image": image{ crop, hotspot, asset },
       "imageSrc": image.asset->url,
       imageAlt,
-      "leftImage": leftImage{ crop, hotspot, asset },
+      "leftImage": leftImage{
+        _type,
+        crop,
+        hotspot,
+        asset
+      },
       "leftImageSrc": leftImage.asset->url,
       leftImageAlt,
       "galleryImages": galleryImages[]{
-        "image": image{ crop, hotspot, asset },
+        "image": image{
+          _type,
+          crop,
+          hotspot,
+          asset
+        },
         "imageSrc": image.asset->url,
         imageAlt
       },

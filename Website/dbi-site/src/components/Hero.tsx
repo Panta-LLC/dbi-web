@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
-import { useId } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import {
   CarouselArrowButton,
@@ -65,10 +65,7 @@ function useHeroGalleryState(images: HeroGallerySlide[], carousel?: CarouselSett
 
   const multi = c.multi;
   const enterClass = multi ? animClass(resolved.transition, c.direction) : "";
-  const slideDurationMs =
-    resolved.transition === "fade"
-      ? resolved.transitionDurationMs * 2
-      : resolved.transitionDurationMs;
+  const slideDurationMs = resolved.transitionDurationMs;
   const srLabel = `Hero gallery, slide ${c.activeIndex + 1} of ${count}`;
   const current = count > 0 ? images[c.activeIndex] : undefined;
 
@@ -97,14 +94,124 @@ function HeroGallerySlides({
   images: HeroGallerySlide[];
   state: HeroGalleryState;
 }) {
-  const { count, c, regionId, labelId, multi, enterClass, slideDurationMs, srLabel, current } =
-    state;
+  const {
+    count,
+    c,
+    regionId,
+    labelId,
+    multi,
+    enterClass,
+    slideDurationMs,
+    srLabel,
+    current,
+    resolved,
+  } = state;
+
+  const crossfade = multi && resolved.transition === "fade";
+  const prevActiveRef = useRef(c.activeIndex);
+  const [outgoing, setOutgoing] = useState<{ idx: number } | null>(null);
+  const [navGen, setNavGen] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!crossfade) return;
+    if (prevActiveRef.current !== c.activeIndex) {
+      setOutgoing({ idx: prevActiveRef.current });
+      setNavGen((n) => n + 1);
+      prevActiveRef.current = c.activeIndex;
+    }
+  }, [c.activeIndex, crossfade]);
+
+  useEffect(() => {
+    if (!crossfade || !outgoing) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!mq.matches) return;
+    queueMicrotask(() => setOutgoing(null));
+  }, [crossfade, outgoing]);
+
+  const durationStyle = {
+    "--slide-carousel-duration": `${resolved.transitionDurationMs}ms`,
+  } as CSSProperties;
 
   if (count === 0) {
     return <div className="absolute inset-0 bg-[#b5b2a9]" aria-hidden />;
   }
 
   if (!current) return null;
+
+  const slideStack = crossfade ? (
+    <div
+      className="relative h-full min-h-0 w-full"
+      style={durationStyle}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {outgoing != null && outgoing.idx !== c.activeIndex ? (
+        <div
+          key={`out-${outgoing.idx}`}
+          className="slide-carousel-crossfade-out pointer-events-none absolute inset-0 z-0 min-h-0 overflow-hidden backface-hidden"
+          aria-hidden
+          onAnimationEnd={(e) => {
+            if (e.target !== e.currentTarget) return;
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            setOutgoing(null);
+          }}
+        >
+          <Image
+            src={images[outgoing.idx]!.src}
+            alt={images[outgoing.idx]!.alt || "Hero"}
+            fill
+            sizes="(max-width: 768px) 100vw, 882px"
+            className="object-cover object-center"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden />
+        </div>
+      ) : null}
+      <div
+        key={`in-${c.activeIndex}`}
+        className={`absolute inset-0 z-1 min-h-0 overflow-hidden backface-hidden ${
+          navGen > 0 ? "slide-carousel-crossfade-in" : ""
+        }`}
+      >
+        <Image
+          src={current.src}
+          alt={current.alt || "Hero"}
+          fill
+          priority={c.activeIndex === 0}
+          sizes="(max-width: 768px) 100vw, 882px"
+          className="object-cover object-center"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden />
+      </div>
+    </div>
+  ) : (
+    <div
+      key={multi ? c.activeIndex : "single"}
+      className={
+        multi
+          ? `slide-carousel-content absolute inset-0 min-h-0 overflow-hidden ${enterClass}`
+          : "absolute inset-0 min-h-0 overflow-hidden"
+      }
+      style={
+        multi
+          ? ({
+              "--slide-carousel-duration": `${slideDurationMs}ms`,
+            } as CSSProperties)
+          : undefined
+      }
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <Image
+        src={current.src}
+        alt={current.alt || "Hero"}
+        fill
+        priority={c.activeIndex === 0}
+        sizes="(max-width: 768px) 100vw, 882px"
+        className="object-cover object-center"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden />
+    </div>
+  );
 
   return (
     <div
@@ -122,35 +229,7 @@ function HeroGallerySlides({
         {srLabel}
       </span>
 
-      <div className="absolute inset-0 min-h-0">
-        <div
-          key={multi ? c.activeIndex : "single"}
-          className={
-            multi
-              ? `slide-carousel-content absolute inset-0 min-h-0 overflow-hidden ${enterClass}`
-              : "absolute inset-0 min-h-0 overflow-hidden"
-          }
-          style={
-            multi
-              ? ({
-                  "--slide-carousel-duration": `${slideDurationMs}ms`,
-                } as CSSProperties)
-              : undefined
-          }
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <Image
-            src={current.src}
-            alt={current.alt || "Hero"}
-            fill
-            priority={c.activeIndex === 0}
-            sizes="(max-width: 768px) 100vw, 882px"
-            className="object-cover object-center"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-black/20" aria-hidden />
-        </div>
-      </div>
+      <div className="absolute inset-0 min-h-0">{slideStack}</div>
     </div>
   );
 }

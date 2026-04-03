@@ -15,6 +15,7 @@ import { urlForSanityImage } from "@/lib/sanity-image";
 import type { ContentBlock } from "./pageContentTypes";
 import {
   heroGallerySlides,
+  heroSectionImageUrlOptions,
   heroSplitPalette,
   mapGridCardCta,
   mapProgramCardItem,
@@ -31,7 +32,10 @@ export function renderPageContentBlock(
       return (
         <Hero
           key={index}
-          leftImageSrc={urlForSanityImage(block.leftImage) ?? block.leftImageSrc}
+          leftImageSrc={
+            urlForSanityImage(block.leftImage, heroSectionImageUrlOptions.leftStrip) ??
+            block.leftImageSrc
+          }
           leftImageAlt={block.leftImageAlt}
           galleryImages={heroGallerySlides(block)}
           carousel={block.carouselSettings}

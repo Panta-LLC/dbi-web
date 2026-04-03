@@ -55,10 +55,11 @@ const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
   lg: "p-12 px-4",
 };
 
+/** Card grid image: ~50% taller than 4/3 at equal width → aspect 4/(3×1.5) = 8/9 */
 const GRID_IMAGE_BOX: Record<CollectionArticleCardSize, string> = {
-  sm: "aspect-4/3 max-h-44",
-  md: "aspect-4/3",
-  lg: "aspect-4/3 min-h-[14rem]",
+  sm: "aspect-[8/9] max-h-[16.5rem]",
+  md: "aspect-[8/9]",
+  lg: "aspect-[8/9] min-h-[21rem]",
 };
 
 const GRID_TITLE: Record<CollectionArticleCardSize, string> = {
@@ -79,9 +80,13 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
   lg: "max-h-40",
 };
 
-/** Explorer sidebar / accordion: thumb stretches to preview row height; width from aspect ratio */
+/**
+ * Explorer sidebar / accordion: fixed width + `self-stretch` height so the `Image` `fill`
+ * parent always has non-zero size. (Combining `aspect-ratio`, `h-full`, and nested flex
+ * often collapses to 0×0 — thumbnails disappear.)
+ */
 const EXPLORER_THUMB_BOX =
-  "relative shrink-0 self-stretch overflow-hidden rounded-none aspect-[4/3] h-full min-h-0 min-w-0 w-auto";
+  "relative shrink-0 self-stretch overflow-hidden rounded-none w-28 sm:w-36";
 
 /** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
 const EXPLORER_FULL_BLEED = "relative overflow-x-hidden";
@@ -212,8 +217,8 @@ function PreviewBlock({
     return (
       <div className={`relative w-full rounded-none border-0 shadow-none ${active ? "" : shell}`}>
         {active ? (
-          <div className="flex w-full items-stretch">
-            <div className="flex min-w-0 flex-1 bg-[var(--color-4)] text-[var(--color-3)] h-full">
+          <div className="flex w-full min-h-0 items-stretch">
+            <div className="flex min-h-0 min-w-0 flex-1 items-stretch bg-[var(--color-4)] text-[var(--color-3)]">
               {explorerListThumb}
               <div
                 className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} justify-center flex flex-col ${item.imageSrc ? "px-8 py-4" : "py-8"}`}
@@ -303,7 +308,8 @@ function ExplorerArticleBody({
     ? `relative ${containerPad} pb-10 sm:pb-12 pt-2 sm:pt-0`
     : `relative ${containerPad} pb-10 pt-10 sm:pt-0 lg:pr-12`;
 
-  const heroBoxClass = `relative aspect-21/9 w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
+  /** ~15% taller than 21/9: height scales by 1.15 at equal width → aspect 21/(9×1.15) = 140/69 */
+  const heroBoxClass = `relative aspect-[140/69] w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
 
   const heroInner = item.imageSrc ? (
     <Image
@@ -321,7 +327,7 @@ function ExplorerArticleBody({
         <button
           type="button"
           onClick={onClose}
-          className={`absolute top-4 z-10 p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)] ${embedded ? "right-4 sm:right-6 lg:right-8" : "right-2 sm:right-6 lg:right-8"}`}
+          className={`absolute top-2 z-10 p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)] ${embedded ? "right-4 sm:right-6 lg:right-8" : "right-2 sm:right-14 bg-white"}`}
           aria-label="Close"
         >
           <X className="h-6 w-6" aria-hidden />
@@ -397,10 +403,7 @@ export function CollectionArticleSection({
   const reactId = useId();
   const idPrefix = useMemo(() => reactId.replace(/:/g, ""), [reactId]);
   const sectionAnchorKeyResolved = sectionAnchorKey ?? idPrefix;
-  const itemSlugs = useMemo(
-    () => uniqueAnchorSlugsForItems(items.map((i) => i.heading)),
-    [items],
-  );
+  const itemSlugs = useMemo(() => uniqueAnchorSlugsForItems(items.map((i) => i.heading)), [items]);
 
   const isExplorerLayout = sectionLayout === "explorer";
   const tiledOnly = !isExplorerLayout && !expandedMode;
@@ -465,8 +468,8 @@ export function CollectionArticleSection({
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
 
   return (
-    <>
-      {title ? <h2 className="heading-2 text-center">{title}</h2> : null}
+    <div className="my-10">
+      {title ? <h2 className="heading-2 text-center mt-10">{title}</h2> : null}
       {description ? (
         <Container maxWidth="narrow" className="mt-6 mb-4 text-center">
           <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
@@ -646,6 +649,6 @@ export function CollectionArticleSection({
           </div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
