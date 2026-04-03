@@ -54,7 +54,7 @@ const GRID_TITLE: Record<CollectionArticleCardSize, string> = {
 
 const GRID_SUMMARY: Record<CollectionArticleCardSize, string> = {
   sm: "text-sm line-clamp-3",
-  md: "text-md",
+  md: "body-md",
   lg: "text-lg line-clamp-6",
 };
 
@@ -326,7 +326,7 @@ function ExplorerArticleBody({
         />
 
         {item.description ? (
-          <p className="mt-6 text-md whitespace-pre-line text-[var(--color-5)]">
+          <p className="body-md mt-6 whitespace-pre-line text-[var(--color-5)]">
             {item.description}
           </p>
         ) : null}
@@ -391,9 +391,9 @@ export function CollectionArticleSection({
     <>
       {title ? <h2 className="heading-2 text-center">{title}</h2> : null}
       {description ? (
-        <p className="body-md mx-auto mt-6 mb-4 max-w-3xl text-center text-slate-600 whitespace-pre-line">
-          {description}
-        </p>
+        <Container maxWidth="narrow" className="mt-6 mb-4 text-center">
+          <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
+        </Container>
       ) : null}
 
       {tiledOnly ? (

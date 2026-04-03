@@ -141,7 +141,7 @@ export function renderPageContentBlock(
         cta: mapGridCardCta(item, block.cta, donateUrl),
       }));
       return (
-        <Section className="bg-white my-10" key={index}>
+        <Section className="bg-white section-block-gap" key={index}>
           <Container>
             <ServiceCardTabSection
               title={block.title}
@@ -165,7 +165,7 @@ export function renderPageContentBlock(
         cta: mapGridCardCta(item, block.cta, donateUrl),
       }));
       return (
-        <Section className="bg-white mt-10" key={index}>
+        <Section className="bg-white section-block-gap-top" key={index}>
           <CollectionArticleSection
             title={block.title}
             description={block.description}
@@ -182,7 +182,7 @@ export function renderPageContentBlock(
 
     case "imageCardGridSection":
       return (
-        <Section className="bg-light-gray py-10" key={index}>
+        <Section className="bg-light-gray section-block-y" key={index}>
           <Container>
             <h2 className="heading-2 text-center">{block.title}</h2>
             <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -256,7 +256,7 @@ export function renderPageContentBlock(
     case "ctaButtonSection":
       return (
         <Section className="bg-white" noPadding key={index}>
-          <Container className="py-10 flex justify-center">
+          <Container className="section-block-y flex justify-center">
             {block.ctaButton?.href ? (
               <Button
                 href={resolveHref(block.ctaButton.href, donateUrl)}

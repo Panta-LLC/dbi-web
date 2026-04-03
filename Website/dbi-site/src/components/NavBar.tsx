@@ -28,9 +28,8 @@ export function NavBar({ donateUrl }: NavBarProps) {
 
   return (
     <>
-      <header className="nav-entrance nav-solid fixed max-w-7xl mx-auto inset-x-0 top-0 z-[100] font-inter text-slate-900 transition-colors duration-300 border-b-4 md:border-b-5 border-orange-400">
-        {/* <Container className="flex items-center justify-start gap-3 lg:gap-6"> */}
-        <div className="flex items-center justify-start max-w-5xl mx-auto">
+      <header className="nav-entrance nav-solid fixed inset-x-0 top-0 z-[100] mx-auto max-w-7xl border-b-4 border-orange-400 font-inter text-slate-900 transition-colors duration-300 md:border-b-5">
+        <Container className="relative flex items-center justify-start">
           <div className="flex grow items-center justify-start gap-3 lg:gap-6">
             <NextLink href="/" className="flex items-center" aria-label="Delta Bay Impact Home">
               <div className="nav-logo-badge py-2">
@@ -82,8 +81,7 @@ export function NavBar({ donateUrl }: NavBarProps) {
               </svg>
             </button>
           </div>
-        </div>
-        {/* </Container> */}
+        </Container>
       </header>
 
       {/* Mobile menu overlay - blurs content but stays below navbar */}

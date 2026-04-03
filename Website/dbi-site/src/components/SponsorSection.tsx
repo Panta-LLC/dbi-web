@@ -157,11 +157,9 @@ export function SponsorSection({
       onPointerLeave={() => setPaused(false)}
     >
       <Container>
-        <div className="text-center mb-8 md:mb-10">
-          <p className="text-base md:text-lg text-slate-700">{titleLine1}</p>
-          <h2 className="mt-1 text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">
-            {titleLine2}
-          </h2>
+        <div className="mb-8 text-center md:mb-10">
+          <p className="body-md text-slate-700">{titleLine1}</p>
+          <h2 className="heading-2 mt-1 text-slate-900">{titleLine2}</h2>
         </div>
 
         <div className="flex flex-col items-center gap-4">

@@ -269,6 +269,21 @@ body {
     line-height: 1.5;
   }
 
+  /** CMS section blocks: consistent vertical rhythm (see `renderPageContentBlock`). */
+  .section-block-y {
+    padding-top: clamp(2rem, 5vw, 2.5rem);
+    padding-bottom: clamp(2rem, 5vw, 2.5rem);
+  }
+
+  .section-block-gap {
+    margin-top: clamp(2rem, 5vw, 2.5rem);
+    margin-bottom: clamp(2rem, 5vw, 2.5rem);
+  }
+
+  .section-block-gap-top {
+    margin-top: clamp(2rem, 5vw, 2.5rem);
+  }
+
   .hero-accent {
     --hero-offset-x: 25px;
     --hero-offset-y: 0px;

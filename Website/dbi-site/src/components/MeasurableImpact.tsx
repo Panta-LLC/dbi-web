@@ -157,7 +157,7 @@ export function MeasurableImpact({
 
   return (
     <div ref={rootRef} className={className}>
-      <h2 className="heading-2 text-center text-slate-900 mb-6 mt-15">{title}</h2>
+      <h2 className="heading-2 mt-16 mb-6 text-center text-slate-900">{title}</h2>
 
       <div
         className="flex flex-row w-full overflow-hidden items-stretch"

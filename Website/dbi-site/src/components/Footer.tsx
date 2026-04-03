@@ -141,7 +141,7 @@ export async function Footer() {
                     <Link
                       href={link.href}
                       variant="nav"
-                      className="touch-target text-md md:text-sm font-semibold"
+                      className="touch-target body-md md:text-sm font-semibold"
                     >
                       {link.label}
                     </Link>

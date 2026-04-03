@@ -16,12 +16,7 @@ import { imageCardGridSection } from "./objects/imageCardGridSection";
 import { hero } from "./objects/hero";
 import { measurableImpactSection } from "./objects/measurableImpactSection";
 import { newsletterSignupSection } from "./objects/newsletterSignupSection";
-import { impactCard } from "./objects/impactCard";
-import { infoCard } from "./objects/infoCard";
 import { programCardsSection } from "./objects/programCardsSection";
-import { pageHeader } from "./objects/pageHeader";
-import { sectionHeading } from "./objects/sectionHeading";
-import { tabItem } from "./objects/tabItem";
 import { supportSection } from "./objects/supportSection";
 import { textAndCtaSection } from "./objects/textAndCtaSection";
 import { textHighlightSection } from "./objects/textHighlightSection";
@@ -31,11 +26,6 @@ export const schemaTypes = [
   carouselSettings,
   cta,
   hero,
-  impactCard,
-  infoCard,
-  pageHeader,
-  sectionHeading,
-  tabItem,
   contactDetails,
   contactForm,
   contactFormOptional,

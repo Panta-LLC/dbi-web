@@ -254,7 +254,7 @@ function HeroContent({
         ))}
       </h1>
       {subtitle ? (
-        <p className="mt-2 max-w-lg text-md text-white/95 max-md:mx-auto md:text-lg">{subtitle}</p>
+        <p className="body-md mt-2 max-w-lg text-white/95 max-md:mx-auto">{subtitle}</p>
       ) : null}
       <div className="mt-2 flex flex-col flex-wrap gap-3 sm:mt-4 max-md:items-center sm:flex-row">
         {primaryCta?.label ? (

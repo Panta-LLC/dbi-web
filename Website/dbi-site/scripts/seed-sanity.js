@@ -1,6 +1,10 @@
 /**
  * Canonical seed payloads for Sanity. Run `pnpm seed:sanity` (requires write token + env).
  * Do not duplicate marketing copy in `src/data`; extend documents here instead.
+ *
+ * Some documents use legacy `_type` values (e.g. homePage) that are not registered in
+ * `src/sanity/schema/index.ts`. Prefer `page` documents for Studio-managed routes; use
+ * `pnpm sanity:type-counts` to audit legacy types in a dataset.
  */
 require("dotenv").config({ path: ".env.local" });
 require("dotenv").config({ path: ".env" });

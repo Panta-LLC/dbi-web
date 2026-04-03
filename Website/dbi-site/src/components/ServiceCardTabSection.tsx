@@ -6,6 +6,7 @@ import { ContentCard } from "@/components/ContentCard";
 import { CtaModalForm } from "@/components/cta-modal-form";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
 import { ProgramCardCompactTab } from "@/components/ProgramCards";
+import { Container } from "@/components/Container";
 
 export type ServiceCardTabItem = {
   title: string;
@@ -92,9 +93,9 @@ export function ServiceCardTabSection({
     <>
       {title ? <h2 className="heading-2 text-center">{title}</h2> : null}
       {description ? (
-        <p className="body-md mx-auto mt-6 max-w-3xl text-center text-slate-600 whitespace-pre-line">
-          {description}
-        </p>
+        <Container maxWidth="narrow" className="mt-6 text-center">
+          <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
+        </Container>
       ) : null}
 
       {selectedIndex === null ? (
@@ -165,7 +166,7 @@ export function ServiceCardTabSection({
                   <>
                     <h3 className="display-s text-slate-900">{item.title}</h3>
                     {body ? (
-                      <p className="mt-3 text-md whitespace-pre-line text-slate-700">{body}</p>
+                      <p className="mt-3 body-md whitespace-pre-line text-slate-700">{body}</p>
                     ) : null}
                     {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
                   </>

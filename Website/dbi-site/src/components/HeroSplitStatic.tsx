@@ -73,13 +73,9 @@ function ContentHalf({
       className="flex min-w-0 flex-1 flex-col justify-center px-6 py-12 md:px-10 md:py-16 lg:px-14 lg:py-20"
       style={{ backgroundColor: bg }}
     >
-      <h1
-        className={`text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-3xl lg:text-4xl ${headingClass}`}
-      >
-        {title}
-      </h1>
+      <h1 className={`display-l font-bold ${headingClass}`}>{title}</h1>
       {description ? (
-        <p className={`mt-4 max-w-xl text-base md:text-lg ${bodyClass}`}>{description}</p>
+        <p className={`body-md mt-4 max-w-xl ${bodyClass}`}>{description}</p>
       ) : null}
       {ctas?.length ? (
         <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center">

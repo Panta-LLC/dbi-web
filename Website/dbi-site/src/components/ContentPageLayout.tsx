@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
-import { ContactBand } from "./ContactBand";
 import { PageIntro } from "./PageIntro";
 import { SiteLayout } from "./SiteLayout";
 import { Section } from "./Section";
-import { Container } from "./Container";
 
 type ContentPageLayoutProps = {
   title: string;
