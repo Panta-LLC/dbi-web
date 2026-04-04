@@ -78,6 +78,13 @@ const ProgramCardFace = forwardRef<HTMLDivElement, ProgramCardFaceProps>(functio
         }}
         aria-hidden
       />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.22) 100%)",
+        }}
+        aria-hidden
+      />
 
       <div
         className="absolute inset-0 opacity-0 translate-y-[50%] group-hover:translate-y-0 group-focus-visible:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300 ease-out pointer-events-none"
@@ -89,7 +96,7 @@ const ProgramCardFace = forwardRef<HTMLDivElement, ProgramCardFaceProps>(functio
 
       <div className="relative flex flex-col flex-1 px-6 py-6 sm:px-8 sm:py-8 w-full">
         <div className="absolute left-6 right-6 sm:left-8 sm:right-8 flex flex-col items-center text-center -mb-4 group-hover:pb-5 group-focus-visible:pb-5 bottom-0 transition-all duration-300 ease-out">
-          <h3 className="heading-3 text-slate-900 transition-colors duration-200 group-hover:text-white group-focus-visible:text-white">
+          <h3 className="heading-3 text-slate-900 transition-colors duration-200 [text-shadow:0_1px_2px_rgba(255,255,255,0.9),0_0_12px_rgba(255,255,255,0.65)] group-hover:text-white group-hover:[text-shadow:none] group-focus-visible:text-white group-focus-visible:[text-shadow:none]">
             {title}
           </h3>
           <span className="mt-1 text-sm font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -165,6 +172,13 @@ function ProgramCard({ item }: { item: ProgramCardItem }) {
         }}
         aria-hidden
       />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.22) 100%)",
+        }}
+        aria-hidden
+      />
 
       <div
         className="absolute inset-0 opacity-0 translate-y-[50%] group-hover:translate-y-0 group-focus-visible:translate-y-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300 ease-out pointer-events-none"
@@ -176,7 +190,7 @@ function ProgramCard({ item }: { item: ProgramCardItem }) {
 
       <div className="relative flex flex-col flex-1 px-6 py-6 sm:px-8 sm:py-8 w-full">
         <div className="absolute left-6 right-6 sm:left-8 sm:right-8 flex flex-col items-center text-center -mb-4 group-hover:pb-5 group-focus-visible:pb-5 bottom-0 transition-all duration-300 ease-out">
-          <h3 className="heading-3 text-slate-900 transition-colors duration-200 group-hover:text-white group-focus-visible:text-white">
+          <h3 className="heading-3 text-slate-900 transition-colors duration-200 [text-shadow:0_1px_2px_rgba(255,255,255,0.9),0_0_12px_rgba(255,255,255,0.65)] group-hover:text-white group-hover:[text-shadow:none] group-focus-visible:text-white group-focus-visible:[text-shadow:none]">
             {item.title}
           </h3>
           <span className="mt-1 text-sm font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
