@@ -188,7 +188,7 @@ export function MeasurableImpact({
             return (
               <div
                 key={metric.label + index}
-                className="flex-1 min-w-0 flex flex-col items-center justify-center px-4 py-6 md:py-8 ml-[-15px]"
+                className="flex-1 min-w-0 flex flex-col items-center justify-center px-5 py-6 sm:px-6 md:py-8 ml-[-15px] last:pr-7 sm:last:pr-8"
                 style={{
                   backgroundColor: PANEL_BG,
                   clipPath: panelClip,
