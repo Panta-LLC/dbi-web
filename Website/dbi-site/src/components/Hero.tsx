@@ -382,7 +382,7 @@ function HeroContent({
 
       {/* Mobile: overlay on gallery; slants sit above (z-30) on the sides */}
       <div
-        className="absolute inset-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/75 via-black/45 to-transparent px-[max(1.25rem,calc(min(3.75rem,5vw)+1rem))] pt-12 pb-6 md:hidden"
+        className="absolute inset-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/88 via-black/58 to-transparent px-[max(1.25rem,calc(min(3.75rem,5vw)+1rem))] pt-12 pb-6 md:hidden"
         data-name="Hero Content Mobile"
       >
         <div className="pointer-events-auto flex w-full flex-col items-center gap-2">
