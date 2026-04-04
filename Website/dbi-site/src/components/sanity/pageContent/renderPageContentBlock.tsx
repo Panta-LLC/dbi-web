@@ -12,6 +12,7 @@ import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
 import { TextHighlightSection } from "@/components/TextHighlightSection";
 import { urlForSanityImage } from "@/lib/sanity-image";
+import type { PortableTextBlock } from "@portabletext/types";
 import type { ContentBlock } from "./pageContentTypes";
 import {
   heroGallerySlides,
@@ -21,6 +22,13 @@ import {
   mapProgramCardItem,
   resolveHref,
 } from "./pageContentHelpers";
+
+/** Section intros that remain plain text in Sanity (not hero split). */
+function plainTextSectionIntro(
+  v: string | PortableTextBlock[] | undefined,
+): string | undefined {
+  return typeof v === "string" ? v : undefined;
+}
 
 export function renderPageContentBlock(
   block: ContentBlock,
@@ -149,7 +157,7 @@ export function renderPageContentBlock(
           <Container>
             <ServiceCardTabSection
               title={block.title}
-              description={block.description}
+              description={plainTextSectionIntro(block.description)}
               columnsPerRow={block.columnsPerRow}
               items={serviceTabItems}
             />
@@ -169,10 +177,14 @@ export function renderPageContentBlock(
         cta: mapGridCardCta(item, block.cta, donateUrl),
       }));
       return (
-        <Section className="bg-white section-block-gap-top" key={index}>
+        <Section
+          className="bg-white section-block-gap-top"
+          key={index}
+          reveal={false}
+        >
           <CollectionArticleSection
             title={block.title}
-            description={block.description}
+            description={plainTextSectionIntro(block.description)}
             columnsPerRow={block.columnsPerRow}
             expandedMode={block.expandedMode !== false}
             sectionLayout={block.sectionLayout === "explorer" ? "explorer" : "cardGrid"}
@@ -206,15 +218,16 @@ export function renderPageContentBlock(
         </Section>
       );
 
-    case "supportSection":
+    case "supportSection": {
+      const supportIntro = plainTextSectionIntro(block.description);
       return (
         <Section className="bg-white" key={index}>
           <Container>
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
               <div className="flex-1">
                 <h2 className="heading-2">{block.title}</h2>
-                {block.description ? (
-                  <p className="body-md mt-4 text-slate-600">{block.description}</p>
+                {supportIntro ? (
+                  <p className="body-md mt-4 text-slate-600">{supportIntro}</p>
                 ) : null}
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-start">
@@ -236,13 +249,15 @@ export function renderPageContentBlock(
           </Container>
         </Section>
       );
+    }
 
-    case "textAndCtaSection":
+    case "textAndCtaSection": {
+      const textAndCtaIntro = plainTextSectionIntro(block.description);
       return (
         <Section className="bg-white" key={index}>
           <Container className="text-center">
-            {block.description ? (
-              <p className="body-md text-slate-600">{block.description}</p>
+            {textAndCtaIntro ? (
+              <p className="body-md text-slate-600">{textAndCtaIntro}</p>
             ) : null}
             {block.textCta?.href ? (
               <div className="mt-6 flex justify-center">
@@ -257,6 +272,7 @@ export function renderPageContentBlock(
           </Container>
         </Section>
       );
+    }
 
     case "ctaButtonSection":
       return (

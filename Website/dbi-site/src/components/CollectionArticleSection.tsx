@@ -21,6 +21,8 @@ import {
   resetUnscopedHashClaims,
   uniqueAnchorSlugsForItems,
 } from "@/lib/slugify-anchor";
+import type { PortableTextBlock } from "@portabletext/types";
+import { CollectionArticleDescription } from "./CollectionArticleDescription";
 import { Container } from "./Container";
 
 export type CollectionArticleItem = {
@@ -28,7 +30,8 @@ export type CollectionArticleItem = {
   summary?: string;
   /** Article panel line under title; if empty, summary is shown under the title instead. */
   subtitle?: string;
-  description?: string;
+  /** Portable Text blocks from Sanity, or legacy plain string. */
+  description?: string | PortableTextBlock[];
   imageSrc?: string;
   imageAlt?: string;
   cta?: GridCardCtaResolved;
@@ -42,11 +45,12 @@ export type CollectionArticleSectionLayout = "cardGrid" | "explorer";
 
 export type CollectionArticleDefaultView = "grid" | "explorer";
 
-const GRID_COLS_CLASS: Record<CollectionArticleColumnsPerRow, string> = {
-  2: "grid-cols-1 sm:grid-cols-2",
-  3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-  4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
-  5: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5",
+/** Masonry: multi-column layout (matches prior grid breakpoints; fills columns top-to-bottom). */
+const MASONRY_COLS_CLASS: Record<CollectionArticleColumnsPerRow, string> = {
+  2: "columns-1 sm:columns-2",
+  3: "columns-1 sm:columns-2 lg:columns-3",
+  4: "columns-1 sm:columns-2 lg:columns-4",
+  5: "columns-1 sm:columns-2 lg:columns-3 xl:columns-5",
 };
 
 const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
@@ -69,9 +73,9 @@ const GRID_TITLE: Record<CollectionArticleCardSize, string> = {
 };
 
 const GRID_SUMMARY: Record<CollectionArticleCardSize, string> = {
-  sm: "text-sm line-clamp-3",
+  sm: "text-sm",
   md: "body-md",
-  lg: "text-lg line-clamp-6",
+  lg: "text-lg",
 };
 
 const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
@@ -80,16 +84,12 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
   lg: "max-h-40",
 };
 
-/**
- * Explorer sidebar / accordion: fixed width + `self-stretch` height so the `Image` `fill`
- * parent always has non-zero size. (Combining `aspect-ratio`, `h-full`, and nested flex
- * often collapses to 0×0 — thumbnails disappear.)
- */
+/** Explorer list thumbnail: fixed square; `Image` `fill` uses the aspect box (non-zero size). */
 const EXPLORER_THUMB_BOX =
-  "relative shrink-0 self-stretch overflow-hidden rounded-none w-28 sm:w-36";
+  "relative aspect-square w-28 shrink-0 overflow-hidden rounded-none sm:w-36";
 
-/** Full-bleed breakout from padded Container (matches px-4 sm:px-6 lg:px-8) */
-const EXPLORER_FULL_BLEED = "relative overflow-x-hidden";
+/** Full-bleed breakout from padded Container. Avoid `overflow-x-hidden` here — it breaks `position:sticky` on the explorer sidebar. */
+const EXPLORER_FULL_BLEED = "relative";
 
 function columnsPerRowFromCms(value: number | undefined): CollectionArticleColumnsPerRow {
   if (value === 3 || value === 4 || value === 5) return value;
@@ -170,10 +170,10 @@ function PreviewBlock({
   const titleClass = variant === "sidebar" ? "" : `${GRID_TITLE[cardSize]} text-slate-900`;
   const summaryClass =
     variant === "sidebar"
-      ? "text-sm line-clamp-4 py-6"
+      ? "text-sm py-6"
       : `mt-2 text-slate-700 whitespace-pre-line ${GRID_SUMMARY[cardSize]}`;
   /** Card grid only: light gray surface → orange on hover */
-  const gridCardSurface = "group bg-[#f8f8f8] hover:bg-[var(--color-2)]";
+  const gridCardSurface = "group bg-[var(--color-3)] hover:bg-[var(--color-2)]";
   const gridCardTitleHover = "group-hover:text-[var(--color-3)]";
   const gridCardSummaryHover = "group-hover:text-[var(--color-3)]/95";
   const gridCardFooterRule = "border-t border-slate-200/80 group-hover:border-[var(--color-3)]/25";
@@ -203,7 +203,7 @@ function PreviewBlock({
     const active = explorerTone === "active";
     const shell = active ? "" : "bg-[var(--color-3)]";
     const explorerListThumb = item.imageSrc ? (
-      <div className={`${EXPLORER_THUMB_BOX} border-r-8 border-r-white mr-2`}>
+      <div className={`${EXPLORER_THUMB_BOX} border-r-8 border-r-white`}>
         <Image
           src={item.imageSrc}
           alt={item.imageAlt ?? item.heading}
@@ -215,35 +215,35 @@ function PreviewBlock({
     ) : null;
 
     return (
-      <div className={`relative w-full rounded-none border-0 shadow-none ${active ? "" : shell}`}>
+      <div className={`relative w-full rounded-none border-0 shadow-none`}>
         {active ? (
-          <div className="flex w-full min-h-0 items-stretch">
-            <div className="flex min-h-0 min-w-0 flex-1 items-stretch bg-[var(--color-4)] text-[var(--color-3)]">
+          <div className={`flex w-full min-h-0 items-start`}>
+            <div className="flex min-h-0 min-w-0 flex-1 items-start gap-0 ">
               {explorerListThumb}
               <div
-                className={`min-w-0 flex-1 ${item.imageSrc ? "px-3" : "px-8"} justify-center flex flex-col ${item.imageSrc ? "px-8 py-4" : "py-8"}`}
+                className={`relative min-w-0 flex-1 flex flex-col justify-center ${item.imageSrc ? "px-4 py-4 sm:px-6 sm:py-5" : "px-8 py-8"} ${active ? "" : shell} bg-[var(--color-4)] text-[var(--color-3)]`}
               >
                 <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
-                  <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-3)]/95">
+                  <p className="mt-1 text-sm whitespace-pre-line text-[var(--color-3)]/95">
                     {item.summary}
                   </p>
                 ) : null}
+                {explorerActiveRightTab}
               </div>
             </div>
-            {explorerActiveRightTab}
           </div>
         ) : (
           <div
-            className={`flex min-h-0 items-stretch justify-center ${shell} ${item.imageSrc ? "flex-row" : "flex-col px-8 py-6"}`}
+            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row items-start gap-0" : "flex-col items-stretch px-8 py-6"}`}
           >
             {explorerListThumb}
             <div
-              className={`min-w-0 flex-1 justify-center justify-center flex flex-col ${item.imageSrc ? "px-4 py-6" : ""}`}
+              className={`min-w-0 flex-1 w-full flex flex-col justify-center ${item.imageSrc ? "px-4 py-6 sm:px-5" : ""}`}
             >
               <h3 className="heading-3 text-[var(--color-4)]">{item.heading}</h3>
               {item.summary ? (
-                <p className="mt-1 line-clamp-4 text-sm whitespace-pre-line text-[var(--color-5)]">
+                <p className="mt-1 text-sm whitespace-pre-line text-[var(--color-5)]">
                   {item.summary}
                 </p>
               ) : null}
@@ -256,15 +256,15 @@ function PreviewBlock({
 
   return (
     <div
-      className={`content-card relative flex h-full min-h-0 flex-col ${gridCardSurface} ${item.imageSrc ? "" : padding} ${footer ? "pb-0" : ""}`}
+      className={`content-card relative flex min-h-0 flex-col ${variant === "grid" ? "" : "h-full"} ${footer ? "pb-0" : ""}`}
     >
       <div className={`flex min-h-0 flex-col ${footer ? "flex-1" : ""}`}>
         {item.imageSrc ? (
           <div className={`relative w-full overflow-hidden ${imageBoxClass}`}>{imageInner}</div>
         ) : null}
-        <div className={item.imageSrc ? padding : ""}>
+        <div className={`${item.imageSrc ? padding : "px-9 py-5"} ${gridCardSurface}`}>
           <h2
-            className={`text-slate-900 display-l text-center ${gridCardTitleHover} ${item.imageSrc ? "mt-4" : ""} ${titleClass}`}
+            className={`text-slate-900 display-m text-center ${gridCardTitleHover} ${titleClass}`}
           >
             {item.heading}
           </h2>
@@ -347,11 +347,7 @@ function ExplorerArticleBody({
           className="body-md mt-4 whitespace-pre-line text-[var(--color-5)]"
         />
 
-        {item.description ? (
-          <p className="body-md mt-6 whitespace-pre-line text-[var(--color-5)]">
-            {item.description}
-          </p>
-        ) : null}
+        <CollectionArticleDescription value={item.description} />
 
         {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
       </div>
@@ -400,6 +396,9 @@ export function CollectionArticleSection({
   });
   const [hashScrollNonce, setHashScrollNonce] = useState(0);
   const pendingScrollIdxRef = useRef<number | null>(null);
+  /** Baseline `selectedIndex` after first paint — skip scroll on load; scroll when selection changes after. */
+  const prevSelectedForArticleScrollRef = useRef<number | null | undefined>(undefined);
+  const desktopArticleRef = useRef<HTMLElement | null>(null);
   const reactId = useId();
   const idPrefix = useMemo(() => reactId.replace(/:/g, ""), [reactId]);
   const sectionAnchorKeyResolved = sectionAnchorKey ?? idPrefix;
@@ -458,9 +457,39 @@ export function CollectionArticleSection({
     document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
   }, [hashScrollNonce, itemSlugs, sectionAnchorKeyResolved]);
 
-  const gridColsClass = GRID_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
+  /** Desktop explorer: smooth-scroll the article panel to the top when switching items. */
+  useLayoutEffect(() => {
+    if (typeof window === "undefined" || !items.length) return;
+    const selectedItem =
+      selectedIndex !== null && items[selectedIndex] !== undefined ? items[selectedIndex] : null;
+    const showExplorerPane =
+      isExplorerLayout || (expandedMode && selectedIndex !== null && !tiledOnly);
+
+    if (!showExplorerPane || selectedIndex === null || !selectedItem) {
+      prevSelectedForArticleScrollRef.current = selectedIndex;
+      return;
+    }
+    if (!window.matchMedia("(min-width: 1024px)").matches) return;
+
+    const prev = prevSelectedForArticleScrollRef.current;
+    if (prev === undefined) {
+      prevSelectedForArticleScrollRef.current = selectedIndex;
+      return;
+    }
+    if (prev === selectedIndex) {
+      return;
+    }
+    prevSelectedForArticleScrollRef.current = selectedIndex;
+
+    requestAnimationFrame(() => {
+      desktopArticleRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [items, selectedIndex, isExplorerLayout, expandedMode, tiledOnly]);
+
+  const masonryColsClass = MASONRY_COLS_CLASS[columnsPerRowFromCms(columnsPerRowProp)];
 
   if (!items.length) return null;
+
   const selected =
     selectedIndex !== null && items[selectedIndex] !== undefined ? items[selectedIndex] : null;
   const showExplorer = isExplorerLayout || (expandedMode && selectedIndex !== null && !tiledOnly);
@@ -468,7 +497,7 @@ export function CollectionArticleSection({
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
 
   return (
-    <div className="my-10">
+    <div className="my-10 pl-4">
       {title ? <h2 className="heading-2 text-center mt-10">{title}</h2> : null}
       {description ? (
         <Container maxWidth="narrow" className="mt-6 mb-4 text-center">
@@ -477,9 +506,9 @@ export function CollectionArticleSection({
       ) : null}
 
       {tiledOnly ? (
-        <div className={`mt-8 grid gap-4 ${gridColsClass}`}>
+        <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
           {items.map((item, i) => (
-            <div key={`${idPrefix}-tile-${i}`} className="h-full min-h-0">
+            <div key={`${idPrefix}-tile-${i}`} className="mb-4 w-full min-h-0 break-inside-avoid">
               <PreviewBlock
                 item={item}
                 variant="grid"
@@ -492,7 +521,7 @@ export function CollectionArticleSection({
         </div>
       ) : showCardGrid ? (
         <Container>
-          <div className={`mt-8 grid gap-4 ${gridColsClass}`}>
+          <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
             {items.map((item, i) => (
               <div
                 key={`${idPrefix}-grid-${i}`}
@@ -509,7 +538,7 @@ export function CollectionArticleSection({
                     setAccordionOpen((prev) => new Set(prev).add(i));
                   }
                 }}
-                className="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+                className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
               >
                 <PreviewBlock
                   item={item}
@@ -599,9 +628,9 @@ export function CollectionArticleSection({
           </div>
 
           {/* Large screens: sidebar + article */}
-          <div className="hidden gap-0 lg:grid lg:grid-cols-6">
+          <div className="hidden gap-0 lg:grid lg:grid-cols-12 lg:items-start">
             <div
-              className="flex flex-col gap-2 lg:col-span-2"
+              className="flex flex-col gap-2 lg:sticky lg:top-25 lg:col-span-5 lg:max-h-[calc(100vh-5.5rem)] lg:self-start lg:overflow-y-auto lg:pr-2 z-50 relative overflow-x-visible"
               role="listbox"
               aria-label={title ?? "Collection items"}
             >
@@ -634,8 +663,13 @@ export function CollectionArticleSection({
               })}
             </div>
 
-            <div className="relative min-h-48 lg:col-span-4">
-              <article key={selectedIndex} role="article" className="relative">
+            <div className="relative min-h-48 min-w-0 overflow-x-hidden lg:col-span-7">
+              <article
+                ref={desktopArticleRef}
+                key={selectedIndex}
+                role="article"
+                className="collection-explorer-article-panel collection-article-scroll-target relative"
+              >
                 <ExplorerArticleBody
                   item={selected}
                   showInsetClose={showClose}

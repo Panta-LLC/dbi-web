@@ -247,7 +247,7 @@ export function SponsorSection({
                 {(needsCarouselDesktop ? loopStrip : list).map((item, i) => (
                   <div
                     key={`${item.name}-${i}`}
-                    className="flex min-h-0 min-w-0 flex-col items-center text-center px-4 lg:px-6"
+                    className="flex min-h-0 min-w-0 flex-col items-center text-center px-2 lg:px-2"
                     style={
                       needsCarouselDesktop
                         ? { flex: `0 0 calc(100% / ${loopLen})` }
@@ -262,7 +262,7 @@ export function SponsorSection({
                           width={320}
                           height={240}
                           sizes="(max-width: 1024px) 28vw, 240px"
-                          className="h-auto max-h-[120px] w-full max-w-full object-contain"
+                          className="h-auto max-h-[200px] w-full max-w-full object-contain"
                         />
                       </div>
                     ) : (

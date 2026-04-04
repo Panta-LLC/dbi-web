@@ -72,7 +72,12 @@ export const site = defineType({
               type: "object",
               fields: [
                 defineField({ name: "name", title: "Name", type: "string" }),
-                defineField({ name: "logo", title: "Logo", type: "image" }),
+                defineField({
+                  name: "logo",
+                  title: "Logo",
+                  type: "image",
+                  options: { hotspot: true },
+                }),
                 defineField({ name: "logoAlt", title: "Logo Alt Text", type: "string" }),
                 defineField({
                   name: "tagline",

@@ -1,5 +1,7 @@
 import Image from "next/image";
+import type { PortableTextBlock } from "@portabletext/types";
 import { Button } from "@/components/Button";
+import { HeroSplitDescription } from "@/components/HeroSplitDescription";
 import { Section } from "@/components/Section";
 
 /** Matches `--color-1` … `--color-5` in globals.css / Sanity list values. */
@@ -16,7 +18,8 @@ export type HeroSplitStaticProps = {
   /** Optional; use when `imageSrc` is set for accessibility. */
   imageAlt?: string;
   title: string;
-  description?: string;
+  /** Portable Text from Sanity or legacy plain string. */
+  description?: string | PortableTextBlock[];
   ctas?: HeroSplitCta[];
   /** Background for the content column using design tokens. */
   backgroundPalette?: HeroSplitPalette;
@@ -59,14 +62,13 @@ function ContentHalf({
   isLight,
 }: {
   title: string;
-  description?: string;
+  description?: string | PortableTextBlock[];
   ctas?: HeroSplitCta[];
   backgroundPalette: HeroSplitPalette;
   isLight: boolean;
 }) {
   const bg = PALETTE_VAR[backgroundPalette];
   const headingClass = isLight ? "text-[var(--color-4)]" : "text-white";
-  const bodyClass = isLight ? "text-[var(--color-5)]" : "text-white/95";
 
   return (
     <div
@@ -74,9 +76,7 @@ function ContentHalf({
       style={{ backgroundColor: bg }}
     >
       <h1 className={`display-l font-bold ${headingClass}`}>{title}</h1>
-      {description ? (
-        <p className={`body-md mt-4 max-w-xl ${bodyClass}`}>{description}</p>
-      ) : null}
+      <HeroSplitDescription value={description} isLight={isLight} />
       {ctas?.length ? (
         <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center">
           {ctas.map((cta, i) => {

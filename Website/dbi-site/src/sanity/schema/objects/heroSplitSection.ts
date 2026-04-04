@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { simplePortableTextField } from "./portableTextSimple";
 
 const paletteOptions = [
   { title: "Color 1 (primary blue)", value: "color-1" },
@@ -19,11 +20,10 @@ export const heroSplitSection = defineType({
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
+    simplePortableTextField({
       name: "description",
       title: "Description",
-      type: "text",
-      rows: 4,
+      description: "Shown under the title in the content column.",
     }),
     defineField({
       name: "backgroundColor",

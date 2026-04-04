@@ -1,6 +1,7 @@
 import type { CarouselSettings } from "@/components/carousel";
 import type { SanityImageSource } from "@sanity/image-url";
 import type { SanityCtaAction } from "@/lib/sanity-cta-action";
+import type { PortableTextBlock } from "@portabletext/types";
 
 export type Cta = {
   label?: string;
@@ -13,7 +14,8 @@ export type ContentBlock = {
   title?: string;
   subtitle?: string;
   text?: string;
-  description?: string;
+  /** Plain string or portable text blocks depending on block type (e.g. hero split, collection items). */
+  description?: string | PortableTextBlock[];
   placeholder?: string;
   buttonLabel?: string;
   legalText?: string;
@@ -80,7 +82,7 @@ export type ContentBlock = {
     heading?: string;
     summary?: string;
     subtitle?: string;
-    description?: string;
+    description?: string | PortableTextBlock[];
     image?: SanityImageSource;
     imageSrc?: string;
     imageAlt?: string;

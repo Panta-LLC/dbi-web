@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-1: #2a579c;
-  --color-2: #ff7900;
-  --color-3: #fbfff5;
-  --color-4: #002354;
-  --color-5: #222d2f;
-  --color-6: #ecf0f1;
+  --color-1: #2a579c; /* Deep blue (primary brand color, preserved) */
+  --color-2: #ff7900; /* Vibrant orange (accent color, preserved) */
+
+  /* Complementary palette */
+  --color-3: #f9fafb; /* Very light neutral background */
+  --color-4: #25405a; /* Muted blue (complementary to color-1, for headings/surfaces) */
+  --color-5: #435963; /* Cool neutral/dark slate, balanced with blue/green undertones */
+  --color-6: #ffe1c9; /* Pale, warm beige-orange (tint of color-2 for backgrounds/alerts) */
+  --color-7: #b9d9f7; /* Light blue (background/hover/soft highlight reflecting color-1) */
+  --color-8: #f7ecd7; /* Light warm cream (support for light tints & backgrounds) */
   --font-noto-sans: "Noto Sans", system-ui, -apple-system, sans-serif;
   --font-noto-serif: "Noto Serif", Georgia, serif;
   --font-inter: "Inter", system-ui, -apple-system, sans-serif;
@@ -109,7 +113,7 @@ body {
 }
 
 .bg-light-gray {
-  background-color: var(--color-6);
+  background-color: var(--color-8);
 }
 
 .scrollbar-hide {
@@ -804,6 +808,22 @@ body {
   animation: slide-carousel-autoplay-progress var(--slide-carousel-autoplay-ms, 8s) linear forwards;
 }
 
+@keyframes collection-explorer-article-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/** Collection article explorer: desktop detail panel when switching items */
+.collection-explorer-article-panel {
+  animation: collection-explorer-article-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-accent,
   .hero-mask,
@@ -850,5 +870,11 @@ body {
   .slide-carousel-autoplay-progress-fill {
     animation: none;
     transform: scaleX(1);
+  }
+
+  .collection-explorer-article-panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

@@ -14,7 +14,7 @@ type MeasurableImpactProps = {
   className?: string;
 };
 
-const PANEL_BG = "#f0f0f0";
+const PANEL_BG = "var(--color-8)";
 const ORANGE_ACCENT = "var(--color-2, #ff7900)";
 const COUNT_MS = 750;
 

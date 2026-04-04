@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const collectionArticleSection = defineType({
   name: "collectionArticleSection",
@@ -105,55 +105,7 @@ export const collectionArticleSection = defineType({
       name: "items",
       title: "Items",
       type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "heading", title: "Heading", type: "string" }),
-            defineField({
-              name: "summary",
-              title: "Summary",
-              type: "text",
-              rows: 4,
-              description: "Shown on cards in the grid and in the detail sidebar.",
-            }),
-            defineField({
-              name: "subtitle",
-              title: "Subtitle (article panel)",
-              type: "string",
-              description:
-                "Optional. Shown under the title in the full article panel. If empty, the summary is shown there instead.",
-            }),
-            defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
-              rows: 10,
-              description: "Full body text shown in the article panel when an item is opened.",
-            }),
-            defineField({
-              name: "image",
-              title: "Image",
-              type: "image",
-              options: { hotspot: true },
-            }),
-            defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
-            defineField({
-              name: "cardCta",
-              title: "Card CTA",
-              type: "ctaActionOptional",
-              description:
-                "Optional. Link or contact form. When empty, the legacy URL below and section CTA are used. All fields are optional.",
-            }),
-            defineField({
-              name: "href",
-              title: "Card link URL (legacy)",
-              type: "string",
-              description: "Optional fallback when Card CTA is not set.",
-            }),
-          ],
-        },
-      ],
+      of: [defineArrayMember({ type: "collectionArticleItem" })],
     }),
   ],
 });
