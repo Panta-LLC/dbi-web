@@ -49,9 +49,9 @@ export function NavBar({ donateUrl }: NavBarProps) {
               ))}
             </nav>
           </div>
-          <div className="absolute flex pr-2 items-center ml-auto my-auto text-right right-0 top-auto bottom-auto">
-            <Button href={donateHref} variant="nav-primary" className="m-2">
-              <h5 className="text-lg text-white">Donate</h5>
+          <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2 pr-2">
+            <Button href={donateHref} variant="nav-primary" className="m-0 shrink-0">
+              <h5 className="text-lg leading-none text-white">Donate</h5>
             </Button>
             <button
               type="button"
@@ -106,9 +106,6 @@ export function NavBar({ donateUrl }: NavBarProps) {
               {item.label}
             </Link>
           ))}
-          <Link href={donateHref} variant="nav" onClick={closeMenu}>
-            Donate
-          </Link>
         </nav>
       </aside>
     </>
