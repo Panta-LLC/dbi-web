@@ -255,14 +255,14 @@ export function SponsorSection({
                     }
                   >
                     {item.logoSrc ? (
-                      <div className="flex min-h-12 w-full max-w-[240px] flex-1 flex-col items-center justify-center mx-auto">
+                      <div className="flex min-h-[140px] w-full max-w-[280px] flex-1 flex-col items-center justify-center mx-auto sm:min-h-12 sm:max-w-[240px]">
                         <Image
                           src={item.logoSrc}
                           alt={item.logoAlt ?? item.name}
                           width={320}
                           height={240}
-                          sizes="(max-width: 1024px) 28vw, 240px"
-                          className="h-auto max-h-[200px] w-full max-w-full object-contain"
+                          sizes="(max-width: 1024px) 72vw, 240px"
+                          className="h-auto max-h-[220px] w-full max-w-full object-contain sm:max-h-[200px]"
                         />
                       </div>
                     ) : (
