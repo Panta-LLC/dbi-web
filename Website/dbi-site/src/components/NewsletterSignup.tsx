@@ -56,7 +56,7 @@ export function NewsletterSignup({
               submitLabel="Subscribe"
               successMessage="Thanks — you're on the list."
               fieldVariant="newsletter"
-              className="touch-target w-full sm:w-auto relative inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-white hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed"
+              className="touch-target flex min-h-12 w-full items-center justify-center px-7 py-3.5 text-sm font-semibold text-white sm:inline-flex sm:min-h-[48px] sm:w-auto relative hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed"
             />
           </div>
 
