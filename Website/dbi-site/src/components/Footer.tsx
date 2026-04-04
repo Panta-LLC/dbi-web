@@ -148,7 +148,7 @@ export async function Footer() {
                   </div>
                 ))}
               </div>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-slate-700">
+              <div className="flex flex-wrap items-start gap-x-3 gap-y-3 text-slate-700 md:items-center">
                 <EmailActions email={content.email} />
                 {content.phone?.trim() ? (
                   <>
@@ -163,7 +163,7 @@ export async function Footer() {
                     <span className="text-slate-400 select-none shrink-0" aria-hidden>
                       |
                     </span>
-                    <ul className="flex items-center gap-1">
+                    <ul className="flex items-center gap-2">
                       {content.socialLinks.map((link: LinkItem) => {
                         const Icon =
                           SOCIAL_ICONS[link.label.toLowerCase()] ??
@@ -172,7 +172,7 @@ export async function Footer() {
                           <li key={link.label}>
                             <a
                               href={link.href}
-                              className="touch-target inline-flex items-center justify-center transition hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary rounded"
+                              className="touch-target inline-flex min-h-11 min-w-11 items-center justify-center rounded transition hover:text-primary focus:text-primary focus:ring-2 focus:ring-primary"
                               target="_blank"
                               rel="noreferrer"
                               aria-label={link.label}
@@ -188,8 +188,8 @@ export async function Footer() {
               </div>
             </div>
           </div>
-          <div className="mt-8 md:mt-10 border-t border-slate-200 pt-5 md:pt-6">
-            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+          <div className="mt-8 md:mt-10 border-t border-slate-300 pt-5 md:pt-6">
+            <p className="text-sm text-slate-600 leading-relaxed">
               © {new Date().getFullYear()} Delta Bay Impact | Nonprofit youth organization
             </p>
             {content.servingLine ? (
