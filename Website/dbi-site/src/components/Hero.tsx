@@ -448,7 +448,7 @@ export function Hero({
       <div className="relative isolate w-full min-w-0 bg-white" data-name="Hero">
         {/* Mobile: image only, then primary band with copy + controls */}
         {/* Desktop: strip + gallery row + absolute copy */}
-        <div className="relative z-0 flex min-h-0 w-full min-w-0 flex-col md:flex-row md:h-[min(548px,55vw)] md:max-h-[548px] lg:h-[min(548px,40vw)]">
+        <div className="relative z-0 flex min-h-0 w-full min-w-0 flex-col max-md:flex-none md:flex-row md:h-[min(548px,55vw)] md:max-h-[548px] lg:h-[min(548px,40vw)]">
           <div
             className="relative hidden h-full shrink-0 overflow-hidden bg-[#b5b2a9] md:block"
             style={{
@@ -468,7 +468,7 @@ export function Hero({
             ) : null}
           </div>
 
-          <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col md:min-h-0 md:flex-row md:overflow-hidden">
+          <div className="flex min-h-0 w-full min-w-0 flex-col max-md:flex-none max-md:grow-0 md:flex-1 md:min-h-0 md:flex-row md:overflow-hidden">
             {/* Image band */}
             <div className="relative w-full max-md:aspect-[882/548] max-md:min-h-[350px] max-md:overflow-hidden max-[350px]:min-h-0 md:flex md:min-h-0 md:flex-1 md:bg-[#b5b2a9]">
               <div className="relative flex h-full min-h-0 w-full items-stretch justify-end overflow-hidden md:min-h-0">
