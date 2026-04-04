@@ -23,8 +23,8 @@ export function CarouselDotNav({
   getDotLabel,
   activeDotClassName = "bg-white scale-110",
   inactiveDotClassName = "bg-white/40 hover:bg-white/70",
-  navClassName = "flex flex-wrap items-center justify-center gap-2 mt-6 px-4",
-  dotButtonClassName = "touch-target rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151]",
+  navClassName = "flex flex-wrap items-center justify-center gap-3 mt-6 px-4",
+  dotButtonClassName = "inline-flex touch-target items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151]",
 }: CarouselDotNavProps) {
   if (!show || count <= 1) return null;
 
@@ -40,7 +40,7 @@ export function CarouselDotNav({
           aria-label={getDotLabel(i, count)}
         >
           <span
-            className={`block h-2.5 w-2.5 rounded-full transition-colors duration-200 ${
+            className={`block h-3.5 w-3.5 rounded-full transition-colors duration-200 ${
               i === activeIndex ? activeDotClassName : inactiveDotClassName
             }`}
             aria-hidden
