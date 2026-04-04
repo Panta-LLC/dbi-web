@@ -18,7 +18,7 @@ export async function SiteLayout({ children }: SiteLayoutProps) {
         Skip to main content
       </a>
       <NavBar donateUrl={donateUrl} />
-      <main id="main-content" className="flex-1 pt-[80px]">
+      <main id="main-content" className="flex-1 pt-[68px] md:pt-[80px]">
         {children}
       </main>
       <Footer />

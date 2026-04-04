@@ -84,9 +84,12 @@ const SIDEBAR_IMAGE_MAX: Record<CollectionArticleCardSize, string> = {
   lg: "max-h-40",
 };
 
-/** Explorer list thumbnail: fixed square; `Image` `fill` uses the aspect box (non-zero size). */
+/**
+ * Explorer list: left strip matches row height (thumb fills vertically) so long summaries
+ * don’t leave dead space under a short square. `min-h-[7rem]` ≈ former square at w-28.
+ */
 const EXPLORER_THUMB_BOX =
-  "relative aspect-square w-28 shrink-0 overflow-hidden rounded-none sm:w-36";
+  "relative h-full min-h-[7rem] w-28 shrink-0 self-stretch overflow-hidden rounded-none sm:w-36";
 
 /** Full-bleed breakout from padded Container. Avoid `overflow-x-hidden` here — it breaks `position:sticky` on the explorer sidebar. */
 const EXPLORER_FULL_BLEED = "relative";
@@ -217,11 +220,11 @@ function PreviewBlock({
     return (
       <div className={`relative w-full rounded-none border-0 shadow-none`}>
         {active ? (
-          <div className={`flex w-full min-h-0 items-start`}>
-            <div className="flex min-h-0 min-w-0 flex-1 items-start gap-0 ">
+          <div className="flex min-h-0 w-full items-stretch">
+            <div className="flex min-h-0 min-w-0 flex-1 items-stretch gap-0">
               {explorerListThumb}
               <div
-                className={`relative min-w-0 flex-1 flex flex-col justify-center ${item.imageSrc ? "px-4 py-4 sm:px-6 sm:py-5" : "px-8 py-8"} ${active ? "" : shell} bg-[var(--color-4)] text-[var(--color-3)]`}
+                className={`relative flex min-w-0 flex-1 flex-col justify-start ${item.imageSrc ? "px-4 py-4 sm:px-6 sm:py-5" : "px-8 py-8"} ${active ? "" : shell} bg-[var(--color-4)] text-[var(--color-3)]`}
               >
                 <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
@@ -235,11 +238,11 @@ function PreviewBlock({
           </div>
         ) : (
           <div
-            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row items-start gap-0" : "flex-col items-stretch px-8 py-6"}`}
+            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row items-stretch gap-0" : "flex-col items-stretch px-8 py-6"}`}
           >
             {explorerListThumb}
             <div
-              className={`min-w-0 flex-1 w-full flex flex-col justify-center ${item.imageSrc ? "px-4 py-6 sm:px-5" : ""}`}
+              className={`flex min-w-0 w-full flex-1 flex-col justify-start ${item.imageSrc ? "px-4 py-6 sm:px-5" : ""}`}
             >
               <h3 className="heading-3 text-[var(--color-4)]">{item.heading}</h3>
               {item.summary ? (
@@ -334,7 +337,8 @@ function ExplorerArticleBody({
         </button>
       ) : null}
 
-      {item.imageSrc ? <div className={heroBoxClass}>{heroInner}</div> : null}
+      {/* Mobile accordion: thumbnail already in list row — skip duplicate hero image */}
+      {!embedded && item.imageSrc ? <div className={heroBoxClass}>{heroInner}</div> : null}
       <div className={embedded ? "pt-2" : ""}>
         {embedded ? null : (
           <>
@@ -428,7 +432,7 @@ export function CollectionArticleSection({
         const idx = itemSlugs.indexOf(parsed.itemSlug);
         if (idx === -1) return;
         setSelectedIndex(idx);
-        setAccordionOpen((prev) => new Set(prev).add(idx));
+        setAccordionOpen(new Set([idx]));
         pendingScrollIdxRef.current = idx;
         setHashScrollNonce((n) => n + 1);
         return;
@@ -438,7 +442,7 @@ export function CollectionArticleSection({
       const idx = itemSlugs.indexOf(parsed.itemSlug);
       if (idx === -1) return;
       setSelectedIndex(idx);
-      setAccordionOpen((prev) => new Set(prev).add(idx));
+      setAccordionOpen(new Set([idx]));
       pendingScrollIdxRef.current = idx;
       setHashScrollNonce((n) => n + 1);
     };
@@ -536,13 +540,13 @@ export function CollectionArticleSection({
                 tabIndex={0}
                 onClick={() => {
                   setSelectedIndex(i);
-                  setAccordionOpen((prev) => new Set(prev).add(i));
+                  setAccordionOpen(new Set([i]));
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     setSelectedIndex(i);
-                    setAccordionOpen((prev) => new Set(prev).add(i));
+                    setAccordionOpen(new Set([i]));
                   }
                 }}
                 className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
@@ -603,12 +607,16 @@ export function CollectionArticleSection({
                       aria-expanded={open}
                       aria-controls={panelId}
                       onClick={() => {
+                        const willOpen = !accordionOpen.has(i);
                         setAccordionOpen((prev) => {
-                          const next = new Set(prev);
-                          if (next.has(i)) next.delete(i);
-                          else next.add(i);
-                          return next;
+                          if (prev.has(i)) {
+                            return new Set();
+                          }
+                          return new Set([i]);
                         });
+                        if (willOpen) {
+                          setSelectedIndex(i);
+                        }
                       }}
                       className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
                     >
