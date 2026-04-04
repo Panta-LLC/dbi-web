@@ -13,14 +13,12 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-const DEFAULT_DONATE_HREF = process.env.NEXT_PUBLIC_DONATE_URL || "/donate";
-
 type NavBarProps = {
-  donateUrl?: string | null;
+  /** Final URL from server: CMS → NEXT_PUBLIC_DONATE_URL → /donate (see `resolveDonateHref`). */
+  donateHref?: string;
 };
 
-export function NavBar({ donateUrl }: NavBarProps) {
-  const donateHref = donateUrl || DEFAULT_DONATE_HREF;
+export function NavBar({ donateHref = "/donate" }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);

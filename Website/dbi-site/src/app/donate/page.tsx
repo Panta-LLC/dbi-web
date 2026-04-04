@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { resolveDonateHref } from "@/lib/donate-url";
 import { createMetadataForPath } from "@/lib/page-metadata";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
@@ -14,9 +15,9 @@ export default async function DonatePage() {
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
   ]);
 
-  const donateUrl = siteSettings?.donateUrl ?? null;
+  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
 
-  if (donateUrl) {
+  if (donateUrl !== "/donate") {
     redirect(donateUrl);
   }
 

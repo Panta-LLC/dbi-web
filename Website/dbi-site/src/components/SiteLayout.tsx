@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { resolveDonateHref } from "@/lib/donate-url";
 import { sanityClient } from "@/sanity/client";
 import { siteSettingsQuery } from "@/sanity/queries";
 import { Footer } from "./Footer";
@@ -10,14 +11,14 @@ type SiteLayoutProps = {
 
 export async function SiteLayout({ children }: SiteLayoutProps) {
   const siteSettings = await sanityClient.fetch(siteSettingsQuery).catch(() => null);
-  const donateUrl = siteSettings?.donateUrl ?? null;
+  const donateHref = resolveDonateHref(siteSettings?.donateUrl);
 
   return (
     <div className="flex min-h-screen flex-col text-foreground mx-auto max-w-7xl bg-white">
       <a href="#main-content" className="skip-to-content">
         Skip to main content
       </a>
-      <NavBar donateUrl={donateUrl} />
+      <NavBar donateHref={donateHref} />
       <main id="main-content" className="flex-1 pt-[68px] md:pt-[80px]">
         {children}
       </main>

@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { resolveDonateHref } from "@/lib/donate-url";
 import { urlForSanityImage } from "@/lib/sanity-image";
 import { sanityClient } from "@/sanity/client";
 import { siteQuery } from "@/sanity/queries";
@@ -63,12 +64,12 @@ const SOCIAL_ICONS: Record<string, IconComponent> = {
 export async function Footer() {
   const siteData = await sanityClient.fetch(siteQuery).catch(() => null);
   const data = siteData?.footer ?? defaultContent;
-  const donateUrl = siteData?.donateUrl ?? null;
+  const donateHref = resolveDonateHref(siteData?.donateUrl);
   const rawSiteLinks = (
     data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks
   ) as LinkItem[];
   const siteLinks = rawSiteLinks.map((link) =>
-    link.label === "Donate" && donateUrl ? { ...link, href: donateUrl } : link,
+    link.label === "Donate" ? { ...link, href: donateHref } : link,
   );
   const rawPartners = (data.partners?.length ? data.partners : defaultContent.partners) as {
     name: string;

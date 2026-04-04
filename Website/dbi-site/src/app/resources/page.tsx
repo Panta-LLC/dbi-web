@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
+import { resolveDonateHref } from "@/lib/donate-url";
 import { createMetadataForPath } from "@/lib/page-metadata";
 import { sanityClient } from "@/sanity/client";
 import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
@@ -16,7 +17,7 @@ export default async function ResourcesPage() {
   if (!cmsPage?.content?.length) {
     notFound();
   }
-  const donateUrl = siteSettings?.donateUrl ?? null;
+  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
 
   if (cmsPage.layout === "site") {
     return (
