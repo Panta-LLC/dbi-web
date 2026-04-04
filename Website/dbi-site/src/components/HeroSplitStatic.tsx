@@ -41,7 +41,7 @@ function isLightPalette(p: HeroSplitPalette): boolean {
 
 function ImageHalf({ imageSrc, imageAlt }: { imageSrc: string; imageAlt?: string | undefined }) {
   return (
-    <div className="relative min-h-[min(50vw,280px)] w-full min-w-0 md:min-h-0 md:flex-1">
+    <div className="relative w-full min-w-0 min-h-[min(88vw,420px)] md:min-h-0 md:flex-1">
       <Image
         src={imageSrc}
         alt={imageAlt ?? ""}
