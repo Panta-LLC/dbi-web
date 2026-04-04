@@ -47,18 +47,24 @@ const components: PortableTextComponents = {
 
 type CollectionArticleDescriptionProps = {
   value: string | PortableTextBlock[] | undefined | null;
+  /** Merged onto the outer wrapper (e.g. `!mt-0` when headline/teaser sit above in another view). */
+  className?: string;
 };
 
-export function CollectionArticleDescription({ value }: CollectionArticleDescriptionProps) {
+export function CollectionArticleDescription({ value, className = "" }: CollectionArticleDescriptionProps) {
   if (value == null || value === "") return null;
   if (typeof value === "string") {
     return (
-      <p className="body-md mt-6 whitespace-pre-line text-[var(--color-5)] first:mt-0">{value}</p>
+      <p
+        className={`body-md mt-6 whitespace-pre-line text-[var(--color-5)] first:mt-0 ${className}`.trim()}
+      >
+        {value}
+      </p>
     );
   }
   if (Array.isArray(value) && value.length === 0) return null;
   return (
-    <div className="mt-6 space-y-4 text-[var(--color-5)] first:mt-0 [&_a]:break-words">
+    <div className={`mt-6 space-y-4 text-[var(--color-5)] first:mt-0 [&_a]:break-words ${className}`.trim()}>
       <PortableText value={value} components={components} />
     </div>
   );

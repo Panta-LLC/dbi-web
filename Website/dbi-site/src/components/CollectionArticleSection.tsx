@@ -191,7 +191,7 @@ function PreviewBlock({
   /** Right-pointing tab (same fill as --color-2), flush with the preview body like a speech-bubble tail */
   const explorerActiveRightTab = (
     <div
-      className=" absolute right-[-13px] top-0 bottom-0 m-auto z-50 flex shrink-0 self-stretch"
+      className="absolute right-[-13px] top-0 bottom-0 z-50 hidden shrink-0 self-stretch m-auto lg:flex"
       aria-hidden
     >
       <span className="h-0 w-0 absolute top-0 bottom-0 m-auto right-[-4px] border-y-[16px] border-l-[14px] border-y-transparent border-l-[var(--color-3)] sm:border-y-[16px] sm:border-l-[14px]" />
@@ -336,18 +336,25 @@ function ExplorerArticleBody({
 
       {item.imageSrc ? <div className={heroBoxClass}>{heroInner}</div> : null}
       <div className={embedded ? "pt-2" : ""}>
-        <h3
-          className={`text-[var(--color-4)] ${embedded ? "text-xl font-semibold tracking-tight sm:text-2xl" : "display-s"} ${showInsetClose ? "pr-10" : ""}`}
-        >
-          {item.heading}
-        </h3>
+        {embedded ? null : (
+          <>
+            <h3
+              className={`text-[var(--color-4)] display-s ${showInsetClose ? "pr-10" : ""}`}
+            >
+              {item.heading}
+            </h3>
 
-        <ArticleTeaser
-          item={item}
-          className="body-md mt-4 whitespace-pre-line text-[var(--color-5)]"
+            <ArticleTeaser
+              item={item}
+              className="body-md mt-4 whitespace-pre-line text-[var(--color-5)]"
+            />
+          </>
+        )}
+
+        <CollectionArticleDescription
+          value={item.description}
+          className={embedded ? "!mt-0" : ""}
         />
-
-        <CollectionArticleDescription value={item.description} />
 
         {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
       </div>
@@ -585,7 +592,11 @@ export function CollectionArticleSection({
                 const headingId = `${idPrefix}-acc-h-${i}`;
                 const panelId = `${idPrefix}-acc-p-${i}`;
                 return (
-                  <div key={`${idPrefix}-acc-${i}`} role="listitem" className="w-full">
+                  <div
+                    key={`${idPrefix}-acc-${i}`}
+                    role="listitem"
+                    className="w-full border-b border-slate-200 last:border-b-0"
+                  >
                     <button
                       type="button"
                       id={headingId}
@@ -617,7 +628,9 @@ export function CollectionArticleSection({
                       className="grid"
                       style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
                     >
-                      <div className="min-h-0 overflow-hidden">
+                      <div
+                        className={`min-h-0 overflow-hidden ${open ? "bg-slate-50/95" : ""}`}
+                      >
                         <ExplorerArticleBody item={item} embedded showInsetClose={false} />
                       </div>
                     </div>
