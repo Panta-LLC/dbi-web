@@ -2,6 +2,18 @@
 
 import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
 
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduced(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return reduced;
+}
+
 export type UseCarouselOptions = {
   /** If set, advances after this many ms (pauses while pointer hovers when used with pointer handlers). */
   autoPlayMs?: number;
@@ -30,6 +42,7 @@ export function useCarousel(count: number, options: UseCarouselOptions = {}): Us
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [paused, setPaused] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const activeIndex = Math.min(Math.max(0, index), Math.max(0, count - 1));
 
@@ -62,10 +75,10 @@ export function useCarousel(count: number, options: UseCarouselOptions = {}): Us
   );
 
   useEffect(() => {
-    if (!autoPlayMs || paused || !multi) return;
+    if (!autoPlayMs || paused || !multi || prefersReducedMotion) return;
     const t = window.setTimeout(goNext, autoPlayMs);
     return () => window.clearTimeout(t);
-  }, [activeIndex, autoPlayMs, goNext, multi, paused]);
+  }, [activeIndex, autoPlayMs, goNext, multi, paused, prefersReducedMotion]);
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
