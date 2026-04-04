@@ -25,6 +25,14 @@ export const CtaSecondary: Story = {
   },
 };
 
+export const CtaHero: Story = {
+  args: {
+    children: "Learn more",
+    href: "/about",
+    variant: "cta-hero",
+  },
+};
+
 export const NavPrimary: Story = {
   args: {
     children: "Donate",

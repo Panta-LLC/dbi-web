@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Pause, Play } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
@@ -19,10 +20,6 @@ const HERO_GALLERY_ACCENT = "var(--color-2, #ff7900)";
 
 /** Layout proportions: 159×548 left strip + 882×548 gallery (desktop). */
 const LEFT_WIDTH_FRAC = 159 / (159 + 882);
-
-/** Mobile: blue slant clip (inner edge). */
-const SLANT_CLIP_LEFT = "polygon(0 0, 100% 0, 72% 100%, 0 100%)";
-const SLANT_CLIP_RIGHT = "polygon(28% 0, 100% 0, 100% 100%, 0 100%)";
 
 type HeroCta = {
   href?: string;
@@ -111,6 +108,7 @@ function HeroGallerySlides({
   const prevActiveRef = useRef(c.activeIndex);
   const [outgoing, setOutgoing] = useState<{ idx: number } | null>(null);
   const [navGen, setNavGen] = useState(0);
+  const touchStartX = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     if (!crossfade) return;
@@ -223,6 +221,20 @@ function HeroGallerySlides({
       onKeyDown={c.onKeyDown}
       onPointerEnter={() => c.setPaused(true)}
       onPointerLeave={() => c.setPaused(false)}
+      onTouchStart={(e) => {
+        if (!multi) return;
+        touchStartX.current = e.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={(e) => {
+        if (!multi || touchStartX.current == null) return;
+        const endX = e.changedTouches[0]?.clientX;
+        if (endX == null) return;
+        const dx = endX - touchStartX.current;
+        touchStartX.current = null;
+        if (Math.abs(dx) < 56) return;
+        if (dx > 0) c.goPrev();
+        else c.goNext();
+      }}
       className="absolute inset-0 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/30"
     >
       <span id={labelId} className="sr-only">
@@ -234,74 +246,78 @@ function HeroGallerySlides({
   );
 }
 
-function HeroGalleryControls({
-  state,
-  className,
-  variant = "default",
-}: {
-  state: HeroGalleryState;
-  className?: string;
-  /** `minimal` = arrows + thin progress bar only (small screens). */
-  variant?: "default" | "minimal";
-}) {
+const HERO_CTRL_ARROW =
+  "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-white ring-1 ring-white/30 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50";
+
+/** Unified pill: prev / dots / next / pause + slide counter + optional progress */
+function HeroGalleryControls({ state, className = "" }: { state: HeroGalleryState; className?: string }) {
   const { resolved, count, c, showDots, showBar, multi } = state;
   if (!multi) return null;
 
-  const minimal = variant === "minimal";
-  const showDotsUi = !minimal && showDots;
-  const arrowBtnClass = minimal
-    ? "flex h-6 w-6 shrink-0 items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151]"
-    : "flex h-8 w-8 shrink-0 scale-90 items-center justify-center touch-target focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#374151]";
-  const progressTrackClass = minimal
-    ? "h-0.5 w-10 shrink-0 overflow-hidden rounded-full bg-white/25 px-0"
-    : "h-1 w-16 shrink-0 overflow-hidden rounded-full bg-white/25 px-0";
+  const showPause = !!(resolved.autoPlayMs && resolved.autoPlayMs > 0);
 
   return (
     <div
-      className={
-        className ??
-        (minimal
-          ? "pointer-events-auto flex max-w-[calc(100%-1rem)] items-center gap-1 rounded-md bg-black/40 px-1.5 py-0.5 backdrop-blur-sm"
-          : "pointer-events-auto absolute right-3 bottom-3 z-30 flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-md bg-black/45 px-2 py-1 shadow-md backdrop-blur-sm")
-      }
+      role="group"
+      aria-label="Hero carousel controls"
+      className={`pointer-events-auto flex flex-col items-center gap-2.5 ${className}`.trim()}
     >
-      <CarouselArrowButton
-        direction="prev"
-        onClick={c.goPrev}
-        label="Previous hero image"
-        accentColor={HERO_GALLERY_ACCENT}
-        className={arrowBtnClass}
-      />
+      <div className="flex max-w-[min(100%,28rem)] flex-wrap items-center justify-center gap-2 rounded-full border border-white/15 bg-black/45 px-2 py-2 shadow-lg backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
+        <CarouselArrowButton
+          direction="prev"
+          onClick={c.goPrev}
+          label="Previous hero image"
+          accentColor={HERO_GALLERY_ACCENT}
+          className={HERO_CTRL_ARROW}
+        />
+        {showDots ? (
+          <CarouselDotNav
+            show
+            count={count}
+            activeIndex={c.activeIndex}
+            onSelect={c.goToIndex}
+            navLabel="Hero gallery pagination"
+            getDotLabel={(i, n) => `Go to hero image ${i + 1} of ${n}`}
+            activeDotClassName="bg-white scale-110"
+            inactiveDotClassName="bg-white/50 hover:bg-white/80"
+            dotButtonClassName="inline-flex touch-target items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
+            navClassName="mt-0 flex flex-wrap items-center justify-center gap-2.5 px-1"
+          />
+        ) : null}
+        <CarouselArrowButton
+          direction="next"
+          onClick={c.goNext}
+          label="Next hero image"
+          accentColor={HERO_GALLERY_ACCENT}
+          className={HERO_CTRL_ARROW}
+        />
+        <span
+          className="min-w-[3.25rem] text-center text-xs font-semibold tabular-nums text-white/95 sm:text-sm"
+          aria-live="polite"
+        >
+          {c.activeIndex + 1} / {count}
+        </span>
+        {showPause ? (
+          <button
+            type="button"
+            onClick={() => c.setPaused(!c.paused)}
+            aria-pressed={c.paused}
+            aria-label={c.paused ? "Play slideshow" : "Pause slideshow"}
+            className={HERO_CTRL_ARROW}
+          >
+            {c.paused ? <Play className="h-5 w-5" strokeWidth={2} aria-hidden /> : <Pause className="h-5 w-5" strokeWidth={2} aria-hidden />}
+          </button>
+        ) : null}
+      </div>
       {showBar ? (
         <CarouselProgressBar
           show
           activeIndex={c.activeIndex}
           autoPlayMs={resolved.autoPlayMs ?? 8000}
           fillColor={HERO_GALLERY_ACCENT}
-          trackClassName={progressTrackClass}
+          trackClassName="h-1 w-full max-w-[min(20rem,90vw)] overflow-hidden rounded-full bg-white/25"
         />
       ) : null}
-      {showDotsUi ? (
-        <CarouselDotNav
-          show
-          count={count}
-          activeIndex={c.activeIndex}
-          onSelect={c.goToIndex}
-          navLabel="Hero gallery pagination"
-          getDotLabel={(i, n) => `Go to hero image ${i + 1} of ${n}`}
-          activeDotClassName="bg-white scale-110"
-          inactiveDotClassName="bg-white/50 hover:bg-white/80"
-          dotButtonClassName="touch-target rounded-full p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50"
-          navClassName="mt-0 flex items-center gap-1 [&_button>span]:!h-2 [&_button>span]:!w-2"
-        />
-      ) : null}
-      <CarouselArrowButton
-        direction="next"
-        onClick={c.goNext}
-        label="Next hero image"
-        accentColor={HERO_GALLERY_ACCENT}
-        className={arrowBtnClass}
-      />
     </div>
   );
 }
@@ -323,8 +339,8 @@ function HeroContent({
   const lines = displayTitle.split("\n");
 
   const copyBlock = (
-    <div className="pointer-events-auto relative z-1 w-full max-w-lg max-md:mx-auto max-md:text-center md:pl-22">
-      <h1 className="font-bold text-white text-2xl leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
+    <div className="pointer-events-auto relative z-[1] w-full max-w-lg max-md:mx-auto max-md:text-center md:max-w-[min(28rem,44vw)]">
+      <h1 className="text-2xl font-bold leading-[1.12] tracking-tight text-white text-balance sm:text-3xl md:text-4xl md:text-left lg:text-5xl">
         {lines.map((line, i) => (
           <span key={i}>
             {line}
@@ -333,14 +349,16 @@ function HeroContent({
         ))}
       </h1>
       {subtitle ? (
-        <p className="body-md mt-2 max-w-lg text-white/95 max-md:mx-auto">{subtitle}</p>
+        <p className="body-md mt-3 max-w-[42ch] leading-relaxed text-white/95 max-md:mx-auto md:mt-4 md:text-left">
+          {subtitle}
+        </p>
       ) : null}
-      <div className="mt-2 flex flex-col flex-wrap gap-3 sm:mt-4 max-md:items-center sm:flex-row">
+      <div className="mt-4 flex max-md:flex-col max-md:items-center max-md:gap-3 sm:mt-5 sm:flex-row sm:flex-wrap sm:gap-4">
         {primaryCta?.label ? (
           <Button
             href={primaryCta.href}
-            variant="cta-knockout"
-            className="touch-target w-full justify-center sm:w-auto"
+            variant="cta-hero"
+            className="w-full justify-center shadow-black/30 sm:w-auto"
           >
             {primaryCta.label}
           </Button>
@@ -360,34 +378,26 @@ function HeroContent({
 
   return (
     <div className="pointer-events-none absolute inset-0 z-20 md:z-25">
-      {/* Desktop: overlay on image */}
+      {/* Desktop: left-aligned copy over image — no skew panel */}
       <div
-        className="pointer-events-none absolute inset-0 z-25 hidden items-start md:flex"
+        className="pointer-events-none absolute inset-0 z-25 hidden md:flex md:items-center"
         data-name="Hero Content"
       >
-        <div className="absolute z-20 flex h-full max-w-[50vw] items-center py-5 pl-2 md:max-w-[440px] md:pl-16">
+        <div className="pointer-events-auto relative z-20 w-full max-w-[min(480px,46vw)] px-6 py-8 md:pl-12 lg:pl-20 lg:py-10">
           {copyBlock}
-          <div
-            className="pointer-events-none absolute top-0 left-0 z-0 hidden w-full max-w-xl border-10 border-t-0 border-white bg-primary md:block"
-            style={{
-              height: "calc(100% + 30px)",
-              transform: "skewX(15deg)",
-              transformOrigin: "top left",
-            }}
-            aria-hidden
-          />
         </div>
-        <div className="relative z-10 mx-auto h-full w-full max-w-5xl" />
       </div>
 
-      {/* Mobile: overlay on gallery; slants sit above (z-30) on the sides */}
+      {/* Mobile: bottom scrim + copy + carousel controls in one stack */}
       <div
-        className="absolute inset-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/88 via-black/58 to-transparent px-[max(1.25rem,calc(min(3.75rem,5vw)+1rem))] pt-12 pb-6 md:hidden"
+        className="absolute inset-0 z-20 flex flex-col justify-end md:hidden"
         data-name="Hero Content Mobile"
       >
-        <div className="pointer-events-auto flex w-full flex-col items-center gap-2">
-          {copyBlock}
-          {mobileGalleryControls}
+        <div className="bg-gradient-to-t from-black/92 via-black/55 to-transparent px-5 pb-8 pt-20 sm:px-6">
+          <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-5">
+            {copyBlock}
+            {mobileGalleryControls}
+          </div>
         </div>
       </div>
     </div>
@@ -416,10 +426,10 @@ export function Hero({
         className="relative isolate w-full min-w-0 max-md:aspect-[882/548] max-md:min-h-[350px] max-[350px]:min-h-0 max-md:overflow-hidden md:block md:h-[min(548px,55vw)] md:max-h-[548px] lg:h-[min(548px,40vw)]"
         data-name="Hero"
       >
-        {/* Base layer: gallery full-bleed under overlays; desktop = row with left strip */}
-        <div className="absolute inset-0 z-0 flex min-h-0 w-full min-w-0 flex-col md:relative md:flex md:h-full md:flex-row">
+        {/* Base layer: gallery full-bleed; optional left strip only on xl+ */}
+        <div className="absolute inset-0 z-0 flex min-h-0 w-full min-w-0 flex-col xl:relative xl:flex xl:h-full xl:flex-row">
           <div
-            className="relative hidden h-full shrink-0 overflow-hidden bg-[#b5b2a9] md:block"
+            className="relative hidden h-full shrink-0 overflow-hidden bg-[#b5b2a9] xl:block"
             style={{
               width: `${LEFT_WIDTH_FRAC * 100}%`,
               clipPath: "polygon(0 0, 100% 0, 82% 100%, 0 100%)",
@@ -431,17 +441,13 @@ export function Hero({
                 alt={leftImageAlt || ""}
                 fill
                 priority
-                sizes="(max-width: 768px) 24vw, 159px"
+                sizes="(max-width: 1279px) 0px, 159px"
                 className="object-cover"
               />
             ) : null}
           </div>
           <div className="relative h-full min-h-0 w-full min-w-0 flex-1 bg-[#b5b2a9]">
             <HeroGallerySlides images={galleryImages} state={galleryState} />
-            <HeroGalleryControls
-              state={galleryState}
-              className="pointer-events-auto absolute right-3 bottom-3 z-30 hidden max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-md bg-black/45 px-2 py-1 shadow-md backdrop-blur-sm md:flex"
-            />
           </div>
         </div>
 
@@ -451,37 +457,14 @@ export function Hero({
           primaryCta={primaryCta}
           secondaryCta={secondaryCta}
           mobileGalleryControls={
-            <HeroGalleryControls
-              state={galleryState}
-              variant="minimal"
-              className="pointer-events-auto relative z-30 mt-0.5 flex w-full max-w-44 shrink-0 justify-center gap-1 rounded-md bg-black/40 px-1.5 py-0.5 backdrop-blur-sm md:hidden"
-            />
+            <HeroGalleryControls state={galleryState} className="relative z-30 w-full md:hidden" />
           }
         />
 
-        {/* Overlay: blue frame + white bands — above gallery + copy; image runs full width underneath */}
-        <div className="pointer-events-none absolute inset-0 z-[35] md:hidden" aria-hidden>
-          <div className="absolute top-0 bottom-0 left-0 flex w-[min(3.75rem,5vw)] flex-col">
-            <div
-              className="min-h-0 flex-1 w-full bg-primary relative z-50"
-              style={{ clipPath: SLANT_CLIP_LEFT }}
-            />
-            <div
-              className="min-h-0 flex-1 w-full bg-white absolute inset-0 left-3"
-              style={{ clipPath: SLANT_CLIP_LEFT }}
-            />
-          </div>
-          <div className="absolute top-0 right-0 bottom-0 flex w-[min(3.75rem,5vw)] flex-col">
-            <div
-              className="min-h-0 flex-1 w-full bg-primary relative z-50"
-              style={{ clipPath: SLANT_CLIP_RIGHT }}
-            />
-            <div
-              className="min-h-0 flex-1 w-full bg-white absolute inset-0 -left-3"
-              style={{ clipPath: SLANT_CLIP_RIGHT }}
-            />
-          </div>
-        </div>
+        <HeroGalleryControls
+          state={galleryState}
+          className="absolute bottom-5 left-1/2 z-40 hidden w-[min(100%,28rem)] max-w-[calc(100vw-2rem)] -translate-x-1/2 md:flex"
+        />
       </div>
     </Section>
   );
