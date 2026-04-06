@@ -19,6 +19,7 @@ import {
   heroGallerySlides,
   heroSectionImageUrlOptions,
   heroSplitPalette,
+  mapCollectionArticleCtas,
   mapGridCardCta,
   mapProgramCardItem,
   resolveHref,
@@ -175,7 +176,7 @@ export function renderPageContentBlock(
         description: item.description,
         imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
         imageAlt: item.imageAlt,
-        cta: mapGridCardCta(item, block.cta, donateUrl),
+        ctas: mapCollectionArticleCtas(item, block.cta, donateUrl),
       }));
       return (
         <Section

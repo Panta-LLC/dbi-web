@@ -92,6 +92,11 @@ export type ContentBlock = {
     imageAlt?: string;
     href?: string;
     cardCta?: SanityCtaAction;
+    articleCtas?: Array<{
+      _key?: string;
+      hierarchy?: string;
+      cta?: SanityCtaAction;
+    }>;
   }>;
   imageItems?: Array<{
     title?: string;

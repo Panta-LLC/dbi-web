@@ -38,11 +38,19 @@ export const collectionArticleItem = defineType({
     }),
     defineField({ name: "imageAlt", title: "Image Alt Text", type: "string" }),
     defineField({
+      name: "articleCtas",
+      title: "CTAs (multiple)",
+      type: "array",
+      of: [{ type: "collectionArticleItemCta" }],
+      description:
+        "Optional. Add several actions with primary, secondary, or tertiary styling. When any row has a complete action, these replace the single Card CTA on the card footer and in the article panel. Order is preserved.",
+    }),
+    defineField({
       name: "cardCta",
-      title: "Card CTA",
+      title: "Card CTA (legacy)",
       type: "ctaActionOptional",
       description:
-        "Optional. Link or contact form. When empty, the legacy URL below and section CTA are used. All fields are optional.",
+        "Used when **CTAs (multiple)** is empty. Link or contact form. When empty, the legacy URL below and section CTA are used.",
     }),
     defineField({
       name: "href",

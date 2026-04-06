@@ -12,6 +12,12 @@ const meta: Meta<typeof CollectionArticleSection> = {
 export default meta;
 type Story = StoryObj<typeof CollectionArticleSection>;
 
+function primaryLinkCta(label: string, href: string) {
+  return {
+    ctas: [{ variant: "cta-primary" as const, cta: { kind: "link" as const, label, href } }],
+  };
+}
+
 const baseItems = [
   {
     heading: "School-Based Mentorship",
@@ -21,7 +27,7 @@ const baseItems = [
       "DBI mentors build trusted relationships with students, providing academic support, goal-setting, and personal development while advocating for students' educational needs. This paragraph appears only in the article panel.",
     imageSrc: "https://picsum.photos/600/400?random=51",
     imageAlt: "Mentorship",
-    cta: { kind: "link" as const, label: "Get in touch", href: "/contact" },
+    ...primaryLinkCta("Get in touch", "/contact"),
   },
   {
     heading: "Academic Support",
@@ -30,14 +36,14 @@ const baseItems = [
       "We connect students to tutoring, homework help, and skill-building resources tailored to each learner.",
     imageSrc: "https://picsum.photos/600/400?random=52",
     imageAlt: "Academic support",
-    cta: { kind: "link" as const, label: "Learn more", href: "/services" },
+    ...primaryLinkCta("Learn more", "/services"),
   },
   {
     heading: "Family Engagement",
     summary: "Strengthening school-family partnerships.",
     description:
       "DBI strengthens school-family partnerships through regular communication, workshops, and collaborative planning.",
-    cta: { kind: "link" as const, label: "Learn more", href: "/services" },
+    ...primaryLinkCta("Learn more", "/services"),
   },
   {
     heading: "Mental Health Awareness",
@@ -46,7 +52,7 @@ const baseItems = [
       "We provide mental health education and connect families to culturally responsive resources in the community.",
     imageSrc: "https://picsum.photos/600/400?random=53",
     imageAlt: "Mental health",
-    cta: { kind: "link" as const, label: "Learn more", href: "/services" },
+    ...primaryLinkCta("Learn more", "/services"),
   },
 ];
 
@@ -81,6 +87,7 @@ export const FiveColumns: Story = {
         description: "Quarterly events bring families and staff together.",
         imageSrc: "https://picsum.photos/600/400?random=54",
         imageAlt: "Events",
+        ctas: [],
       },
     ],
   },
@@ -93,7 +100,7 @@ export const NoImages: Story = {
       heading: item.heading,
       summary: item.summary,
       description: item.description,
-      cta: item.cta,
+      ctas: item.ctas,
     })),
   },
 };

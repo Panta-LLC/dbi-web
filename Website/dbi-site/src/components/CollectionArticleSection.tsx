@@ -11,7 +11,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Button } from "@/components/Button";
+import type { ButtonVariant } from "@/components/Button";
 import { GridCardCtaTrigger } from "@/components/GridCardCtaTrigger";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
 import {
@@ -34,7 +34,8 @@ export type CollectionArticleItem = {
   description?: string | PortableTextBlock[];
   imageSrc?: string;
   imageAlt?: string;
-  cta?: GridCardCtaResolved;
+  /** Ordered CTAs with button variant (primary / secondary / tertiary). */
+  ctas: Array<{ variant: ButtonVariant; cta: GridCardCtaResolved }>;
 };
 
 export type CollectionArticleColumnsPerRow = 2 | 3 | 4 | 5;
@@ -116,16 +117,28 @@ function initialSelectedIndex(
   return defaultView === "explorer" ? 0 : null;
 }
 
-function DetailPanelCta({
-  cta,
+function ArticlePanelCtas({
+  rows,
   className = "mt-6",
 }: {
-  cta: GridCardCtaResolved;
+  rows: Array<{ variant: ButtonVariant; cta: GridCardCtaResolved }>;
   className?: string;
 }) {
+  if (!rows.length) return null;
   return (
-    <div className={className}>
-      <GridCardCtaTrigger cta={cta} triggerVariant="cta-primary" className="px-4 py-2" />
+    <div
+      className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center ${className}`.trim()}
+    >
+      {rows.map((row, i) => (
+        <GridCardCtaTrigger
+          key={`${row.variant}-${row.cta.kind === "link" ? row.cta.href : row.cta.formId}-${i}`}
+          cta={row.cta}
+          triggerVariant={row.variant}
+          className={`px-4 py-2 sm:shrink-0 ${
+            row.variant === "nav-secondary" ? "underline underline-offset-2" : ""
+          }`.trim()}
+        />
+      ))}
     </div>
   );
 }
@@ -321,9 +334,7 @@ function ExplorerArticleBody({
       <div className={embedded ? "pt-2" : ""}>
         {embedded ? null : (
           <>
-            <h3
-              className={`text-[var(--color-4)] display-s ${showInsetClose ? "pr-10" : ""}`}
-            >
+            <h3 className={`text-[var(--color-4)] display-s ${showInsetClose ? "pr-10" : ""}`}>
               {item.heading}
             </h3>
 
@@ -339,7 +350,7 @@ function ExplorerArticleBody({
           className={embedded ? "!mt-0" : ""}
         />
 
-        {item.cta ? <DetailPanelCta cta={item.cta} /> : null}
+        <ArticlePanelCtas rows={item.ctas ?? []} />
       </div>
     </div>
   );
@@ -487,7 +498,7 @@ export function CollectionArticleSection({
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
 
   return (
-    <div className="my-10 pl-4">
+    <div className="my-10 pl-4 max-w-6xl m-auto">
       {title ? <h2 className="heading-2 text-center mt-10">{title}</h2> : null}
       {description ? (
         <Container maxWidth="narrow" className="mt-6 mb-4 text-center">
@@ -504,7 +515,11 @@ export function CollectionArticleSection({
                 variant="grid"
                 cardSize={cardSize}
                 imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                footer={item.cta ? <DetailPanelCta cta={item.cta} className="my-4" /> : undefined}
+                footer={
+                  item.ctas.length ? (
+                    <ArticlePanelCtas rows={item.ctas} className="my-4" />
+                  ) : undefined
+                }
               />
             </div>
           ))}
@@ -615,9 +630,7 @@ export function CollectionArticleSection({
                       className="grid"
                       style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
                     >
-                      <div
-                        className={`min-h-0 overflow-hidden ${open ? "bg-slate-50/95" : ""}`}
-                      >
+                      <div className={`min-h-0 overflow-hidden ${open ? "bg-slate-50/95" : ""}`}>
                         <ExplorerArticleBody item={item} embedded showInsetClose={false} />
                       </div>
                     </div>

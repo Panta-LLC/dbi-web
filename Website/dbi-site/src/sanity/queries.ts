@@ -167,6 +167,11 @@ export const pageByPathQuery = groq`
         "imageSrc": image.asset->url,
         imageAlt,
         href,
+        "articleCtas": articleCtas[]{
+          _key,
+          hierarchy,
+          "cta": cta{${ctaActionFields}}
+        },
         "cardCta": cardCta{${ctaActionFields}}
       },
       "imageItems": items[]{

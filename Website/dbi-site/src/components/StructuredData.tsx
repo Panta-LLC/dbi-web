@@ -12,7 +12,10 @@ type SiteFooter = {
 function parseOrgSameAsFromEnv(): string[] {
   const raw = process.env.NEXT_PUBLIC_ORG_SAME_AS?.trim();
   if (!raw) return [];
-  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 export async function StructuredData() {
@@ -37,7 +40,7 @@ export async function StructuredData() {
     {
       "@type": "ContactPoint" as const,
       contactType: "customer service",
-      ...(email ? { email } : { email: "info@deltabayimpact.org" }),
+      ...(email ? { email } : { email: "damonjhastings@gmail.com" }),
       ...(phone ? { telephone: phone } : {}),
       availableLanguage: ["English"],
     },

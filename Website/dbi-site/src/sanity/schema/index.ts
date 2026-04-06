@@ -12,6 +12,7 @@ import { ctaAction } from "./objects/ctaAction";
 import { ctaActionOptional } from "./objects/ctaActionOptional";
 import { cardGridSection } from "./objects/cardGridSection";
 import { collectionArticleItem } from "./objects/collectionArticleItem";
+import { collectionArticleItemCta } from "./objects/collectionArticleItemCta";
 import { collectionArticleSection } from "./objects/collectionArticleSection";
 import { contactSection } from "./objects/contactSection";
 import { carouselSettings } from "./objects/carouselSettings";
@@ -49,6 +50,7 @@ export const schemaTypes = [
   testimonialSliderSection,
   newsletterSignupSection,
   cardGridSection,
+  collectionArticleItemCta,
   collectionArticleItem,
   collectionArticleSection,
   imageCardGridSection,

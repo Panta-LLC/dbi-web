@@ -12,17 +12,26 @@ import {
 import { sanityClient } from "@/sanity/client";
 import { contactFormDefinitionByIdQuery } from "@/sanity/queries";
 
-const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_HOST = process.env.SMTP_HOST?.trim();
 const SMTP_PORT = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL;
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? SMTP_USER;
+const SMTP_USER = process.env.SMTP_USER?.trim();
+const SMTP_PASS = process.env.SMTP_PASS?.trim();
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL?.trim();
+/** Envelope From; falls back to SMTP user when unset or blank. */
+const CONTACT_FROM_EMAIL =
+  process.env.CONTACT_FROM_EMAIL?.trim() || SMTP_USER || undefined;
+
+function missingContactEnvVars(): string[] {
+  const missing: string[] = [];
+  if (!SMTP_HOST) missing.push("SMTP_HOST");
+  if (!SMTP_USER) missing.push("SMTP_USER");
+  if (!SMTP_PASS) missing.push("SMTP_PASS");
+  if (!CONTACT_TO_EMAIL) missing.push("CONTACT_TO_EMAIL");
+  return missing;
+}
 
 function isConfigured(): boolean {
-  return Boolean(
-    SMTP_HOST && CONTACT_TO_EMAIL && CONTACT_FROM_EMAIL && SMTP_USER && SMTP_PASS,
-  );
+  return missingContactEnvVars().length === 0;
 }
 
 function createTransporter() {
@@ -51,7 +60,11 @@ async function fetchContactFormDefinition(id: string) {
 export async function POST(request: Request) {
   if (!isConfigured()) {
     return NextResponse.json(
-      { error: "Contact form is not configured." },
+      {
+        error:
+          "Contact form email is not configured. Set SMTP and inbox env vars on the server (see .env.example).",
+        missing: missingContactEnvVars(),
+      },
       { status: 503 },
     );
   }

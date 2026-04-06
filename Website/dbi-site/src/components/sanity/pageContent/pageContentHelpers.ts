@@ -1,3 +1,4 @@
+import type { ButtonVariant } from "@/components/Button";
 import type { ProgramCardItem } from "@/components/ProgramCards";
 import type { HeroSplitPalette } from "@/components/HeroSplitStatic";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
@@ -175,6 +176,19 @@ export function mapGridCardCta(
     return { kind: "link", label: cardCta.label.trim(), href };
   }
 
+  /** Link with URL but empty label — `isLinkCta` is false; tertiary rows often omit the label. */
+  if (cardCta) {
+    const kind = cardCta.kind ?? "link";
+    if (kind !== "contactForm") {
+      const hrefRaw = typeof cardCta.href === "string" ? cardCta.href.trim() : "";
+      const resolvedHref = resolveHref(hrefRaw || undefined, donateUrl) ?? fallback;
+      const label = typeof cardCta.label === "string" ? cardCta.label.trim() : "";
+      if (resolvedHref) {
+        return { kind: "link", label: label || "Learn more", href: resolvedHref };
+      }
+    }
+  }
+
   const sectionResolved = resolveSanityContactFormCta(sectionCta);
   if (sectionResolved) {
     return gridCardContactFromResolved(sectionResolved);
@@ -191,6 +205,49 @@ export function mapGridCardCta(
   }
 
   return undefined;
+}
+
+export function collectionArticleHierarchyToVariant(hierarchy: string | undefined): ButtonVariant {
+  const h = hierarchy?.trim().toLowerCase();
+  if (h === "secondary") return "cta-secondary";
+  if (h === "tertiary") return "nav-secondary";
+  return "cta-primary";
+}
+
+type CollectionArticleCtaRowInput = {
+  hierarchy?: string;
+  cta?: SanityCtaAction;
+};
+
+type CollectionArticleItemCtaInput = {
+  cardCta?: SanityCtaAction;
+  href?: string;
+  articleCtas?: CollectionArticleCtaRowInput[];
+};
+
+/**
+ * Resolves ordered CTAs for a collection article item. Uses **articleCtas** when any row
+ * resolves to a usable action; otherwise falls back to **cardCta** / section / **href** (same as `mapGridCardCta`).
+ */
+export function mapCollectionArticleCtas(
+  item: CollectionArticleItemCtaInput,
+  sectionCta: SanityCtaAction | undefined,
+  donateUrl: string | null | undefined,
+): Array<{ variant: ButtonVariant; cta: GridCardCtaResolved }> {
+  const rows = item.articleCtas ?? [];
+  const list: Array<{ variant: ButtonVariant; cta: GridCardCtaResolved }> = [];
+  for (const row of rows) {
+    const resolved = mapGridCardCta({ cardCta: row.cta, href: undefined }, undefined, donateUrl);
+    if (!resolved) continue;
+    list.push({
+      variant: collectionArticleHierarchyToVariant(row.hierarchy),
+      cta: resolved,
+    });
+  }
+  if (list.length > 0) return list;
+  const single = mapGridCardCta(item, sectionCta, donateUrl);
+  if (single) return [{ variant: "cta-primary", cta: single }];
+  return [];
 }
 
 export function heroGallerySlides(block: ContentBlock): { src: string; alt?: string }[] {
