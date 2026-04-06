@@ -1,6 +1,10 @@
 import type { CarouselSettings } from "@/components/carousel";
 import type { SanityImageSource } from "@sanity/image-url";
-import type { SanityCtaAction } from "@/lib/sanity-cta-action";
+import type {
+  SanityContactFormDefinitionRef,
+  SanityContactFormPreset,
+  SanityCtaAction,
+} from "@/lib/sanity-cta-action";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export type Cta = {
@@ -102,4 +106,14 @@ export type ContentBlock = {
   imagePosition?: "left" | "right";
   backgroundColor?: string;
   ctas?: Cta[];
+  /** `contactSection` block */
+  contactIntro?: string;
+  generalListLabel?: string;
+  generalFormId?: string;
+  generalMessageContext?: string;
+  generalModalTitle?: string;
+  generalModalDescription?: string;
+  generalSuccessMessage?: string;
+  generalContactFormDefinition?: SanityContactFormDefinitionRef | null;
+  formCtas?: SanityContactFormPreset[];
 };

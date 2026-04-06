@@ -3,22 +3,38 @@
 import Image from "next/image";
 import React, { forwardRef } from "react";
 import { CtaModalForm } from "@/components/cta-modal-form";
+import type { ContactFormFieldDef } from "@/lib/contact-form-fields";
 import type { ContactPlaceholders, Presentation } from "@/components/cta-modal-form/types";
 import { Link } from "@/components/Link";
 
 const DEFAULT_HOVER_COLOR = "#ff7900";
 
-export type ProgramCardContactModal = {
-  formId: string;
-  triggerLabel: string;
-  presentation: Presentation;
-  messageContext?: string;
-  title?: string;
-  description?: string;
-  placeholders: ContactPlaceholders;
-  submitLabel: string;
-  successMessage?: string;
-};
+export type ProgramCardContactModal =
+  | {
+      formId: string;
+      triggerLabel: string;
+      presentation: Presentation;
+      messageContext?: string;
+      title?: string;
+      description?: string;
+      successMessage?: string;
+      formLayout: "legacy";
+      placeholders: ContactPlaceholders;
+      submitLabel: string;
+    }
+  | {
+      formId: string;
+      triggerLabel: string;
+      presentation: Presentation;
+      messageContext?: string;
+      title?: string;
+      description?: string;
+      successMessage?: string;
+      formLayout: "dynamic";
+      contactFormDefinitionId: string;
+      dynamicFields: ContactFormFieldDef[];
+      submitLabel: string;
+    };
 
 export type ProgramCardItem = {
   title: string;
@@ -123,7 +139,12 @@ function ProgramCard({ item }: { item: ProgramCardItem }) {
         messageContext={m.messageContext}
         title={m.title}
         description={m.description}
-        placeholders={m.placeholders}
+        {...(m.formLayout === "dynamic"
+          ? {
+              contactFormDefinitionId: m.contactFormDefinitionId,
+              dynamicFields: m.dynamicFields,
+            }
+          : { placeholders: m.placeholders })}
         submitLabel={m.submitLabel}
         successMessage={m.successMessage}
         customTrigger={

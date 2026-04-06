@@ -9,6 +9,13 @@ const presentationOptions = [
   { title: "Popover (anchored to button)", value: "popover" },
 ];
 
+function hasContactFormRef(parent: { contactFormRef?: unknown } | undefined): boolean {
+  const ref = parent?.contactFormRef;
+  return Boolean(
+    ref && typeof ref === "object" && "_ref" in ref && (ref as { _ref?: string })._ref,
+  );
+}
+
 /**
  * Same shape as `ctaAction` but all fields optional (no required validation).
  * Used by card grid section so editors can save incomplete CTAs while drafting.
@@ -43,6 +50,15 @@ export const ctaActionOptional = defineType({
       type: "string",
       description: "Internal path (e.g. /services) or https://…",
       hidden: ({ parent }) => parent?.kind === "contactForm",
+    }),
+    defineField({
+      name: "contactFormRef",
+      title: "Contact Form",
+      type: "reference",
+      to: [{ type: "contactFormDefinition" }],
+      description:
+        "Optional. Use a saved Contact Form for field labels instead of defining them below.",
+      hidden: ({ parent }) => parent?.kind !== "contactForm",
     }),
     defineField({
       name: "formId",
@@ -87,9 +103,11 @@ export const ctaActionOptional = defineType({
     }),
     defineField({
       name: "contactForm",
-      title: "Form fields",
+      title: "Form fields (inline)",
       type: "contactFormOptional",
-      hidden: ({ parent }) => parent?.kind !== "contactForm",
+      description: "Used when no Contact Form document is selected above.",
+      hidden: ({ parent }) =>
+        parent?.kind !== "contactForm" || hasContactFormRef(parent),
     }),
   ],
 });

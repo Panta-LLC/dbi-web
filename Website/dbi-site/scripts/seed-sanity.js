@@ -5,6 +5,9 @@
  * Some documents use legacy `_type` values (e.g. homePage) that are not registered in
  * `src/sanity/schema/index.ts`. Prefer `page` documents for Studio-managed routes; use
  * `pnpm sanity:type-counts` to audit legacy types in a dataset.
+ *
+ * Contact Form / CTA payloads and `page-contact` are shared from `contact-forms-seed-data.cjs`
+ * (also used by `pnpm seed:sanity:contact`).
  */
 require("dotenv").config({ path: ".env.local" });
 require("dotenv").config({ path: ".env" });
@@ -30,11 +33,12 @@ const client = createClient({
   useCdn: false,
 });
 
-const withKeys = (items, prefix) =>
-  items.map((item, index) => ({
-    _key: `${prefix}-${index}`,
-    ...item,
-  }));
+const {
+  withKeys,
+  contactFormDefinitionsSeed,
+  contactFormCtasSeed,
+  pageContactDocument,
+} = require("./contact-forms-seed-data.cjs");
 
 const documents = [
   {
@@ -813,32 +817,17 @@ const documents = [
       "donate-page-content",
     ),
   },
-  {
-    _id: "page-contact",
-    _type: "page",
-    title: "Contact",
-    lead: "Let's connect",
-    description:
-      "Questions about partnership, programs, or support? Reach out to our team and we will follow up quickly.",
-    layout: "contentPage",
-    path: "/contact",
-    content: withKeys(
-      [
-        {
-          _type: "ctaButtonSection",
-          buttonVariant: "primary",
-          cta: { label: "Email us", href: "mailto:info@deltabayimpact.org" },
-        },
-      ],
-      "contact-page-content",
-    ),
-  },
+  pageContactDocument,
 ];
 
 async function run() {
-  const documentsToSeed = documents.filter((doc) => doc._type === "site" || doc._type === "page");
-  const results = await Promise.all(documentsToSeed.map((doc) => client.createOrReplace(doc)));
-  console.log(`Seeded ${results.length} documents.`);
+  await Promise.all(contactFormDefinitionsSeed.map((doc) => client.createOrReplace(doc)));
+  await Promise.all(contactFormCtasSeed.map((doc) => client.createOrReplace(doc)));
+  const siteAndPages = documents.filter((doc) => doc._type === "site" || doc._type === "page");
+  const results = await Promise.all(siteAndPages.map((doc) => client.createOrReplace(doc)));
+  console.log(
+    `Seeded ${contactFormDefinitionsSeed.length} contact forms, ${contactFormCtasSeed.length} contact CTAs, ${results.length} site/pages.`,
+  );
 }
 
 run().catch((error) => {

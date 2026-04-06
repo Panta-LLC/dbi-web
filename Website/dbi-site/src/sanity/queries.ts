@@ -14,6 +14,28 @@ const contactFormFields = `
   submitLabel
 `;
 
+const contactFormDefinitionProjection = `
+  _id,
+  adminTitle,
+  submitLabel,
+  fieldDefinitions[]{ name, fieldType, label, placeholder, required, selectOptions, rows },
+  fields{${contactFormFields}}
+`;
+
+const contactFormCtaDocumentFields = `
+  _id,
+  listLabel,
+  listDescription,
+  label,
+  formId,
+  messageContext,
+  modalTitle,
+  modalDescription,
+  presentation,
+  successMessage,
+  "contactFormDefinition": contactFormRef->{${contactFormDefinitionProjection}}
+`;
+
 const ctaActionFields = `
   kind,
   label,
@@ -24,7 +46,13 @@ const ctaActionFields = `
   modalDescription,
   presentation,
   successMessage,
-  contactForm{${contactFormFields}}
+  contactForm{${contactFormFields}},
+  "contactFormRef": contactFormRef->{${contactFormDefinitionProjection}}
+`;
+
+/** Server-side validation for dynamic contact submissions (`POST /api/contact`). */
+export const contactFormDefinitionByIdQuery = groq`
+  *[_type == "contactFormDefinition" && _id == $id][0]{${contactFormDefinitionProjection}}
 `;
 
 export const pageByPathQuery = groq`
@@ -150,7 +178,16 @@ export const pageByPathQuery = groq`
         "cardCta": cardCta{${ctaActionFields}}
       },
       "textCta": cta{${ctaFields}},
-      "ctaButton": cta{${ctaFields}}
+      "ctaButton": cta{${ctaFields}},
+      contactIntro,
+      generalListLabel,
+      generalFormId,
+      generalMessageContext,
+      generalModalTitle,
+      generalModalDescription,
+      generalSuccessMessage,
+      "generalContactFormDefinition": generalContactFormRef->{${contactFormDefinitionProjection}},
+      "formCtas": formCtas[]->{${contactFormCtaDocumentFields}}
     }
   }
 `;

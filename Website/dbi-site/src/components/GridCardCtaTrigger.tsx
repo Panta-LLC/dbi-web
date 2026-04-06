@@ -25,6 +25,26 @@ export function GridCardCtaTrigger({
       </Button>
     );
   }
+
+  if (cta.formLayout === "dynamic") {
+    return (
+      <CtaModalForm
+        presentation={cta.presentation}
+        formId={cta.formId}
+        triggerLabel={cta.triggerLabel}
+        messageContext={cta.messageContext}
+        title={cta.title}
+        description={cta.description}
+        submitLabel={cta.submitLabel}
+        successMessage={cta.successMessage}
+        triggerVariant={triggerVariant}
+        className={className}
+        contactFormDefinitionId={cta.contactFormDefinitionId}
+        dynamicFields={cta.dynamicFields}
+      />
+    );
+  }
+
   return (
     <CtaModalForm
       presentation={cta.presentation}

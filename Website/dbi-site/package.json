@@ -9,13 +9,12 @@
     "lint": "eslint",
     "sanity": "sanity",
     "seed:sanity": "node scripts/seed-sanity.js",
+    "seed:sanity:contact": "node scripts/seed-contact-forms.js",
     "sanity:type-counts": "node scripts/sanity-type-counts.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@portabletext/react": "^6.0.3",
-    "@portabletext/types": "^4.0.2",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-popover": "^1.1.15",
     "@sanity/client": "^7.18.0",

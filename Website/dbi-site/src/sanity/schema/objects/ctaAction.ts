@@ -9,6 +9,13 @@ const presentationOptions = [
   { title: "Popover (anchored to button)", value: "popover" },
 ];
 
+function hasContactFormRef(parent: { contactFormRef?: unknown } | undefined): boolean {
+  const ref = parent?.contactFormRef;
+  return Boolean(
+    ref && typeof ref === "object" && "_ref" in ref && (ref as { _ref?: string })._ref,
+  );
+}
+
 export const ctaAction = defineType({
   name: "ctaAction",
   title: "CTA",
@@ -40,6 +47,15 @@ export const ctaAction = defineType({
       type: "string",
       description: "Internal path (e.g. /services) or https://…",
       hidden: ({ parent }) => parent?.kind === "contactForm",
+    }),
+    defineField({
+      name: "contactFormRef",
+      title: "Contact Form",
+      type: "reference",
+      to: [{ type: "contactFormDefinition" }],
+      description:
+        "Optional. Use a saved Contact Form for field labels instead of defining them below.",
+      hidden: ({ parent }) => parent?.kind !== "contactForm",
     }),
     defineField({
       name: "formId",
@@ -84,9 +100,11 @@ export const ctaAction = defineType({
     }),
     defineField({
       name: "contactForm",
-      title: "Form fields",
+      title: "Form fields (inline)",
       type: "contactForm",
-      hidden: ({ parent }) => parent?.kind !== "contactForm",
+      description: "Used when no Contact Form document is selected above.",
+      hidden: ({ parent }) =>
+        parent?.kind !== "contactForm" || hasContactFormRef(parent),
     }),
   ],
   validation: (Rule) =>
@@ -99,9 +117,16 @@ export const ctaAction = defineType({
         return true;
       }
       if (kind === "contactForm") {
+        const hasRef = Boolean(
+          value.contactFormRef &&
+            typeof value.contactFormRef === "object" &&
+            "_ref" in value.contactFormRef &&
+            (value.contactFormRef as { _ref?: string })._ref,
+        );
         const formId = typeof value.formId === "string" ? value.formId.trim() : "";
         if (!formId) return "Form ID is required for contact form actions.";
-        if (!value.contactForm) return "Form field copy is required.";
+        if (hasRef) return true;
+        if (!value.contactForm) return "Form field copy is required, or choose a Contact Form document.";
         return true;
       }
       return true;

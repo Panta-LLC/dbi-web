@@ -1,0 +1,428 @@
+/**
+ * Shared payloads for Contact Form / Contact CTA documents and the /contact page.
+ * Used by scripts/seed-sanity.js and scripts/seed-contact-forms.js.
+ * See CONTACT_FORMS_INQUIRY_TYPES.md.
+ */
+
+const withKeys = (items, prefix) =>
+  items.map((item, index) => ({
+    _key: `${prefix}-${index}`,
+    ...item,
+  }));
+
+const contactFormDefinitionsSeed = [
+  {
+    _id: "contact-form-general",
+    _type: "contactFormDefinition",
+    adminTitle: "Contact — General inquiry",
+    submitLabel: "Send message",
+    fieldDefinitions: withKeys(
+      [
+        {
+          name: "first_name",
+          fieldType: "text",
+          label: "First name",
+          placeholder: "First name",
+          required: true,
+        },
+        {
+          name: "last_name",
+          fieldType: "text",
+          label: "Last name",
+          placeholder: "Last name",
+          required: true,
+        },
+        {
+          name: "email",
+          fieldType: "email",
+          label: "Email",
+          placeholder: "you@example.com",
+          required: true,
+        },
+        {
+          name: "organization",
+          fieldType: "text",
+          label: "Organization",
+          placeholder: "School, org, or Individual",
+          required: false,
+        },
+        {
+          name: "topic",
+          fieldType: "select",
+          label: "Topic",
+          placeholder: "Select a topic (optional)",
+          required: false,
+          selectOptions: [
+            "General question",
+            "Programs",
+            "Media",
+            "Other",
+          ],
+        },
+        {
+          name: "message",
+          fieldType: "textarea",
+          label: "Message",
+          placeholder: "Your question or request",
+          required: true,
+          rows: 5,
+        },
+      ],
+      "cf-general-field",
+    ),
+  },
+  {
+    _id: "contact-form-partnership",
+    _type: "contactFormDefinition",
+    adminTitle: "Contact — Partnership",
+    submitLabel: "Submit partnership inquiry",
+    fieldDefinitions: withKeys(
+      [
+        {
+          name: "first_name",
+          fieldType: "text",
+          label: "First name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "last_name",
+          fieldType: "text",
+          label: "Last name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "email",
+          fieldType: "email",
+          label: "Email",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "organization",
+          fieldType: "text",
+          label: "Organization",
+          placeholder: "School or organization name",
+          required: true,
+        },
+        {
+          name: "role_title",
+          fieldType: "text",
+          label: "Your role / title",
+          placeholder: "",
+          required: false,
+        },
+        {
+          name: "partnership_interest",
+          fieldType: "textarea",
+          label: "Partnership interest",
+          placeholder: "What partnership or collaboration are you interested in?",
+          required: true,
+          rows: 4,
+        },
+        {
+          name: "timeline",
+          fieldType: "text",
+          label: "Timeline",
+          placeholder: "e.g. Fall 2026",
+          required: false,
+        },
+      ],
+      "cf-partnership-field",
+    ),
+  },
+  {
+    _id: "contact-form-sponsorship",
+    _type: "contactFormDefinition",
+    adminTitle: "Contact — Sponsorship",
+    submitLabel: "Send sponsorship inquiry",
+    fieldDefinitions: withKeys(
+      [
+        {
+          name: "first_name",
+          fieldType: "text",
+          label: "First name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "last_name",
+          fieldType: "text",
+          label: "Last name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "email",
+          fieldType: "email",
+          label: "Email",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "organization",
+          fieldType: "text",
+          label: "Organization",
+          placeholder: "Company or organization",
+          required: true,
+        },
+        {
+          name: "sponsorship_level",
+          fieldType: "select",
+          label: "Sponsorship level",
+          placeholder: "Select level (optional)",
+          required: false,
+          selectOptions: ["Event", "Annual", "In-kind"],
+        },
+        {
+          name: "message",
+          fieldType: "textarea",
+          label: "Message",
+          placeholder: "Goals, budget band, or questions",
+          required: true,
+          rows: 5,
+        },
+      ],
+      "cf-sponsorship-field",
+    ),
+  },
+  {
+    _id: "contact-form-volunteer",
+    _type: "contactFormDefinition",
+    adminTitle: "Contact — Volunteer",
+    submitLabel: "Send volunteer interest",
+    fieldDefinitions: withKeys(
+      [
+        {
+          name: "first_name",
+          fieldType: "text",
+          label: "First name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "last_name",
+          fieldType: "text",
+          label: "Last name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "email",
+          fieldType: "email",
+          label: "Email",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "phone",
+          fieldType: "text",
+          label: "Phone",
+          placeholder: "",
+          required: false,
+        },
+        {
+          name: "skills_interests",
+          fieldType: "textarea",
+          label: "Skills & interests",
+          placeholder: "What skills or interests do you want to contribute?",
+          required: true,
+          rows: 4,
+        },
+        {
+          name: "availability",
+          fieldType: "text",
+          label: "Availability",
+          placeholder: "e.g. weekdays, evenings",
+          required: false,
+        },
+        {
+          name: "background",
+          fieldType: "textarea",
+          label: "Background",
+          placeholder: "Relevant experience (optional)",
+          required: false,
+          rows: 3,
+        },
+      ],
+      "cf-volunteer-field",
+    ),
+  },
+  {
+    _id: "contact-form-advisory-board",
+    _type: "contactFormDefinition",
+    adminTitle: "Contact — Advisory & board",
+    submitLabel: "Send inquiry",
+    fieldDefinitions: withKeys(
+      [
+        {
+          name: "first_name",
+          fieldType: "text",
+          label: "First name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "last_name",
+          fieldType: "text",
+          label: "Last name",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "email",
+          fieldType: "email",
+          label: "Email",
+          placeholder: "",
+          required: true,
+        },
+        {
+          name: "organization",
+          fieldType: "text",
+          label: "Organization",
+          placeholder: "Current or past affiliation (optional)",
+          required: false,
+        },
+        {
+          name: "expertise",
+          fieldType: "textarea",
+          label: "Relevant experience",
+          placeholder: "Brief background relevant to governance or advisory work",
+          required: true,
+          rows: 4,
+        },
+        {
+          name: "involvement_type",
+          fieldType: "select",
+          label: "Involvement type",
+          placeholder: "Select type (optional)",
+          required: false,
+          selectOptions: ["Advisory", "Board", "Committee"],
+        },
+        {
+          name: "message",
+          fieldType: "textarea",
+          label: "Additional context",
+          placeholder: "",
+          required: false,
+          rows: 4,
+        },
+      ],
+      "cf-advisory-field",
+    ),
+  },
+];
+
+const contactFormCtasSeed = [
+  {
+    _id: "contact-cta-partnership",
+    _type: "contactFormCta",
+    adminTitle: "CTA — Partnership",
+    listLabel: "Partnership",
+    listDescription: "Schools, orgs, and collaborators",
+    label: "Partnership",
+    formId: "contact-partnership",
+    messageContext: "Contact page — Partnership",
+    modalTitle: "Partnership inquiry",
+    modalDescription:
+      "Tell us about your organization and how we might work together.",
+    presentation: "dialog",
+    successMessage: "Thanks — we'll be in touch.",
+    contactFormRef: { _type: "reference", _ref: "contact-form-partnership" },
+  },
+  {
+    _id: "contact-cta-sponsorship",
+    _type: "contactFormCta",
+    adminTitle: "CTA — Sponsorship",
+    listLabel: "Sponsorship",
+    listDescription: "Brands and supporters",
+    label: "Sponsorship",
+    formId: "contact-sponsorship",
+    messageContext: "Contact page — Sponsorship",
+    modalTitle: "Sponsorship inquiry",
+    modalDescription: "Share your goals and we'll follow up with options.",
+    presentation: "dialog",
+    successMessage: "Thanks — we'll be in touch.",
+    contactFormRef: { _type: "reference", _ref: "contact-form-sponsorship" },
+  },
+  {
+    _id: "contact-cta-volunteer",
+    _type: "contactFormCta",
+    adminTitle: "CTA — Volunteer",
+    listLabel: "Volunteer",
+    listDescription: "Mentors and helpers",
+    label: "Volunteer",
+    formId: "contact-volunteer",
+    messageContext: "Contact page — Volunteer",
+    modalTitle: "Volunteer inquiry",
+    modalDescription: "Tell us how you'd like to contribute.",
+    presentation: "dialog",
+    successMessage: "Thanks — we'll be in touch.",
+    contactFormRef: { _type: "reference", _ref: "contact-form-volunteer" },
+  },
+  {
+    _id: "contact-cta-advisory-board",
+    _type: "contactFormCta",
+    adminTitle: "CTA — Advisory / Board",
+    listLabel: "Advisory & board",
+    listDescription: "Governance and leadership",
+    label: "Advisory & board",
+    formId: "contact-advisory-board",
+    messageContext: "Contact page — Advisory & board",
+    modalTitle: "Advisory / Board inquiry",
+    modalDescription: "Share your background and interest in serving.",
+    presentation: "dialog",
+    successMessage: "Thanks — we'll be in touch.",
+    contactFormRef: { _type: "reference", _ref: "contact-form-advisory-board" },
+  },
+];
+
+const pageContactDocument = {
+  _id: "page-contact",
+  _type: "page",
+  title: "Contact",
+  lead: "Let's connect",
+  description:
+    "Questions about partnership, programs, or support? Reach out to our team and we will follow up quickly.",
+  layout: "contentPage",
+  path: "/contact",
+  content: withKeys(
+    [
+      {
+        _type: "contactSection",
+        title: "Contact us",
+        contactIntro:
+          "Choose the type of inquiry that fits best. We'll respond as soon as we can.",
+        generalListLabel: "General contact",
+        generalFormId: "contact-general",
+        generalMessageContext: "Contact page — General inquiry",
+        generalModalTitle: "Send us a message",
+        generalModalDescription:
+          "Questions about programs, partnerships, or support? We're here to help.",
+        generalSuccessMessage: "Thanks — your message has been sent.",
+        generalContactFormRef: {
+          _type: "reference",
+          _ref: "contact-form-general",
+        },
+        formCtas: withKeys(
+          [
+            { _type: "reference", _ref: "contact-cta-partnership" },
+            { _type: "reference", _ref: "contact-cta-sponsorship" },
+            { _type: "reference", _ref: "contact-cta-volunteer" },
+            { _type: "reference", _ref: "contact-cta-advisory-board" },
+          ],
+          "contact-cta-ref",
+        ),
+      },
+    ],
+    "contact-page-content",
+  ),
+};
+
+module.exports = {
+  withKeys,
+  contactFormDefinitionsSeed,
+  contactFormCtasSeed,
+  pageContactDocument,
+};

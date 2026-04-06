@@ -1,5 +1,7 @@
 /** Shared validation + formatting for POST /api/contact */
 
+import type { ContactFormFieldDef } from "@/lib/contact-form-fields";
+
 export const CONTACT_API_PATH = "/api/contact";
 
 /** Form id for newsletter signups via CtaModalForm (see NewsletterSignup). */
@@ -20,10 +22,12 @@ export const MAX_LEN = {
   email: 320,
   organization: 200,
   message: 5000,
+  dynamicFieldValue: 5000,
   formId: 64,
   triggerLabel: 160,
   messageContext: 240,
   selfIdentification: 120,
+  contactFormDefinitionId: 128,
 } as const;
 
 export type ContactPayload = {
@@ -40,6 +44,16 @@ export type ContactPayload = {
   selfIdentification: string;
   message: string;
   /** Honeypot — must be empty */
+  website?: string;
+};
+
+/** Custom Contact Form definition submissions (keys match CMS field keys). */
+export type DynamicContactPayload = {
+  formId: string;
+  triggerLabel: string;
+  messageContext?: string;
+  contactFormDefinitionId: string;
+  dynamicFields: Record<string, string>;
   website?: string;
 };
 
@@ -60,6 +74,10 @@ export function validateContactBody(body: unknown): ContactValidationResult {
   }
 
   const o = body as Record<string, unknown>;
+
+  if (typeof o.contactFormDefinitionId === "string" && o.contactFormDefinitionId.trim() !== "") {
+    return { ok: false, error: "Use the dynamic contact payload for this form.", status: 400 };
+  }
 
   const website = trimStr(o.website, 200);
   if (website.length > 0) {
@@ -119,6 +137,147 @@ export function validateContactBody(body: unknown): ContactValidationResult {
       message,
     },
   };
+}
+
+export type DynamicContactValidationResult =
+  | { ok: true; data: DynamicContactPayload }
+  | { ok: false; error: string; status: number };
+
+/**
+ * Validates POST body for CMS-defined fields. Pass the same field list as the Contact Form document
+ * (after `normalizeContactFormFieldDefinitions`).
+ */
+export function validateDynamicContactBody(
+  body: unknown,
+  definitionFields: ContactFormFieldDef[],
+): DynamicContactValidationResult {
+  if (body === null || typeof body !== "object") {
+    return { ok: false, error: "Invalid request body.", status: 400 };
+  }
+
+  const o = body as Record<string, unknown>;
+
+  const website = trimStr(o.website, 200);
+  if (website.length > 0) {
+    return { ok: false, error: "Invalid request.", status: 400 };
+  }
+
+  const formId = trimStr(o.formId, MAX_LEN.formId);
+  const triggerLabel = trimStr(o.triggerLabel, MAX_LEN.triggerLabel);
+  const messageContextRaw = trimStr(o.messageContext, MAX_LEN.messageContext);
+  const messageContext = messageContextRaw.length > 0 ? messageContextRaw : undefined;
+  const contactFormDefinitionId = trimStr(o.contactFormDefinitionId, MAX_LEN.contactFormDefinitionId);
+
+  if (!formId) {
+    return { ok: false, error: "Form identifier is required.", status: 400 };
+  }
+  if (!triggerLabel) {
+    return { ok: false, error: "Trigger label is required.", status: 400 };
+  }
+  if (!contactFormDefinitionId) {
+    return { ok: false, error: "Contact form definition is required.", status: 400 };
+  }
+
+  if (o.dynamicFields === null || typeof o.dynamicFields !== "object" || Array.isArray(o.dynamicFields)) {
+    return { ok: false, error: "Invalid field data.", status: 400 };
+  }
+
+  const rawFields = o.dynamicFields as Record<string, unknown>;
+  const allowedNames = new Set(definitionFields.map((f) => f.name));
+
+  for (const key of Object.keys(rawFields)) {
+    if (!allowedNames.has(key)) {
+      return { ok: false, error: "Unexpected field in submission.", status: 400 };
+    }
+  }
+
+  const dynamicFields: Record<string, string> = {};
+
+  for (const def of definitionFields) {
+    const raw = rawFields[def.name];
+    const s =
+      typeof raw === "string" ? raw.trim().slice(0, MAX_LEN.dynamicFieldValue) : "";
+    if (def.required && !s) {
+      return { ok: false, error: `${def.label} is required.`, status: 400 };
+    }
+    if (def.fieldType === "email" && s) {
+      const lower = s.toLowerCase();
+      if (!emailRegex.test(lower)) {
+        return { ok: false, error: "Please enter a valid email address.", status: 400 };
+      }
+      dynamicFields[def.name] = lower;
+      continue;
+    }
+    if (def.fieldType === "select" && s) {
+      const opts = def.selectOptions ?? [];
+      if (opts.length > 0 && !opts.includes(s)) {
+        return { ok: false, error: "Invalid selection.", status: 400 };
+      }
+    }
+    dynamicFields[def.name] = s;
+  }
+
+  return {
+    ok: true,
+    data: {
+      formId,
+      triggerLabel,
+      ...(messageContext !== undefined && { messageContext }),
+      contactFormDefinitionId,
+      dynamicFields,
+    },
+  };
+}
+
+export function buildContactEmailPartsDynamic(
+  data: DynamicContactPayload,
+  definitionFields: ContactFormFieldDef[],
+): { subject: string; text: string; html: string; replyTo: string | undefined } {
+  const esc = escapeHtml;
+  const lines: string[] = [
+    `Form: ${data.formId}`,
+    `CTA: ${data.triggerLabel}`,
+    ...(data.messageContext ? [`Context: ${data.messageContext}`] : []),
+    `Contact Form definition: ${data.contactFormDefinitionId}`,
+    "",
+  ];
+
+  let replyTo: string | undefined;
+  const htmlRows: string[] = [];
+
+  for (const def of definitionFields) {
+    const v = data.dynamicFields[def.name] ?? "";
+    lines.push(`${def.label}: ${v || "(not provided)"}`);
+    htmlRows.push(
+      `<tr><td style="padding:4px 8px;font-weight:bold;vertical-align:top;">${esc(def.label)}</td><td style="padding:4px 8px;">${v ? esc(v) : "<em>Not provided</em>"}</td></tr>`,
+    );
+    if (def.fieldType === "email" && v && !replyTo) {
+      replyTo = v;
+    }
+  }
+
+  const text = lines.join("\n");
+
+  const subjectLead =
+    replyTo ||
+    definitionFields.map((d) => data.dynamicFields[d.name]).find((x) => x && x.trim()) ||
+    data.formId;
+  const subject = `[DBI Website] ${data.triggerLabel} — ${subjectLead}`;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
+<table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
+<tr><td style="padding:4px 8px;font-weight:bold;">Form</td><td style="padding:4px 8px;">${esc(data.formId)}</td></tr>
+<tr><td style="padding:4px 8px;font-weight:bold;">CTA</td><td style="padding:4px 8px;">${esc(data.triggerLabel)}</td></tr>
+${
+  data.messageContext
+    ? `<tr><td style="padding:4px 8px;font-weight:bold;vertical-align:top;">Context</td><td style="padding:4px 8px;">${esc(data.messageContext)}</td></tr>`
+    : ""
+}
+${htmlRows.join("")}
+</table>
+</body></html>`;
+
+  return { subject, text, html, replyTo };
 }
 
 export function escapeHtml(s: string): string {

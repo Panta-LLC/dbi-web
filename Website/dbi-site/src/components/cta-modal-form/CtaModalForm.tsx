@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/Button";
 import { ContactFormFields } from "./ContactFormFields";
 import { FormModalShell } from "./FormModalShell";
+import { resolveContactMessagePlaceholder } from "./messagePlaceholder";
 import type { CtaModalFormProps } from "./types";
 
 const defaultPlaceholders = {
@@ -12,20 +13,6 @@ const defaultPlaceholders = {
   email: "Email",
   organization: "Organization",
 };
-
-function resolveMessagePlaceholder(
-  triggerLabel: string,
-  messageContext: string | undefined,
-  explicit: string | undefined,
-): string {
-  if (explicit !== undefined && explicit.trim() !== "") {
-    return explicit;
-  }
-  if (messageContext !== undefined && messageContext.trim() !== "") {
-    return `What would you like to share? You used “${triggerLabel}” from ${messageContext.trim()}.`;
-  }
-  return `What would you like to share? You used “${triggerLabel}” from this page.`;
-}
 
 export function CtaModalForm({
   presentation,
@@ -42,17 +29,28 @@ export function CtaModalForm({
   defaultOpen = false,
   customTrigger,
   fieldVariant = "default",
+  contactFormDefinitionId,
+  dynamicFields,
 }: CtaModalFormProps) {
   const [open, setOpen] = useState(defaultOpen);
 
-  const mergedPlaceholders = {
-    ...defaultPlaceholders,
-    ...placeholders,
-    message:
-      fieldVariant === "newsletter"
-        ? ""
-        : resolveMessagePlaceholder(triggerLabel, messageContext, placeholders.message),
-  };
+  const isDynamic = Boolean(contactFormDefinitionId?.trim() && dynamicFields && dynamicFields.length > 0);
+
+  const mergedPlaceholders =
+    isDynamic || !placeholders
+      ? undefined
+      : {
+          ...defaultPlaceholders,
+          ...placeholders,
+          message:
+            fieldVariant === "newsletter"
+              ? ""
+              : resolveContactMessagePlaceholder(
+                  triggerLabel,
+                  messageContext,
+                  placeholders.message,
+                ),
+        };
 
   const trigger =
     customTrigger ??
@@ -82,6 +80,8 @@ export function CtaModalForm({
         onSuccess={() => {
           window.setTimeout(() => setOpen(false), 2000);
         }}
+        contactFormDefinitionId={contactFormDefinitionId}
+        dynamicFields={dynamicFields}
       />
     </FormModalShell>
   );

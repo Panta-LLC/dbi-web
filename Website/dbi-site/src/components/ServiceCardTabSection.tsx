@@ -3,7 +3,7 @@
 import { useId, useMemo, useState } from "react";
 import { Button } from "@/components/Button";
 import { ContentCard } from "@/components/ContentCard";
-import { CtaModalForm } from "@/components/cta-modal-form";
+import { GridCardCtaTrigger } from "@/components/GridCardCtaTrigger";
 import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
 import { ProgramCardCompactTab } from "@/components/ProgramCards";
 import { Container } from "@/components/Container";
@@ -41,30 +41,9 @@ type ServiceCardTabSectionProps = {
 };
 
 function DetailPanelCta({ cta }: { cta: GridCardCtaResolved }) {
-  if (cta.kind === "link") {
-    return (
-      <div className="mt-6">
-        <Button href={cta.href} variant="cta-primary" className="px-4 py-2">
-          {cta.label}
-        </Button>
-      </div>
-    );
-  }
   return (
     <div className="mt-6">
-      <CtaModalForm
-        presentation={cta.presentation}
-        formId={cta.formId}
-        triggerLabel={cta.triggerLabel}
-        messageContext={cta.messageContext}
-        title={cta.title}
-        description={cta.description}
-        placeholders={cta.placeholders}
-        submitLabel={cta.submitLabel}
-        successMessage={cta.successMessage}
-        triggerVariant="cta-primary"
-        className="px-4 py-2"
-      />
+      <GridCardCtaTrigger cta={cta} triggerVariant="cta-primary" className="px-4 py-2" />
     </div>
   );
 }

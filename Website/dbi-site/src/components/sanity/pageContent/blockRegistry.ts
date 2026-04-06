@@ -15,6 +15,7 @@ export const PAGE_CONTENT_BLOCK_TYPES = [
   "supportSection",
   "textAndCtaSection",
   "ctaButtonSection",
+  "contactSection",
 ] as const;
 
 export type PageContentBlockType = (typeof PAGE_CONTENT_BLOCK_TYPES)[number];

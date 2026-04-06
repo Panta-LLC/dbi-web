@@ -4,9 +4,10 @@ import type { GridCardCtaResolved } from "@/lib/grid-card-cta";
 import { urlForSanityImage } from "@/lib/sanity-image";
 import {
   contactFormPlaceholdersFromSanity,
-  isContactFormCta,
   isLinkCta,
   presentationFromSanity,
+  resolveSanityContactFormCta,
+  type ResolvedSanityContactFormCta,
   type SanityCtaAction,
 } from "@/lib/sanity-cta-action";
 import type { ContentBlock, Cta } from "./pageContentTypes";
@@ -52,6 +53,37 @@ export function sectionCtaLinkFallback(
   return resolveHref(href, donateUrl);
 }
 
+function gridCardContactFromResolved(resolved: ResolvedSanityContactFormCta): Extract<
+  GridCardCtaResolved,
+  { kind: "contactForm" }
+> {
+  const base = {
+    kind: "contactForm" as const,
+    formId: resolved.formId,
+    triggerLabel: resolved.triggerLabel,
+    presentation: presentationFromSanity(resolved.presentation ?? undefined),
+    messageContext: resolved.messageContext,
+    title: resolved.modalTitle,
+    description: resolved.modalDescription,
+    successMessage: resolved.successMessage,
+  };
+  if (resolved.mode === "dynamic") {
+    return {
+      ...base,
+      formLayout: "dynamic",
+      contactFormDefinitionId: resolved.contactFormDefinitionId,
+      dynamicFields: resolved.dynamicFieldDefinitions,
+      submitLabel: resolved.submitLabel,
+    };
+  }
+  return {
+    ...base,
+    formLayout: "legacy",
+    placeholders: contactFormPlaceholdersFromSanity(resolved.contactForm),
+    submitLabel: resolved.submitLabel,
+  };
+}
+
 export function mapProgramCardItem(
   item: NonNullable<ContentBlock["programItems"]>[number],
   block: ContentBlock,
@@ -62,25 +94,42 @@ export function mapProgramCardItem(
 
   const cardCta = item.cardCta;
 
-  if (cardCta && isContactFormCta(cardCta)) {
-    const cf = cardCta.contactForm;
+  const cardResolved = resolveSanityContactFormCta(cardCta);
+  if (cardResolved) {
+    const gc = gridCardContactFromResolved(cardResolved);
     return {
       title: item.title ?? "",
       imageSrc: urlForSanityImage(item.image) ?? item.imageSrc,
       imageAlt: item.imageAlt,
       hoverColor: item.hoverColor,
       href: fallback,
-      contactModal: {
-        formId: cardCta.formId.trim(),
-        triggerLabel: cardCta.label.trim(),
-        presentation: presentationFromSanity(cardCta.presentation ?? undefined),
-        messageContext: cardCta.messageContext ?? undefined,
-        title: cardCta.modalTitle ?? undefined,
-        description: cardCta.modalDescription ?? undefined,
-        placeholders: contactFormPlaceholdersFromSanity(cf),
-        submitLabel: cf.submitLabel?.trim() || "Send",
-        successMessage: cardCta.successMessage ?? undefined,
-      },
+      contactModal:
+        gc.formLayout === "dynamic"
+          ? {
+              formId: gc.formId,
+              triggerLabel: gc.triggerLabel,
+              presentation: gc.presentation,
+              messageContext: gc.messageContext,
+              title: gc.title,
+              description: gc.description,
+              successMessage: gc.successMessage,
+              formLayout: "dynamic",
+              contactFormDefinitionId: gc.contactFormDefinitionId,
+              dynamicFields: gc.dynamicFields,
+              submitLabel: gc.submitLabel,
+            }
+          : {
+              formId: gc.formId,
+              triggerLabel: gc.triggerLabel,
+              presentation: gc.presentation,
+              messageContext: gc.messageContext,
+              title: gc.title,
+              description: gc.description,
+              successMessage: gc.successMessage,
+              formLayout: "legacy",
+              placeholders: gc.placeholders,
+              submitLabel: gc.submitLabel,
+            },
     };
   }
 
@@ -111,20 +160,9 @@ export function mapGridCardCta(
 
   const cardCta = item.cardCta;
 
-  if (cardCta && isContactFormCta(cardCta)) {
-    const cf = cardCta.contactForm;
-    return {
-      kind: "contactForm",
-      formId: cardCta.formId.trim(),
-      triggerLabel: cardCta.label.trim(),
-      presentation: presentationFromSanity(cardCta.presentation ?? undefined),
-      messageContext: cardCta.messageContext ?? undefined,
-      title: cardCta.modalTitle ?? undefined,
-      description: cardCta.modalDescription ?? undefined,
-      placeholders: contactFormPlaceholdersFromSanity(cf),
-      submitLabel: cf.submitLabel?.trim() || "Send",
-      successMessage: cardCta.successMessage ?? undefined,
-    };
+  const cardResolved = resolveSanityContactFormCta(cardCta);
+  if (cardResolved) {
+    return gridCardContactFromResolved(cardResolved);
   }
 
   let href = fallback;
@@ -137,20 +175,9 @@ export function mapGridCardCta(
     return { kind: "link", label: cardCta.label.trim(), href };
   }
 
-  if (sectionCta && isContactFormCta(sectionCta)) {
-    const cf = sectionCta.contactForm;
-    return {
-      kind: "contactForm",
-      formId: sectionCta.formId.trim(),
-      triggerLabel: sectionCta.label.trim(),
-      presentation: presentationFromSanity(sectionCta.presentation ?? undefined),
-      messageContext: sectionCta.messageContext ?? undefined,
-      title: sectionCta.modalTitle ?? undefined,
-      description: sectionCta.modalDescription ?? undefined,
-      placeholders: contactFormPlaceholdersFromSanity(cf),
-      submitLabel: cf.submitLabel?.trim() || "Send",
-      successMessage: sectionCta.successMessage ?? undefined,
-    };
+  const sectionResolved = resolveSanityContactFormCta(sectionCta);
+  if (sectionResolved) {
+    return gridCardContactFromResolved(sectionResolved);
   }
 
   if (sectionCta && isLinkCta(sectionCta)) {

@@ -7,6 +7,7 @@ import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
 import { ProgramCards } from "@/components/ProgramCards";
 import { CollectionArticleSection } from "@/components/CollectionArticleSection";
+import { ContactSection } from "@/components/ContactSection";
 import { ServiceCardTabSection } from "@/components/ServiceCardTabSection";
 import { Section } from "@/components/Section";
 import { TestimonialSlider } from "@/components/TestimonialSlider";
@@ -289,6 +290,29 @@ export function renderPageContentBlock(
           </Container>
         </Section>
       );
+
+    case "contactSection": {
+      const generalFormId = block.generalFormId?.trim();
+      const generalDef = block.generalContactFormDefinition;
+      if (!generalFormId || !generalDef) return null;
+      return (
+        <ContactSection
+          key={index}
+          title={block.title}
+          contactIntro={block.contactIntro}
+          general={{
+            listLabel: block.generalListLabel?.trim() || "General contact",
+            formId: generalFormId,
+            messageContext: block.generalMessageContext ?? undefined,
+            modalTitle: block.generalModalTitle ?? undefined,
+            modalDescription: block.generalModalDescription ?? undefined,
+            successMessage: block.generalSuccessMessage ?? undefined,
+            contactFormDefinition: generalDef,
+          }}
+          ctaPresets={block.formCtas ?? []}
+        />
+      );
+    }
 
     default:
       return null;

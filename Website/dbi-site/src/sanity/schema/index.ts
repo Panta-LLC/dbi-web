@@ -1,7 +1,10 @@
+import { contactFormCta } from "./documents/contactFormCta";
+import { contactFormDefinition } from "./documents/contactFormDefinition";
 import { page } from "./documents/page";
 import { site } from "./documents/site";
 import { contactDetails } from "./objects/contactDetails";
 import { contactForm } from "./objects/contactForm";
+import { contactFormFieldItem } from "./objects/contactFormFieldItem";
 import { contactFormOptional } from "./objects/contactFormOptional";
 import { ctaButtonSection } from "./objects/ctaButtonSection";
 import { cta } from "./objects/cta";
@@ -10,6 +13,7 @@ import { ctaActionOptional } from "./objects/ctaActionOptional";
 import { cardGridSection } from "./objects/cardGridSection";
 import { collectionArticleItem } from "./objects/collectionArticleItem";
 import { collectionArticleSection } from "./objects/collectionArticleSection";
+import { contactSection } from "./objects/contactSection";
 import { carouselSettings } from "./objects/carouselSettings";
 import { heroSection } from "./objects/heroSection";
 import { heroSplitSection } from "./objects/heroSplitSection";
@@ -29,7 +33,10 @@ export const schemaTypes = [
   hero,
   contactDetails,
   contactForm,
+  contactFormFieldItem,
   contactFormOptional,
+  contactFormDefinition,
+  contactFormCta,
   ctaAction,
   ctaActionOptional,
   page,
@@ -48,4 +55,5 @@ export const schemaTypes = [
   supportSection,
   textAndCtaSection,
   ctaButtonSection,
+  contactSection,
 ];

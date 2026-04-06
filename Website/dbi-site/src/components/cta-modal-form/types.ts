@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { ButtonVariant } from "@/components/Button";
+import type { ContactFormFieldDef } from "@/lib/contact-form-fields";
 
 export type ContactFieldVariant = "default" | "newsletter";
 
@@ -34,7 +35,8 @@ export type CtaModalFormProps = {
   messageContext?: string;
   title?: string;
   description?: string;
-  placeholders: ContactPlaceholders;
+  /** Required for legacy fixed-field forms; omitted when using `contactFormDefinitionId` + `dynamicFields`. */
+  placeholders?: ContactPlaceholders;
   submitLabel: string;
   successMessage?: string;
   triggerVariant?: ButtonVariant;
@@ -43,4 +45,7 @@ export type CtaModalFormProps = {
   defaultOpen?: boolean;
   /** Newsletter: first/last/email + self-identification; hides org and message. */
   fieldVariant?: ContactFieldVariant;
+  /** CMS Contact Form document — renders configurable fields when set with `dynamicFields`. */
+  contactFormDefinitionId?: string;
+  dynamicFields?: ContactFormFieldDef[];
 };

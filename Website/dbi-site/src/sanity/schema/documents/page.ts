@@ -85,6 +85,7 @@ export const page = defineType({
         { type: "supportSection" },
         { type: "textAndCtaSection" },
         { type: "ctaButtonSection" },
+        { type: "contactSection" },
       ],
     }),
   ],
