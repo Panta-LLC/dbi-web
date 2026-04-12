@@ -72,33 +72,35 @@ function ContentHalf({
 
   return (
     <div
-      className="flex min-w-0 flex-1 flex-col justify-center px-6 py-12 md:px-10 md:py-16 lg:py-20 max-w-6xl mx-auto"
+      className="flex min-w-0 flex-1 flex-col justify-center px-6 py-12 md:px-10 md:py-16 lg:py-20"
       style={{ backgroundColor: bg }}
     >
-      <h1 className={`display-l font-bold ${headingClass}`}>{title}</h1>
-      <HeroSplitDescription value={description} isLight={isLight} />
-      {ctas?.length ? (
-        <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center">
-          {ctas.map((cta, i) => {
-            if (!cta.label?.trim()) return null;
-            const variant: "cta-primary" | "cta-secondary" =
-              i % 2 === 0 ? "cta-primary" : "cta-secondary";
-            const secondaryClass = isLight ? "" : "text-white";
-            return (
-              <Button
-                key={`${cta.label}-${i}`}
-                href={cta.href}
-                variant={variant}
-                className={`touch-target w-full justify-center sm:w-auto ${
-                  variant === "cta-secondary" ? secondaryClass : ""
-                }`}
-              >
-                {cta.label}
-              </Button>
-            );
-          })}
-        </div>
-      ) : null}
+      <div className="max-w-6xl mx-auto">
+        <h1 className={`display-l font-bold ${headingClass}`}>{title}</h1>
+        <HeroSplitDescription value={description} isLight={isLight} />
+        {ctas?.length ? (
+          <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center">
+            {ctas.map((cta, i) => {
+              if (!cta.label?.trim()) return null;
+              const variant: "cta-primary" | "cta-secondary" =
+                i % 2 === 0 ? "cta-primary" : "cta-secondary";
+              const secondaryClass = isLight ? "" : "text-white";
+              return (
+                <Button
+                  key={`${cta.label}-${i}`}
+                  href={cta.href}
+                  variant={variant}
+                  className={`touch-target w-full justify-center sm:w-auto ${
+                    variant === "cta-secondary" ? secondaryClass : ""
+                  }`}
+                >
+                  {cta.label}
+                </Button>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -121,7 +123,7 @@ export function HeroSplitStatic({
     <Section className="w-full" noPadding reveal={false}>
       {/* Mobile: image left → image stacked above content; image right → content above image (reading order before visual). Desktop: 50/50 row. No image → full-width content. */}
       <div
-        className="flex w-full flex-col md:min-h-[min(70vh,560px)] md:flex-row"
+        className={`flex w-full flex-col md:flex-row${hasImage ? " md:min-h-[min(60vh,560px)]" : ""}`}
         data-name="HeroSplitStatic"
       >
         {!hasImage ? (

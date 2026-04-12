@@ -503,9 +503,9 @@ export function CollectionArticleSection({
 
   return (
     <div className="my-10 pl-4 max-w-6xl m-auto">
-      {title ? <h2 className="heading-2 text-center mt-10">{title}</h2> : null}
+      {title ? <h2 className="heading-2 text-center mt-14">{title}</h2> : null}
       {description ? (
-        <Container maxWidth="narrow" className="mt-6 mb-4 text-center">
+        <Container maxWidth="narrow" className="mt-6 mb-14 text-center">
           <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
         </Container>
       ) : null}
