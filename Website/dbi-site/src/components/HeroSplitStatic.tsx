@@ -72,7 +72,7 @@ function ContentHalf({
 
   return (
     <div
-      className="flex min-w-0 flex-1 flex-col justify-center px-6 py-12 md:px-10 md:py-16 lg:px-14 lg:py-20"
+      className="flex min-w-0 flex-1 flex-col justify-center px-6 py-12 md:px-10 md:py-16 lg:py-20 max-w-6xl mx-auto"
       style={{ backgroundColor: bg }}
     >
       <h1 className={`display-l font-bold ${headingClass}`}>{title}</h1>

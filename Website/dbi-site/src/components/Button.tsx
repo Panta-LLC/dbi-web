@@ -46,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 
   if (href) {
     const content = (
-      <span className={`relative inline-flex w-full items-center justify-center`}>
+      <span className={`relative inline-flex w-full items-center justify-center pr-[15px]`}>
         <span className="relative z-[1]">{children}</span>
       </span>
     );

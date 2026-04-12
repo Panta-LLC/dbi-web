@@ -165,7 +165,7 @@ function PreviewBlock({
   const titleClass = variant === "sidebar" ? "" : `${GRID_TITLE[cardSize]} text-slate-900`;
   const summaryClass =
     variant === "sidebar"
-      ? "text-sm py-6"
+      ? "text-sm py-6 hidden"
       : `mt-2 text-slate-700 whitespace-pre-line ${GRID_SUMMARY[cardSize]}`;
   /** Card grid only: light gray surface → orange on hover */
   const gridCardSurface = "group bg-[var(--color-3)] hover:bg-[var(--color-2)]";
@@ -213,14 +213,16 @@ function PreviewBlock({
       <div className={`relative w-full rounded-none border-0 shadow-none`}>
         {active ? (
           <div className="flex min-h-0 w-full items-stretch">
-            <div className="flex min-h-0 min-w-0 flex-1 items-stretch gap-0">
+            <div
+              className={`flex min-h-0 min-w-0 flex-1 items-stretch gap-0 ${item.imageSrc ? "flex-row items-stretch gap-0" : "flex-col items-stretch px-8 py-6"}`}
+            >
               {explorerListThumb}
               <div
                 className={`relative flex min-w-0 flex-1 flex-col justify-start ${item.imageSrc ? "px-4 py-4 sm:px-6 sm:py-5" : "px-8 py-8"} ${active ? "" : shell} bg-[var(--color-4)] text-[var(--color-3)]`}
               >
-                <h3 className="heading-3 text-[var(--color-3)]">{item.heading}</h3>
+                <h3 className="heading-4 text-[var(--color-3)]">{item.heading}</h3>
                 {item.summary ? (
-                  <p className="mt-1 text-sm whitespace-pre-line text-[var(--color-3)]/95">
+                  <p className="mt-1 text-xs whitespace-pre-line text-[var(--color-3)]/95">
                     {item.summary}
                   </p>
                 ) : null}
@@ -229,19 +231,21 @@ function PreviewBlock({
             </div>
           </div>
         ) : (
-          <div
-            className={`flex min-h-0 justify-center ${shell} ${item.imageSrc ? "flex-row items-stretch gap-0" : "flex-col items-stretch px-8 py-6"}`}
-          >
-            {explorerListThumb}
+          <div className="flex min-h-0 w-full items-stretch">
             <div
-              className={`flex min-w-0 w-full flex-1 flex-col justify-start ${item.imageSrc ? "px-4 py-6 sm:px-5" : ""}`}
+              className={`flex min-h-0 min-w-0 flex-1 items-stretch gap-0 ${item.imageSrc ? "flex-row items-stretch gap-0" : "flex-col items-stretch px-8 py-6"}`}
             >
-              <h3 className="heading-3 text-[var(--color-4)]">{item.heading}</h3>
-              {item.summary ? (
-                <p className="mt-1 text-sm whitespace-pre-line text-[var(--color-5)]">
-                  {item.summary}
-                </p>
-              ) : null}
+              {explorerListThumb}
+              <div
+                className={`flex min-w-0 w-full flex-1 flex-col justify-start ${item.imageSrc ? "px-4 py-6 sm:px-5" : ""}`}
+              >
+                <h3 className="heading-4 text-[var(--color-4)]">{item.heading}</h3>
+                {item.summary ? (
+                  <p className="mt-1 text-xs whitespace-pre-line text-[var(--color-5)]">
+                    {item.summary}
+                  </p>
+                ) : null}
+              </div>
             </div>
           </div>
         )}
@@ -304,7 +308,7 @@ function ExplorerArticleBody({
     : `relative ${containerPad} pb-10 pt-10 sm:pt-0 lg:pr-12`;
 
   /** ~15% taller than 21/9: height scales by 1.15 at equal width → aspect 21/(9×1.15) = 140/69 */
-  const heroBoxClass = `relative aspect-[140/69] w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
+  const heroBoxClass = `relative aspect-[140/110] w-full overflow-hidden rounded-none ${embedded ? "mb-4" : "mb-6 sm:mb-8"}`;
 
   const heroInner = item.imageSrc ? (
     <Image
@@ -507,7 +511,7 @@ export function CollectionArticleSection({
       ) : null}
 
       {tiledOnly ? (
-        <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
+        <div className={`mt-8 gap-x-4 `}>
           {items.map((item, i) => (
             <div key={`${idPrefix}-tile-${i}`} className="mb-4 w-full min-h-0 break-inside-avoid">
               <PreviewBlock
