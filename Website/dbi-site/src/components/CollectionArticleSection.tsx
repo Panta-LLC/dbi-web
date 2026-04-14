@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { X } from "lucide-react";
 import {
+  useCallback,
   useEffect,
   useId,
   useLayoutEffect,
@@ -51,7 +52,7 @@ const MASONRY_COLS_CLASS: Record<CollectionArticleColumnsPerRow, string> = {
   2: "columns-1 sm:columns-2",
   3: "columns-1 sm:columns-2 lg:columns-3",
   4: "columns-1 sm:columns-2 lg:columns-4",
-  5: "columns-1 sm:columns-2 lg:columns-3 xl:columns-5",
+  5: "columns-1 sm:columns-2 lg:columns-5",
 };
 
 const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
@@ -94,6 +95,15 @@ const EXPLORER_THUMB_BOX =
 
 /** Full-bleed breakout from padded Container. Avoid `overflow-x-hidden` here — it breaks `position:sticky` on the explorer sidebar. */
 const EXPLORER_FULL_BLEED = "relative";
+
+const COLLECTION_VIEW_FADE_MS = 280;
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
 
 function columnsPerRowFromCms(value: number | undefined): CollectionArticleColumnsPerRow {
   if (value === 3 || value === 4 || value === 5) return value;
@@ -150,6 +160,7 @@ function PreviewBlock({
   cardSize,
   footer,
   explorerTone,
+  gridInteractive = true,
 }: {
   item: CollectionArticleItem;
   imageSizes: string;
@@ -158,6 +169,8 @@ function PreviewBlock({
   footer?: ReactNode;
   /** Explorer sidebar: inactive = color-3; active = color-2 + color-3 text + right-pointing tab */
   explorerTone?: "inactive" | "active";
+  /** Card grid: hover styles when tiles open detail (expanded mode on). Off for grid-only / CTAs-on-card. */
+  gridInteractive?: boolean;
 }) {
   const padding = variant === "sidebar" ? "p-3" : GRID_PADDING[cardSize];
   const imageBoxClass =
@@ -167,11 +180,15 @@ function PreviewBlock({
     variant === "sidebar"
       ? "text-sm py-6 hidden"
       : `mt-2 text-slate-700 whitespace-pre-line ${GRID_SUMMARY[cardSize]}`;
-  /** Card grid only: light gray surface → orange on hover */
-  const gridCardSurface = "group bg-[var(--color-3)] hover:bg-[var(--color-2)]";
-  const gridCardTitleHover = "group-hover:text-[var(--color-3)]";
-  const gridCardSummaryHover = "group-hover:text-[var(--color-3)]/95";
-  const gridCardFooterRule = "border-t border-slate-200/80 group-hover:border-[var(--color-3)]/25";
+  /** Card grid only: light gray surface → orange on hover when interactive */
+  const gridCardSurface = gridInteractive
+    ? "group bg-[var(--color-3)] hover:bg-[var(--color-2)]"
+    : "bg-[var(--color-3)]";
+  const gridCardTitleHover = gridInteractive ? "group-hover:text-[var(--color-3)]" : "";
+  const gridCardSummaryHover = gridInteractive ? "group-hover:text-[var(--color-3)]/95" : "";
+  const gridCardFooterRule = gridInteractive
+    ? "border-t border-slate-200/80 group-hover:border-[var(--color-3)]/25"
+    : "border-t border-slate-200/80";
 
   const imageInner = item.imageSrc ? (
     <Image
@@ -261,7 +278,9 @@ function PreviewBlock({
         {item.imageSrc ? (
           <div className={`relative w-full overflow-hidden ${imageBoxClass}`}>{imageInner}</div>
         ) : null}
-        <div className={`${item.imageSrc ? padding : "px-9 py-5"} ${gridCardSurface}`}>
+        <div
+          className={`${item.imageSrc ? padding : "px-9 py-5"} ${gridCardSurface} ${variant === "grid" ? "text-center" : ""}`}
+        >
           <h2
             className={`text-slate-900 display-m text-center ${gridCardTitleHover} ${titleClass}`}
           >
@@ -273,7 +292,11 @@ function PreviewBlock({
         </div>
       </div>
       {footer ? (
-        <div className={`mt-auto px-0 pb-4 pt-4 ${gridCardFooterRule}`}>{footer}</div>
+        <div
+          className={`mt-auto px-0 pb-4 pt-4 ${gridCardFooterRule} ${variant === "grid" ? "flex flex-col items-center" : ""}`}
+        >
+          {footer}
+        </div>
       ) : null}
     </div>
   );
@@ -412,6 +435,73 @@ export function CollectionArticleSection({
   const isExplorerLayout = sectionLayout === "explorer";
   const tiledOnly = !isExplorerLayout && !expandedMode;
 
+  const viewFadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [revealedMode, setRevealedMode] = useState<"grid" | "explorer">(() => {
+    const idx = initialSelectedIndex(sectionLayout, expandedMode, defaultView);
+    return idx === null ? "grid" : "explorer";
+  });
+  const [viewFadeOpacity, setViewFadeOpacity] = useState(1);
+
+  const clearViewFadeTimer = useCallback(() => {
+    if (viewFadeTimerRef.current !== null) {
+      clearTimeout(viewFadeTimerRef.current);
+      viewFadeTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => clearViewFadeTimer(), [clearViewFadeTimer]);
+
+  const closeExplorer = useCallback(() => {
+    clearViewFadeTimer();
+    if (prefersReducedMotion()) {
+      setSelectedIndex(null);
+      setAccordionOpen(new Set());
+      setRevealedMode("grid");
+      setViewFadeOpacity(1);
+      return;
+    }
+    setViewFadeOpacity(0);
+    viewFadeTimerRef.current = setTimeout(() => {
+      viewFadeTimerRef.current = null;
+      setSelectedIndex(null);
+      setAccordionOpen(new Set());
+      setRevealedMode("grid");
+      requestAnimationFrame(() => setViewFadeOpacity(1));
+    }, COLLECTION_VIEW_FADE_MS);
+  }, [clearViewFadeTimer]);
+
+  useEffect(() => {
+    if (tiledOnly || isExplorerLayout) return;
+    const target: "grid" | "explorer" = selectedIndex === null ? "grid" : "explorer";
+    if (target === revealedMode) {
+      clearViewFadeTimer();
+      return;
+    }
+    if (prefersReducedMotion()) {
+      queueMicrotask(() => {
+        setRevealedMode(target);
+        setViewFadeOpacity(1);
+      });
+      return;
+    }
+    clearViewFadeTimer();
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setViewFadeOpacity(0);
+      viewFadeTimerRef.current = setTimeout(() => {
+        viewFadeTimerRef.current = null;
+        if (cancelled) return;
+        setRevealedMode(target);
+        requestAnimationFrame(() => setViewFadeOpacity(1));
+      }, COLLECTION_VIEW_FADE_MS);
+    });
+    return () => {
+      cancelled = true;
+      clearViewFadeTimer();
+    };
+  }, [selectedIndex, revealedMode, tiledOnly, isExplorerLayout, clearViewFadeTimer]);
+
   useEffect(() => {
     if (!items.length || tiledOnly) return;
 
@@ -497,9 +587,177 @@ export function CollectionArticleSection({
 
   const selected =
     selectedIndex !== null && items[selectedIndex] !== undefined ? items[selectedIndex] : null;
-  const showExplorer = isExplorerLayout || (expandedMode && selectedIndex !== null && !tiledOnly);
-  const showCardGrid = !tiledOnly && !isExplorerLayout && expandedMode && selectedIndex === null;
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
+
+  const cardGridPane = (
+    <Container>
+      <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
+        {items.map((item, i) => (
+          <div
+            key={`${idPrefix}-grid-${i}`}
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              setSelectedIndex(i);
+              setAccordionOpen(new Set([i]));
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedIndex(i);
+                setAccordionOpen(new Set([i]));
+              }
+            }}
+            className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+          >
+            <PreviewBlock
+              item={item}
+              variant="grid"
+              cardSize={cardSize}
+              imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          </div>
+        ))}
+      </div>
+    </Container>
+  );
+
+  const explorerPane =
+    selectedIndex !== null && selected ? (
+      <div
+        className={`${EXPLORER_FULL_BLEED} mt-12 collection-article-scroll-target`}
+        id={collectionArticleScrollTargetId(
+          sectionAnchorKeyResolved,
+          itemSlugs[selectedIndex] ?? "",
+        )}
+      >
+        {/* Small screens: accordion (preview header + expandable article) */}
+        <div className="lg:hidden">
+          {showClose ? (
+            <div className="flex w-full justify-end px-4 sm:px-6">
+              <button
+                type="button"
+                onClick={closeExplorer}
+                className="p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)]"
+                aria-label="Back to grid"
+              >
+                <X className="h-6 w-6" aria-hidden />
+              </button>
+            </div>
+          ) : null}
+          <div
+            className="flex flex-col gap-0"
+            role="list"
+            aria-label={title ?? "Collection items"}
+          >
+            {items.map((item, i) => {
+              const open = accordionOpen.has(i);
+              const headingId = `${idPrefix}-acc-h-${i}`;
+              const panelId = `${idPrefix}-acc-p-${i}`;
+              return (
+                <div
+                  key={`${idPrefix}-acc-${i}`}
+                  role="listitem"
+                  className="w-full border-b border-slate-200 last:border-b-0"
+                >
+                  <button
+                    type="button"
+                    id={headingId}
+                    aria-expanded={open}
+                    aria-controls={panelId}
+                    onClick={() => {
+                      const willOpen = !accordionOpen.has(i);
+                      setAccordionOpen((prev) => {
+                        if (prev.has(i)) {
+                          return new Set();
+                        }
+                        return new Set([i]);
+                      });
+                      if (willOpen) {
+                        setSelectedIndex(i);
+                      }
+                    }}
+                    className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
+                  >
+                    <PreviewBlock
+                      item={item}
+                      variant="sidebar"
+                      cardSize={cardSize}
+                      imageSizes="(max-width: 1024px) 100vw, 20vw"
+                      explorerTone={open ? "active" : "inactive"}
+                    />
+                  </button>
+                  <div
+                    id={panelId}
+                    role="region"
+                    aria-labelledby={headingId}
+                    aria-hidden={!open}
+                    className="grid"
+                    style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+                  >
+                    <div className={`min-h-0 overflow-hidden ${open ? "bg-slate-50/95" : ""}`}>
+                      <ExplorerArticleBody item={item} embedded showInsetClose={false} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Large screens: sidebar + article */}
+        <div className="hidden gap-0 lg:grid lg:grid-cols-12 lg:items-start">
+          <div
+            className="flex flex-col gap-2 lg:sticky lg:top-25 lg:col-span-5 lg:max-h-[calc(100vh-5.5rem)] lg:self-start lg:overflow-y-auto lg:pr-2 z-50 relative overflow-x-visible"
+            role="listbox"
+            aria-label={title ?? "Collection items"}
+          >
+            {items.map((item, i) => {
+              const selectedHere = selectedIndex === i;
+              return (
+                <div
+                  key={`${idPrefix}-side-${i}`}
+                  role="option"
+                  aria-selected={selectedHere}
+                  tabIndex={0}
+                  onClick={() => setSelectedIndex(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedIndex(i);
+                    }
+                  }}
+                  className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
+                >
+                  <PreviewBlock
+                    item={item}
+                    variant="sidebar"
+                    cardSize={cardSize}
+                    imageSizes="(max-width: 1024px) 100vw, 20vw"
+                    explorerTone={selectedHere ? "active" : "inactive"}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="relative min-h-48 min-w-0 overflow-x-hidden lg:col-span-7">
+            <article
+              ref={desktopArticleRef}
+              key={selectedIndex}
+              role="article"
+              className="collection-explorer-article-panel collection-article-scroll-target relative"
+            >
+              <ExplorerArticleBody
+                item={selected}
+                showInsetClose={showClose}
+                onClose={closeExplorer}
+              />
+            </article>
+          </div>
+        </div>
+      </div>
+    ) : null;
 
   return (
     <div className="my-10 pl-4 max-w-6xl m-auto">
@@ -511,13 +769,14 @@ export function CollectionArticleSection({
       ) : null}
 
       {tiledOnly ? (
-        <div className={`mt-8 gap-x-4 `}>
+        <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
           {items.map((item, i) => (
             <div key={`${idPrefix}-tile-${i}`} className="mb-4 w-full min-h-0 break-inside-avoid">
               <PreviewBlock
                 item={item}
                 variant="grid"
                 cardSize={cardSize}
+                gridInteractive={false}
                 imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 footer={
                   item.ctas.length ? (
@@ -528,178 +787,17 @@ export function CollectionArticleSection({
             </div>
           ))}
         </div>
-      ) : showCardGrid ? (
-        <Container>
-          <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
-            {items.map((item, i) => (
-              <div
-                key={`${idPrefix}-grid-${i}`}
-                role="button"
-                tabIndex={0}
-                onClick={() => {
-                  setSelectedIndex(i);
-                  setAccordionOpen(new Set([i]));
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelectedIndex(i);
-                    setAccordionOpen(new Set([i]));
-                  }
-                }}
-                className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
-              >
-                <PreviewBlock
-                  item={item}
-                  variant="grid"
-                  cardSize={cardSize}
-                  imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
-            ))}
-          </div>
-        </Container>
-      ) : showExplorer && selectedIndex !== null && selected ? (
+      ) : isExplorerLayout ? (
+        explorerPane
+      ) : (
         <div
-          className={`${EXPLORER_FULL_BLEED} mt-12 collection-article-scroll-target`}
-          id={collectionArticleScrollTargetId(
-            sectionAnchorKeyResolved,
-            itemSlugs[selectedIndex] ?? "",
-          )}
+          className={`collection-article-view-crossfade ${
+            viewFadeOpacity === 1 ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         >
-          {/* Small screens: accordion (preview header + expandable article) */}
-          <div className="lg:hidden">
-            {showClose ? (
-              <div className="flex w-full justify-end px-4 sm:px-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedIndex(null);
-                    setAccordionOpen(new Set());
-                  }}
-                  className="p-2 text-[var(--color-5)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-4)]"
-                  aria-label="Back to grid"
-                >
-                  <X className="h-6 w-6" aria-hidden />
-                </button>
-              </div>
-            ) : null}
-            <div
-              className="flex flex-col gap-0"
-              role="list"
-              aria-label={title ?? "Collection items"}
-            >
-              {items.map((item, i) => {
-                const open = accordionOpen.has(i);
-                const headingId = `${idPrefix}-acc-h-${i}`;
-                const panelId = `${idPrefix}-acc-p-${i}`;
-                return (
-                  <div
-                    key={`${idPrefix}-acc-${i}`}
-                    role="listitem"
-                    className="w-full border-b border-slate-200 last:border-b-0"
-                  >
-                    <button
-                      type="button"
-                      id={headingId}
-                      aria-expanded={open}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        const willOpen = !accordionOpen.has(i);
-                        setAccordionOpen((prev) => {
-                          if (prev.has(i)) {
-                            return new Set();
-                          }
-                          return new Set([i]);
-                        });
-                        if (willOpen) {
-                          setSelectedIndex(i);
-                        }
-                      }}
-                      className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
-                    >
-                      <PreviewBlock
-                        item={item}
-                        variant="sidebar"
-                        cardSize={cardSize}
-                        imageSizes="(max-width: 1024px) 100vw, 20vw"
-                        explorerTone={open ? "active" : "inactive"}
-                      />
-                    </button>
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headingId}
-                      aria-hidden={!open}
-                      className="grid"
-                      style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
-                    >
-                      <div className={`min-h-0 overflow-hidden ${open ? "bg-slate-50/95" : ""}`}>
-                        <ExplorerArticleBody item={item} embedded showInsetClose={false} />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Large screens: sidebar + article */}
-          <div className="hidden gap-0 lg:grid lg:grid-cols-12 lg:items-start">
-            <div
-              className="flex flex-col gap-2 lg:sticky lg:top-25 lg:col-span-5 lg:max-h-[calc(100vh-5.5rem)] lg:self-start lg:overflow-y-auto lg:pr-2 z-50 relative overflow-x-visible"
-              role="listbox"
-              aria-label={title ?? "Collection items"}
-            >
-              {items.map((item, i) => {
-                const selectedHere = selectedIndex === i;
-                return (
-                  <div
-                    key={`${idPrefix}-side-${i}`}
-                    role="option"
-                    aria-selected={selectedHere}
-                    tabIndex={0}
-                    onClick={() => setSelectedIndex(i)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelectedIndex(i);
-                      }
-                    }}
-                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-2)]"
-                  >
-                    <PreviewBlock
-                      item={item}
-                      variant="sidebar"
-                      cardSize={cardSize}
-                      imageSizes="(max-width: 1024px) 100vw, 20vw"
-                      explorerTone={selectedHere ? "active" : "inactive"}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="relative min-h-48 min-w-0 overflow-x-hidden lg:col-span-7">
-              <article
-                ref={desktopArticleRef}
-                key={selectedIndex}
-                role="article"
-                className="collection-explorer-article-panel collection-article-scroll-target relative"
-              >
-                <ExplorerArticleBody
-                  item={selected}
-                  showInsetClose={showClose}
-                  onClose={() => {
-                    setSelectedIndex(null);
-                    setAccordionOpen(new Set());
-                  }}
-                />
-              </article>
-            </div>
-          </div>
+          {revealedMode === "grid" ? cardGridPane : explorerPane}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

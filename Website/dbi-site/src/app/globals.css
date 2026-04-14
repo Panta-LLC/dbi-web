@@ -824,6 +824,11 @@ body {
   animation: collection-explorer-article-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/** Card grid ↔ explorer: fade between views (expanded card grid only) */
+.collection-article-view-crossfade {
+  transition: opacity 280ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-accent,
   .hero-mask,
@@ -876,5 +881,9 @@ body {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .collection-article-view-crossfade {
+    transition: none;
   }
 }

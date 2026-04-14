@@ -12,6 +12,7 @@ export const PAGE_CONTENT_BLOCK_TYPES = [
   "cardGridSection",
   "collectionArticleSection",
   "imageCardGridSection",
+  "fullWidthImageSection",
   "supportSection",
   "textAndCtaSection",
   "ctaButtonSection",

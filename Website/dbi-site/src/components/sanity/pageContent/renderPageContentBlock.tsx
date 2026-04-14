@@ -3,6 +3,7 @@ import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { HeroSplitStatic } from "@/components/HeroSplitStatic";
+import { FullWidthImage } from "@/components/FullWidthImage";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
 import { ProgramCards } from "@/components/ProgramCards";
@@ -219,6 +220,22 @@ export function renderPageContentBlock(
           </Container>
         </Section>
       );
+
+    case "fullWidthImageSection": {
+      const imageSrc = urlForSanityImage(block.image, { width: 2400 }) ?? block.imageSrc;
+      if (!imageSrc || !block.imageAlt?.trim()) return null;
+      return (
+        <Section key={index} reveal={false} className="my-6">
+          <FullWidthImage
+            src={imageSrc}
+            alt={block.imageAlt}
+            caption={block.caption}
+            bleed={block.bleedToViewport !== false}
+            priority={block.priority === true}
+          />
+        </Section>
+      );
+    }
 
     case "supportSection": {
       const supportIntro = plainTextSectionIntro(block.description);

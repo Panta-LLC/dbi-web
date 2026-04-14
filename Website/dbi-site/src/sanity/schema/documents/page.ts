@@ -82,6 +82,7 @@ export const page = defineType({
         { type: "cardGridSection" },
         { type: "collectionArticleSection" },
         { type: "imageCardGridSection" },
+        { type: "fullWidthImageSection" },
         { type: "supportSection" },
         { type: "textAndCtaSection" },
         { type: "ctaButtonSection" },

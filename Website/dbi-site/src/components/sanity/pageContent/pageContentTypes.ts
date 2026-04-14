@@ -25,6 +25,10 @@ export type ContentBlock = {
   legalText?: string;
   imageSrc?: string;
   imageAlt?: string;
+  /** Optional caption under image (`fullWidthImageSection`). */
+  caption?: string;
+  bleedToViewport?: boolean;
+  priority?: boolean;
   /** Full image field (crop/hotspot); prefer `urlForSanityImage` over raw `imageSrc`. */
   image?: SanityImageSource;
   ctaVariant?: "primary" | "secondary";

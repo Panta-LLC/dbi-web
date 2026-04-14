@@ -81,6 +81,9 @@ export const pageByPathQuery = groq`
       "image": image{ crop, hotspot, asset },
       "imageSrc": image.asset->url,
       imageAlt,
+      caption,
+      bleedToViewport,
+      priority,
       "leftImage": leftImage{
         _type,
         crop,

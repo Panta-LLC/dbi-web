@@ -15,6 +15,7 @@ import { collectionArticleItem } from "./objects/collectionArticleItem";
 import { collectionArticleItemCta } from "./objects/collectionArticleItemCta";
 import { collectionArticleSection } from "./objects/collectionArticleSection";
 import { contactSection } from "./objects/contactSection";
+import { fullWidthImageSection } from "./objects/fullWidthImageSection";
 import { carouselSettings } from "./objects/carouselSettings";
 import { heroSection } from "./objects/heroSection";
 import { heroSplitSection } from "./objects/heroSplitSection";
@@ -54,6 +55,7 @@ export const schemaTypes = [
   collectionArticleItem,
   collectionArticleSection,
   imageCardGridSection,
+  fullWidthImageSection,
   supportSection,
   textAndCtaSection,
   ctaButtonSection,
