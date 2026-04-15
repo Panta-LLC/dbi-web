@@ -63,7 +63,7 @@ const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
 
 /** Card grid image: ~50% taller than 4/3 at equal width → aspect 4/(3×1.5) = 8/9 */
 const GRID_IMAGE_BOX: Record<CollectionArticleCardSize, string> = {
-  sm: "aspect-[8/9] max-h-[16.5rem]",
+  sm: "aspect-[8/15] max-h-[16.5rem]",
   md: "aspect-[8/9]",
   lg: "aspect-[8/9] min-h-[21rem]",
 };
@@ -100,8 +100,7 @@ const COLLECTION_VIEW_FADE_MS = 280;
 
 function prefersReducedMotion(): boolean {
   return (
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
 
@@ -645,11 +644,7 @@ export function CollectionArticleSection({
               </button>
             </div>
           ) : null}
-          <div
-            className="flex flex-col gap-0"
-            role="list"
-            aria-label={title ?? "Collection items"}
-          >
+          <div className="flex flex-col gap-0" role="list" aria-label={title ?? "Collection items"}>
             {items.map((item, i) => {
               const open = accordionOpen.has(i);
               const headingId = `${idPrefix}-acc-h-${i}`;
