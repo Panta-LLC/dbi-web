@@ -63,7 +63,7 @@ const GRID_PADDING: Record<CollectionArticleCardSize, string> = {
 
 /** Card grid image: ~50% taller than 4/3 at equal width → aspect 4/(3×1.5) = 8/9 */
 const GRID_IMAGE_BOX: Record<CollectionArticleCardSize, string> = {
-  sm: "aspect-[8/15] max-h-[16.5rem]",
+  sm: "aspect-[6/6] md:aspect-[8/15] md:max-h-[16.5rem]",
   md: "aspect-[8/9]",
   lg: "aspect-[8/9] min-h-[21rem]",
 };
@@ -589,36 +589,34 @@ export function CollectionArticleSection({
   const showClose = sectionLayout === "cardGrid" && expandedMode && selectedIndex !== null;
 
   const cardGridPane = (
-    <Container>
-      <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
-        {items.map((item, i) => (
-          <div
-            key={`${idPrefix}-grid-${i}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => {
+    <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
+      {items.map((item, i) => (
+        <div
+          key={`${idPrefix}-grid-${i}`}
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            setSelectedIndex(i);
+            setAccordionOpen(new Set([i]));
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
               setSelectedIndex(i);
               setAccordionOpen(new Set([i]));
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setSelectedIndex(i);
-                setAccordionOpen(new Set([i]));
-              }
-            }}
-            className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
-          >
-            <PreviewBlock
-              item={item}
-              variant="grid"
-              cardSize={cardSize}
-              imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          </div>
-        ))}
-      </div>
-    </Container>
+            }
+          }}
+          className="mb-4 w-full min-h-0 cursor-pointer break-inside-avoid rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+        >
+          <PreviewBlock
+            item={item}
+            variant="grid"
+            cardSize={cardSize}
+            imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      ))}
+    </div>
   );
 
   const explorerPane =
@@ -633,7 +631,7 @@ export function CollectionArticleSection({
         {/* Small screens: accordion (preview header + expandable article) */}
         <div className="lg:hidden">
           {showClose ? (
-            <div className="flex w-full justify-end px-4 sm:px-6">
+            <div className="flex w-full justify-end">
               <button
                 type="button"
                 onClick={closeExplorer}
@@ -755,44 +753,46 @@ export function CollectionArticleSection({
     ) : null;
 
   return (
-    <div className="my-10 pl-4 max-w-6xl m-auto">
-      {title ? <h2 className="heading-2 text-center mt-14">{title}</h2> : null}
-      {description ? (
-        <Container maxWidth="narrow" className="mt-6 mb-14 text-center">
-          <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
-        </Container>
-      ) : null}
+    <div className="my-10">
+      <Container>
+        {title ? <h2 className="heading-2 text-center mt-14">{title}</h2> : null}
+        {description ? (
+          <div className="mx-auto mt-6 mb-14 max-w-3xl text-center">
+            <p className="body-md text-slate-600 whitespace-pre-line">{description}</p>
+          </div>
+        ) : null}
 
-      {tiledOnly ? (
-        <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
-          {items.map((item, i) => (
-            <div key={`${idPrefix}-tile-${i}`} className="mb-4 w-full min-h-0 break-inside-avoid">
-              <PreviewBlock
-                item={item}
-                variant="grid"
-                cardSize={cardSize}
-                gridInteractive={false}
-                imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                footer={
-                  item.ctas.length ? (
-                    <ArticlePanelCtas rows={item.ctas} className="my-4" />
-                  ) : undefined
-                }
-              />
-            </div>
-          ))}
-        </div>
-      ) : isExplorerLayout ? (
-        explorerPane
-      ) : (
-        <div
-          className={`collection-article-view-crossfade ${
-            viewFadeOpacity === 1 ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-        >
-          {revealedMode === "grid" ? cardGridPane : explorerPane}
-        </div>
-      )}
+        {tiledOnly ? (
+          <div className={`mt-8 gap-x-4 ${masonryColsClass}`}>
+            {items.map((item, i) => (
+              <div key={`${idPrefix}-tile-${i}`} className="mb-4 w-full min-h-0 break-inside-avoid">
+                <PreviewBlock
+                  item={item}
+                  variant="grid"
+                  cardSize={cardSize}
+                  gridInteractive={false}
+                  imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  footer={
+                    item.ctas.length ? (
+                      <ArticlePanelCtas rows={item.ctas} className="my-4" />
+                    ) : undefined
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        ) : isExplorerLayout ? (
+          explorerPane
+        ) : (
+          <div
+            className={`collection-article-view-crossfade ${
+              viewFadeOpacity === 1 ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+          >
+            {revealedMode === "grid" ? cardGridPane : explorerPane}
+          </div>
+        )}
+      </Container>
     </div>
   );
 }

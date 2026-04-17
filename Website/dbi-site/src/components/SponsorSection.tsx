@@ -315,8 +315,8 @@ export function SponsorSection({
                 getDotLabel={(i, n) => `Go to sponsor ${i + 1} of ${n}`}
                 activeDotClassName="bg-slate-800 scale-110"
                 inactiveDotClassName="bg-slate-300 hover:bg-slate-400"
-                dotButtonClassName="touch-target rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                navClassName="flex flex-wrap items-center justify-center gap-2 px-4"
+                dotButtonClassName="touch-target rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center justify-center"
+                navClassName="flex flex-wrap items-center justify-center gap-x-1 gap-y-1 px-1"
               />
             </div>
           ) : null}
