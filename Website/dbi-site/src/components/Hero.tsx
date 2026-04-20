@@ -294,7 +294,11 @@ function HeroGalleryControls({
           aria-label={c.paused ? "Play slideshow" : "Pause slideshow"}
           className={btnClass}
         >
-          {c.paused ? <Play className="h-5 w-5" strokeWidth={2} aria-hidden /> : <Pause className="h-5 w-5" strokeWidth={2} aria-hidden />}
+          {c.paused ? (
+            <Play className="h-5 w-5" strokeWidth={2} aria-hidden />
+          ) : (
+            <Pause className="h-5 w-5" strokeWidth={2} aria-hidden />
+          )}
         </button>
       ) : null}
     </div>
@@ -335,9 +339,10 @@ function HeroCopyBlock({
 }): ReactNode {
   const displayTitle = title || "EDUCATE.\nADVOCATE.\nELEVATE.";
   const lines = displayTitle.split("\n");
-  const wrapClass = layout === "overlay"
-    ? "pointer-events-auto relative z-1 w-full max-w-lg md:pl-22"
-    : "w-full max-w-lg mx-auto text-center";
+  const wrapClass =
+    layout === "overlay"
+      ? "pointer-events-auto relative z-1 w-full max-w-lg md:pl-22"
+      : "w-full max-w-lg mx-auto text-center";
 
   return (
     <div className={wrapClass}>
@@ -470,7 +475,7 @@ export function Hero({
 
           <div className="flex min-h-0 w-full min-w-0 flex-col max-md:flex-none max-md:grow-0 md:flex-1 md:min-h-0 md:flex-row md:overflow-hidden">
             {/* Image band */}
-            <div className="relative w-full max-md:aspect-[882/548] max-md:min-h-[350px] max-md:overflow-hidden max-[350px]:min-h-0 md:flex md:min-h-0 md:flex-1 md:bg-[#b5b2a9]">
+            <div className="relative w-full max-md:aspect-[882/548] max-md:min-h-[249px] max-md:overflow-hidden max-[350px]:min-h-0 md:flex md:min-h-0 md:flex-1 md:bg-[#b5b2a9]">
               <div className="relative flex h-full min-h-0 w-full items-stretch justify-end overflow-hidden md:min-h-0">
                 <div className="relative h-full min-h-0 w-full md:w-[calc(75%+30px)]">
                   <HeroGallerySlides images={galleryImages} state={galleryState} />

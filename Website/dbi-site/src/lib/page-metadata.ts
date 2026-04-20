@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { sanityClient } from "@/sanity/client";
 import { pageMetadataByPathQuery } from "@/sanity/queries";
-import { absoluteUrl } from "@/lib/site-url";
+import { absoluteUrl, DEFAULT_SOCIAL_IMAGE_PATH } from "@/lib/site-url";
 
 export const SITE_BRAND = "Delta Bay Impact";
 
@@ -72,12 +72,14 @@ export async function buildMetadataForPath(path: string): Promise<Metadata> {
     siteName: SITE_BRAND,
     title: undefined,
     description,
+    images: [{ url: DEFAULT_SOCIAL_IMAGE_PATH, alt: SITE_BRAND }],
   };
 
   const twitter: Metadata["twitter"] = {
     card: "summary_large_image",
     title: undefined,
     description,
+    images: [DEFAULT_SOCIAL_IMAGE_PATH],
   };
 
   if (normalized === "/") {
