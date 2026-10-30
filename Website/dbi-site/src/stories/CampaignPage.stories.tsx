@@ -1,8 +1,9 @@
 /**
  * "Ready for What's Next" fundraising campaign page. Storybook only for now.
  *
- * - `NFG_DONATE_URL` is a placeholder until DBI's Network for Good campaign page exists.
- * - Tier impact lines are placeholders until DBI confirms real costs.
+ * The page is an entry point: donors choose an amount and complete their gift on Network for Good.
+ *
+ * - `NFG_EOY_CAMPAIGN_URL` and `NFG_MONTHLY_URL` are placeholders until both campaign pages exist.
  * - The stat's math: 241 of 730 Black graduates (33%) across Mt. Diablo, Antioch, Pittsburg and
  *   Liberty Union were rated "Prepared" on the 2026 Dashboard College/Career Indicator.
  */
@@ -13,12 +14,13 @@ import { Button } from "@/components/Button";
 import { CampaignStat } from "@/components/CampaignStat";
 import { Container } from "@/components/Container";
 import { GiftImpactList } from "@/components/GiftImpactList";
-import { GivingForm } from "@/components/GivingForm";
+import { GivingOptions } from "@/components/GivingOptions";
 import { HeroSplitStatic } from "@/components/HeroSplitStatic";
 import { NavBar } from "@/components/NavBar";
 import { Section } from "@/components/Section";
 
-const NFG_DONATE_URL = "https://www.networkforgood.com/"; // TODO: DBI campaign donation page
+const NFG_EOY_CAMPAIGN_URL = "https://deltabayimpact.networkforgood.com/"; // TODO: EOY $20K campaign page
+const NFG_MONTHLY_URL = "https://deltabayimpact.networkforgood.com/"; // TODO: recurring donor page
 
 const statProps: ComponentProps<typeof CampaignStat> = {
   stat: "2 in 3",
@@ -28,24 +30,24 @@ const statProps: ComponentProps<typeof CampaignStat> = {
   sourceHref: "https://www.caschooldashboard.org/",
 };
 
-const givingFormProps: ComponentProps<typeof GivingForm> = {
-  title: "Help students get ready for what's next",
-  description:
-    "Monthly gifts give DBI steady support all year. One-time gifts go to work right away.",
-  donateUrl: NFG_DONATE_URL,
-  monthlyTiers: [
-    { amount: 10, impact: "Helps keep students reading all summer long." },
-    { amount: 25, impact: "Helps stock backpacks for our school supply drive." },
-    { amount: 50, impact: "Helps put DBI mentors on campus more often." },
-    { amount: 100, impact: "Helps bring more DBI days on campus, all year round." },
-  ],
-  oneTimeTiers: [
-    { amount: 50, impact: "Helps students start the year with the supplies they need." },
-    { amount: 100, impact: "Helps grow our summer reading program." },
-    { amount: 250, impact: "Helps fund an additional DBI day on campus." },
-    { amount: 500, impact: "Helps bring DBI's support to more students and schools." },
-  ],
-};
+const givingOptions: ComponentProps<typeof GivingOptions>["options"] = [
+  {
+    eyebrow: "Year-end campaign",
+    title: "Help us raise $20,000 by year's end",
+    description:
+      "Your gift goes to work right away, so students start the new year with more support on campus.",
+    ctaLabel: "Give to the year-end campaign",
+    href: NFG_EOY_CAMPAIGN_URL,
+  },
+  {
+    eyebrow: "Monthly giving",
+    title: "Support students all year",
+    description:
+      "Monthly gifts give students support they can count on and help DBI plan ahead for more schools.",
+    ctaLabel: "Become a monthly donor",
+    href: NFG_MONTHLY_URL,
+  },
+];
 
 const giftImpactItems: ComponentProps<typeof GiftImpactList>["items"] = [
   {
@@ -92,7 +94,7 @@ export const FullPage: Story = {
             imageAlt="DBI mentor working with students on campus"
             title="Ready for what's next."
             description="Help us empower African American students in Contra Costa County through culture, connection, and community."
-            ctas={[{ href: "#give", label: "Give monthly" }]}
+            ctas={[{ href: "#give", label: "Choose how to give" }]}
           />
         </div>
 
@@ -113,7 +115,7 @@ export const FullPage: Story = {
                 Pittsburg, and Mt. Diablo.
               </p>
             </div>
-            <GivingForm {...givingFormProps} />
+            <GivingOptions options={givingOptions} />
           </Container>
         </Section>
 
@@ -131,7 +133,7 @@ export const FullPage: Story = {
               At Liberty High in Brentwood, college and career readiness for Black students rose 13
               points in a single year. Help us bring that kind of progress to more schools.
             </p>
-            <Button href="#give" variant="cta-knockout" className="mt-8">
+            <Button href={NFG_MONTHLY_URL} variant="cta-knockout" className="mt-8">
               Become a monthly donor
             </Button>
           </Container>
@@ -141,18 +143,10 @@ export const FullPage: Story = {
   ),
 };
 
-export const GivingFormMonthly: Story = {
+export const WaysToGive: Story = {
   render: () => (
-    <div className="mx-auto max-w-xl p-6">
-      <GivingForm {...givingFormProps} />
-    </div>
-  ),
-};
-
-export const GivingFormOneTime: Story = {
-  render: () => (
-    <div className="mx-auto max-w-xl p-6">
-      <GivingForm {...givingFormProps} defaultFrequency="one-time" />
+    <div className="mx-auto max-w-xl bg-white p-6">
+      <GivingOptions options={givingOptions} />
     </div>
   ),
 };
