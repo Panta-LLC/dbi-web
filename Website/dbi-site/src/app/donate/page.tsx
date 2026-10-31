@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
-import { resolveDonateHref } from "@/lib/donate-url";
+import { resolveCampaignUrls, resolveDonateHref } from "@/lib/donate-url";
 import { createMetadataForPath } from "@/lib/page-metadata";
+import { CampaignPage } from "@/components/CampaignPage";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
@@ -10,6 +11,16 @@ import { pageByPathQuery, siteSettingsQuery } from "@/sanity/queries";
 export const generateMetadata = createMetadataForPath("/donate");
 
 export default async function DonatePage() {
+  const campaignUrls = resolveCampaignUrls();
+
+  if (campaignUrls) {
+    return (
+      <SiteLayout>
+        <CampaignPage {...campaignUrls} />
+      </SiteLayout>
+    );
+  }
+
   const [cmsPage, siteSettings] = await Promise.all([
     sanityClient.fetch(pageByPathQuery, { path: "/donate" }).catch(() => null),
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
