@@ -1,3 +1,4 @@
+import { Backpack, BookOpen, GraduationCap, Heart, School, Users, type LucideIcon } from "lucide-react";
 import type { ButtonVariant } from "@/components/Button";
 import type { ProgramCardItem } from "@/components/ProgramCards";
 import type { HeroSplitPalette } from "@/components/HeroSplitStatic";
@@ -12,6 +13,19 @@ import {
   type SanityCtaAction,
 } from "@/lib/sanity-cta-action";
 import type { ContentBlock, Cta } from "./pageContentTypes";
+
+const GIFT_IMPACT_ICONS: Record<string, LucideIcon> = {
+  school: School,
+  backpack: Backpack,
+  bookOpen: BookOpen,
+  graduationCap: GraduationCap,
+  heart: Heart,
+  users: Users,
+};
+
+export function giftImpactIcon(value: string | undefined): LucideIcon | undefined {
+  return value ? GIFT_IMPACT_ICONS[value] : undefined;
+}
 
 /** Hero gallery (882×548) and left strip (159×548); 2× for sharp retina CDN output. */
 export const heroSectionImageUrlOptions = {

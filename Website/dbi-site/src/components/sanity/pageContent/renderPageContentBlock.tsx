@@ -1,9 +1,13 @@
 import type { ReactElement } from "react";
 import { Button } from "@/components/Button";
+import { CampaignCtaBand } from "@/components/CampaignCtaBand";
+import { CampaignGiveSection } from "@/components/CampaignGiveSection";
+import { CampaignStat } from "@/components/CampaignStat";
 import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { HeroSplitStatic } from "@/components/HeroSplitStatic";
 import { FullWidthImage } from "@/components/FullWidthImage";
+import { GiftImpactList } from "@/components/GiftImpactList";
 import { ImageCard } from "@/components/ImageCard";
 import { MeasurableImpact } from "@/components/MeasurableImpact";
 import { ProgramCards } from "@/components/ProgramCards";
@@ -17,6 +21,7 @@ import { urlForSanityImage } from "@/lib/sanity-image";
 import type { PortableTextBlock } from "@portabletext/types";
 import type { ContentBlock } from "./pageContentTypes";
 import {
+  giftImpactIcon,
   heroGallerySlides,
   heroSectionImageUrlOptions,
   heroSplitPalette,
@@ -328,6 +333,77 @@ export function renderPageContentBlock(
             contactFormDefinition: generalDef,
           }}
           ctaPresets={block.formCtas ?? []}
+        />
+      );
+    }
+
+    case "campaignStatSection":
+      if (!block.stat?.trim() || !block.statement?.trim()) return null;
+      return (
+        <CampaignStat
+          key={index}
+          stat={block.stat}
+          statement={block.statement}
+          body={block.body}
+          source={block.source}
+          sourceHref={block.sourceUrl}
+        />
+      );
+
+    case "givingOptionsSection": {
+      const options = (block.givingOptions ?? []).flatMap((option) =>
+        option.title && option.description && option.ctaLabel && option.href
+          ? [
+              {
+                eyebrow: option.eyebrow,
+                title: option.title,
+                description: option.description,
+                ctaLabel: option.ctaLabel,
+                href: resolveHref(option.href, donateUrl) ?? option.href,
+              },
+            ]
+          : [],
+      );
+      if (!block.title?.trim() || !options.length) return null;
+      return (
+        <CampaignGiveSection
+          key={index}
+          title={block.title}
+          paragraphs={(block.body ?? "")
+            .split(/\n\s*\n/)
+            .map((paragraph) => paragraph.trim())
+            .filter(Boolean)}
+          options={options}
+          footnote={block.footnote?.trim() || undefined}
+        />
+      );
+    }
+
+    case "giftImpactSection":
+      return (
+        <div key={index} id="where-it-goes" className="bg-[var(--color-3)]">
+          <GiftImpactList
+            title={block.title ?? undefined}
+            intro={block.intro}
+            items={(block.impactItems ?? []).map((item) => ({
+              title: item.title ?? "",
+              description: item.description ?? "",
+              icon: giftImpactIcon(item.icon),
+            }))}
+          />
+        </div>
+      );
+
+    case "campaignCtaBandSection": {
+      const href = resolveHref(block.ctaButton?.href, donateUrl);
+      if (!block.title?.trim() || !block.ctaButton?.label || !href) return null;
+      return (
+        <CampaignCtaBand
+          key={index}
+          title={block.title}
+          body={block.body}
+          ctaLabel={block.ctaButton.label}
+          ctaHref={href}
         />
       );
     }

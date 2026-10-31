@@ -125,4 +125,27 @@ export type ContentBlock = {
   generalSuccessMessage?: string;
   generalContactFormDefinition?: SanityContactFormDefinitionRef | null;
   formCtas?: SanityContactFormPreset[];
+  /** `campaignStatSection` block */
+  stat?: string;
+  statement?: string;
+  source?: string;
+  sourceUrl?: string;
+  /** Plain text for campaign blocks; `givingOptionsSection` splits it on blank lines. */
+  body?: string;
+  /** `givingOptionsSection` block */
+  givingOptions?: Array<{
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    ctaLabel?: string;
+    href?: string;
+  }>;
+  footnote?: string;
+  /** `giftImpactSection` block */
+  intro?: string;
+  impactItems?: Array<{
+    title?: string;
+    description?: string;
+    icon?: string;
+  }>;
 };

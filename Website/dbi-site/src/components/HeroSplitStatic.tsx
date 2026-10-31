@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { PortableTextBlock } from "@portabletext/types";
-import { Button } from "@/components/Button";
+import { Button, type ButtonVariant } from "@/components/Button";
 import { HeroSplitDescription } from "@/components/HeroSplitDescription";
 import { Section } from "@/components/Section";
 
@@ -82,8 +82,10 @@ function ContentHalf({
           <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center">
             {ctas.map((cta, i) => {
               if (!cta.label?.trim()) return null;
-              const variant: "cta-primary" | "cta-secondary" =
-                i % 2 === 0 ? "cta-primary" : "cta-secondary";
+              // `cta-primary` is the same blue as the color-1 background.
+              const primaryVariant: ButtonVariant =
+                backgroundPalette === "color-1" ? "cta-knockout" : "cta-primary";
+              const variant: ButtonVariant = i % 2 === 0 ? primaryVariant : "cta-secondary";
               const secondaryClass = isLight ? "" : "text-white";
               return (
                 <Button

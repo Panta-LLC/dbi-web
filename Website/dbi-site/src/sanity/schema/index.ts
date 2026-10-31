@@ -10,6 +10,8 @@ import { ctaButtonSection } from "./objects/ctaButtonSection";
 import { cta } from "./objects/cta";
 import { ctaAction } from "./objects/ctaAction";
 import { ctaActionOptional } from "./objects/ctaActionOptional";
+import { campaignCtaBandSection } from "./objects/campaignCtaBandSection";
+import { campaignStatSection } from "./objects/campaignStatSection";
 import { cardGridSection } from "./objects/cardGridSection";
 import { collectionArticleItem } from "./objects/collectionArticleItem";
 import { collectionArticleItemCta } from "./objects/collectionArticleItemCta";
@@ -17,6 +19,8 @@ import { collectionArticleSection } from "./objects/collectionArticleSection";
 import { contactSection } from "./objects/contactSection";
 import { fullWidthImageSection } from "./objects/fullWidthImageSection";
 import { carouselSettings } from "./objects/carouselSettings";
+import { giftImpactSection } from "./objects/giftImpactSection";
+import { givingOptionsSection } from "./objects/givingOptionsSection";
 import { heroSection } from "./objects/heroSection";
 import { heroSplitSection } from "./objects/heroSplitSection";
 import { imageCardGridSection } from "./objects/imageCardGridSection";
@@ -60,4 +64,8 @@ export const schemaTypes = [
   textAndCtaSection,
   ctaButtonSection,
   contactSection,
+  campaignStatSection,
+  givingOptionsSection,
+  giftImpactSection,
+  campaignCtaBandSection,
 ];
