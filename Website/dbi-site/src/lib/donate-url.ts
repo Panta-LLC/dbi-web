@@ -3,10 +3,17 @@ export type CampaignUrls = {
   monthlyUrl: string;
 };
 
-/** Network for Good campaign pages shown on /donate. Null until both are configured. */
+/** Set to null when the campaign ends to restore the previous Donate routing. */
+const CAMPAIGN_URLS: CampaignUrls | null = {
+  eoyCampaignUrl: "https://deltabayimpact.networkforgood.com/projects/309021-year-end-2026",
+  monthlyUrl: "https://deltabayimpact.networkforgood.com/projects/309025-monthly-giving",
+};
+
+/** Network for Good campaign pages shown on /donate. Env vars override CAMPAIGN_URLS. */
 export function resolveCampaignUrls(): CampaignUrls | null {
-  const eoyCampaignUrl = process.env.NEXT_PUBLIC_NFG_EOY_CAMPAIGN_URL?.trim();
-  const monthlyUrl = process.env.NEXT_PUBLIC_NFG_MONTHLY_URL?.trim();
+  const eoyCampaignUrl =
+    process.env.NEXT_PUBLIC_NFG_EOY_CAMPAIGN_URL?.trim() || CAMPAIGN_URLS?.eoyCampaignUrl;
+  const monthlyUrl = process.env.NEXT_PUBLIC_NFG_MONTHLY_URL?.trim() || CAMPAIGN_URLS?.monthlyUrl;
   return eoyCampaignUrl && monthlyUrl ? { eoyCampaignUrl, monthlyUrl } : null;
 }
 
