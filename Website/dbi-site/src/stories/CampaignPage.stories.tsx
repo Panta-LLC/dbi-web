@@ -18,6 +18,7 @@ import { GivingOptions } from "@/components/GivingOptions";
 import { HeroSplitStatic } from "@/components/HeroSplitStatic";
 import { NavBar } from "@/components/NavBar";
 import { Section } from "@/components/Section";
+import { buildGivingOptions } from "@/lib/giving-options";
 
 const NFG_EOY_CAMPAIGN_URL = "https://deltabayimpact.networkforgood.com/"; // TODO: EOY $20K campaign page
 const NFG_MONTHLY_URL = "https://deltabayimpact.networkforgood.com/"; // TODO: recurring donor page
@@ -30,24 +31,10 @@ const statProps: ComponentProps<typeof CampaignStat> = {
   sourceHref: "https://www.caschooldashboard.org/",
 };
 
-const givingOptions: ComponentProps<typeof GivingOptions>["options"] = [
-  {
-    eyebrow: "Year-end campaign",
-    title: "Help us raise $20,000 by year's end",
-    description:
-      "Your gift goes to work right away, so students start the new year with more support on campus.",
-    ctaLabel: "Give to the year-end campaign",
-    href: NFG_EOY_CAMPAIGN_URL,
-  },
-  {
-    eyebrow: "Monthly giving",
-    title: "Support students all year",
-    description:
-      "Monthly gifts give students support they can count on and help DBI plan ahead for more schools.",
-    ctaLabel: "Become a monthly donor",
-    href: NFG_MONTHLY_URL,
-  },
-];
+const givingOptions = buildGivingOptions({
+  eoyCampaignUrl: NFG_EOY_CAMPAIGN_URL,
+  monthlyUrl: NFG_MONTHLY_URL,
+});
 
 const giftImpactItems: ComponentProps<typeof GiftImpactList>["items"] = [
   {
