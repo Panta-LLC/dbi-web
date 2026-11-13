@@ -1,4 +1,4 @@
-import { Backpack, BookOpen, School } from "lucide-react";
+import { Backpack, School, Users } from "lucide-react";
 import type { ComponentProps } from "react";
 import { CampaignCtaBand } from "@/components/CampaignCtaBand";
 import { CampaignGiveSection } from "@/components/CampaignGiveSection";
@@ -25,22 +25,19 @@ export const campaignStatProps: ComponentProps<typeof CampaignStat> = {
 
 const giftImpactItems: ComponentProps<typeof GiftImpactList>["items"] = [
   {
-    icon: School,
-    title: "More DBI days on campus",
-    description:
-      "More time with mentors who help students set goals, stay on track, and map a path to college or career.",
-  },
-  {
     icon: Backpack,
-    title: "School supply drive",
-    description:
-      "Students start the year with the backpacks and supplies they need to show up ready to learn.",
+    title: "$50–75",
+    description: "Gives one student the supplies and curriculum materials they need for the year.",
   },
   {
-    icon: BookOpen,
-    title: "Summer reading",
-    description:
-      "Books and reading support that keep skills sharp over the summer, so students start each year strong.",
+    icon: School,
+    title: "$500–750",
+    description: "Funds a full day of DBI programming on a school campus.",
+  },
+  {
+    icon: Users,
+    title: "$10,000",
+    description: "Could bring up to 20 more mentoring days to our schools.",
   },
 ];
 
@@ -57,7 +54,7 @@ export function CampaignPage({ eoyCampaignUrl, monthlyUrl }: CampaignUrls) {
         imageSrc={HERO_IMAGE_SRC}
         imageAlt="DBI mentor with three graduating students in blue gowns"
         title="Ready for what's next."
-        description="Help us empower African American students in Contra Costa County through culture, connection, and community."
+        description="Delta Bay Impact mentors students at Wren Elementary, Riverview Middle School, and Liberty High School, helping them build the confidence and skills they need for college, career, and the future."
         ctas={[{ href: "#give", label: "Choose how to give" }]}
       />
 
@@ -66,22 +63,22 @@ export function CampaignPage({ eoyCampaignUrl, monthlyUrl }: CampaignUrls) {
       <CampaignGiveSection
         title="Your gift keeps DBI on campus"
         paragraphs={[
-          "Your contribution will help us spend more days on campus with students, and grow our school supply drive and summer reading program, so every student starts the year ready to learn and finishes high school prepared for what's next.",
-          "Today DBI mentors students at Wren Avenue Elementary, Riverview Middle, and Liberty High. Monthly donors help us plan ahead and reach more schools across Antioch, Pittsburg, and Mt. Diablo.",
+          "This year-end, we're raising $10,000 to bring more DBI days to campus and grow our school supply giveaway, so every student we serve has a mentor in their corner and the tools to succeed.",
+          "Your gift today carries that support into 2027. Give once, or make it monthly to help students all year long.",
         ]}
         options={buildGivingOptions({ eoyCampaignUrl, monthlyUrl })}
       />
 
       <div id="where-it-goes" className="bg-[var(--color-3)]">
         <GiftImpactList
-          intro="Every dollar to this campaign supports three things students tell us matter."
+          title="Here's what your gift makes possible"
           items={giftImpactItems}
         />
       </div>
 
       <CampaignCtaBand
         title="When students have support, the numbers move."
-        body="At Liberty High in Brentwood, college and career readiness for Black students rose 13 points in a single year. Help us bring that kind of progress to more schools."
+        body="Every student we serve deserves a mentor in their corner. Make your gift monthly to help students all year long."
         ctaLabel="Become a monthly donor"
         ctaHref={monthlyUrl}
       />

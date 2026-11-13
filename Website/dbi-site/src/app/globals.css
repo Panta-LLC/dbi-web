@@ -887,3 +887,10 @@ body {
     transition: none;
   }
 }
+
+/* Smooth in-page anchor jumps (e.g. nav Donate → #give). Next skips it on route changes via data-scroll-behavior. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
