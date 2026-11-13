@@ -30,3 +30,17 @@ export const CustomContent: Story = {
     buttonLabel: "Subscribe",
   },
 };
+
+const sampleAudiences = [
+  { key: "parent", label: "Parent or Guardian", description: "Updates on programs and events for your student.", formUrl: "https://example.org/" },
+  { key: "community", label: "Community Member", description: "News and ways to get involved.", formUrl: "https://example.org/" },
+  { key: "donor", label: "Donor", description: "Impact stories and giving updates.", formUrl: "https://example.org/" },
+  { key: "partner", label: "Partner or Volunteer", description: "Opportunities for schools, organizations, and volunteers.", formUrl: "https://example.org/" },
+];
+
+/** Audience picker → embedded Network for Good form (placeholder URLs). */
+export const WithAudiences: Story = {
+  args: {
+    audiences: sampleAudiences,
+  },
+};

@@ -262,7 +262,8 @@ export const siteQuery = groq`
         legalText,
         "image": image{ crop, hotspot, asset },
         "imageSrc": image.asset->url,
-        imageAlt
+        imageAlt,
+        audiences[]{ _key, label, description, formUrl }
       },
       partners[]{
         name,
