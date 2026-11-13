@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { resolveDonateHref } from "@/lib/donate-url";
+import { normalizeNewsletterAudiences } from "@/lib/newsletter-audiences";
 import { urlForSanityImage } from "@/lib/sanity-image";
 import { sanityClient } from "@/sanity/client";
 import { siteQuery } from "@/sanity/queries";
@@ -105,6 +106,9 @@ export async function Footer() {
           ) ?? content.newsletterSignup?.imageSrc
         }
         imageAlt={content.newsletterSignup?.imageAlt}
+        audiences={normalizeNewsletterAudiences(
+          (content.newsletterSignup as { audiences?: unknown } | undefined)?.audiences,
+        )}
       />
       {content.partners.length ? (
         <SponsorSection

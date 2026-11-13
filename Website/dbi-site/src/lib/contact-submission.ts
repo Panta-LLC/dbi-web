@@ -9,10 +9,10 @@ export const NEWSLETTER_FORM_ID = "newsletter-signup";
 
 /** Fixed choices for newsletter self-identification (must match UI submit values). */
 export const NEWSLETTER_SELF_IDENTIFICATION_OPTIONS = [
-  "Student",
-  "Parent",
+  "Parent or Guardian",
   "Community Member",
-  "School Staff or Administration",
+  "Donor",
+  "Partner or Volunteer",
   "Other",
 ] as const;
 

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { CtaModalForm } from "@/components/cta-modal-form";
 import { NEWSLETTER_FORM_ID } from "@/lib/contact-submission";
+import { NewsletterAudiencePicker } from "@/components/NewsletterAudiencePicker";
+import { audiencesReady, type NewsletterAudience } from "@/lib/newsletter-audiences";
 
 type NewsletterSignupProps = {
   title?: string;
@@ -11,8 +13,13 @@ type NewsletterSignupProps = {
   legalText?: string;
   imageSrc?: string;
   imageAlt?: string;
+  /** When every audience has a Network for Good form URL, signup goes through the audience picker. */
+  audiences?: NewsletterAudience[];
   className?: string;
 };
+
+const triggerClassName =
+  "touch-target flex min-h-12 w-full items-center justify-center px-7 py-3.5 text-sm font-semibold text-white sm:inline-flex sm:min-h-[48px] sm:w-auto relative hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed";
 
 export function NewsletterSignup({
   title = "Keep up with our Work!",
@@ -21,6 +28,7 @@ export function NewsletterSignup({
   legalText,
   imageSrc,
   imageAlt = "Community",
+  audiences = [],
   className = "",
 }: NewsletterSignupProps) {
   return (
@@ -40,24 +48,33 @@ export function NewsletterSignup({
           <p className="mt-4 text-base md:text-lg text-white/95 max-w-md">{description}</p>
 
           <div className="mt-6 md:mt-8 max-w-lg">
-            <CtaModalForm
-              presentation={{ mode: "dialog", placement: "center" }}
-              formId={NEWSLETTER_FORM_ID}
-              triggerLabel={buttonLabel}
-              messageContext="Footer — newsletter"
-              title={title}
-              description={description}
-              placeholders={{
-                firstName: "First name",
-                lastName: "Last name",
-                email: "Email address",
-                organization: "Organization",
-              }}
-              submitLabel="Subscribe"
-              successMessage="Thanks — you're on the list."
-              fieldVariant="newsletter"
-              className="touch-target flex min-h-12 w-full items-center justify-center px-7 py-3.5 text-sm font-semibold text-white sm:inline-flex sm:min-h-[48px] sm:w-auto relative hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-2,#ff7900)] disabled:opacity-70 disabled:cursor-not-allowed"
-            />
+            {audiencesReady(audiences) ? (
+              <NewsletterAudiencePicker
+                audiences={audiences}
+                triggerLabel={buttonLabel}
+                title={title}
+                className={triggerClassName}
+              />
+            ) : (
+              <CtaModalForm
+                presentation={{ mode: "dialog", placement: "center" }}
+                formId={NEWSLETTER_FORM_ID}
+                triggerLabel={buttonLabel}
+                messageContext="Footer — newsletter"
+                title={title}
+                description={description}
+                placeholders={{
+                  firstName: "First name",
+                  lastName: "Last name",
+                  email: "Email address",
+                  organization: "Organization",
+                }}
+                submitLabel="Subscribe"
+                successMessage="Thanks — you're on the list."
+                fieldVariant="newsletter"
+                className={triggerClassName}
+              />
+            )}
           </div>
 
           {legalText ? (
