@@ -5,9 +5,9 @@ export function buildGivingOptions({ eoyCampaignUrl, monthlyUrl }: CampaignUrls)
   return [
     {
       eyebrow: "Year-end campaign",
-      title: "Help us raise $20,000 by year's end",
+      title: "Help us raise $10,000 by year's end",
       description:
-        "Your gift goes to work right away, so students start the new year with more support on campus.",
+        "Give once to bring more DBI days to campus and carry that support into 2027.",
       ctaLabel: "Give to the year-end campaign",
       href: eoyCampaignUrl,
     },
@@ -15,7 +15,7 @@ export function buildGivingOptions({ eoyCampaignUrl, monthlyUrl }: CampaignUrls)
       eyebrow: "Monthly giving",
       title: "Support students all year",
       description:
-        "Monthly gifts give students support they can count on and help DBI plan ahead for more schools.",
+        "Make it monthly to give students support they can count on all year long.",
       ctaLabel: "Become a monthly donor",
       href: monthlyUrl,
     },

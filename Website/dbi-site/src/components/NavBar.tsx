@@ -1,6 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { Container } from "./Container";
@@ -20,6 +21,9 @@ type NavBarProps = {
 
 export function NavBar({ donateHref = "/donate" }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  // On /donate itself, jump to the giving options instead of linking to the current page.
+  const navDonateHref = donateHref === "/donate" && pathname === "/donate" ? "#give" : donateHref;
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -57,7 +61,7 @@ export function NavBar({ donateHref = "/donate" }: NavBarProps) {
             </nav>
           </div>
           <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2 pr-2">
-            <Button href={donateHref} variant="nav-primary" className="m-0 shrink-0">
+            <Button href={navDonateHref} variant="nav-primary" className="m-0 shrink-0">
               <h5 className="text-lg leading-none text-white">Donate</h5>
             </Button>
             <button
