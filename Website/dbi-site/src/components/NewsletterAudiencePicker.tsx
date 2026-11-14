@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/Button";
 import { FormModalShell } from "@/components/cta-modal-form";
-import type { NewsletterAudience } from "@/lib/newsletter-audiences";
+import {
+  findAudienceForJoinParam,
+  NEWSLETTER_JOIN_PARAM,
+  type NewsletterAudience,
+} from "@/lib/newsletter-audiences";
 
 type NewsletterAudiencePickerProps = {
   audiences: NewsletterAudience[];
@@ -14,6 +18,13 @@ type NewsletterAudiencePickerProps = {
   className?: string;
   defaultOpen?: boolean;
 };
+
+const subscribeNoop = () => () => {};
+
+/** `?join` value on the current URL: `null` when absent, `""` for a bare `?join`. */
+function readJoinParam(): string | null {
+  return new URLSearchParams(window.location.search).get(NEWSLETTER_JOIN_PARAM);
+}
 
 /**
  * Two-step newsletter signup: the visitor picks the audience that fits them,
@@ -27,19 +38,31 @@ export function NewsletterAudiencePicker({
   className = "",
   defaultOpen = false,
 }: NewsletterAudiencePickerProps) {
+  const join = useSyncExternalStore(subscribeNoop, readJoinParam, () => null);
   const [open, setOpen] = useState(defaultOpen);
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [joinDismissed, setJoinDismissed] = useState(false);
+  /** `undefined` until the visitor picks or goes back; then their choice wins over the invite link. */
+  const [choice, setChoice] = useState<string | null | undefined>(undefined);
+
+  // Invite links: `?join=parent` opens the dialog on that audience's form; a bare `?join` opens the picker.
+  const joinActive = join !== null && !joinDismissed;
+  const joinMatch = joinActive ? findAudienceForJoinParam(audiences, join) : undefined;
+  const selectedKey = choice !== undefined ? choice : joinMatch?.formUrl ? joinMatch.key : null;
   const selected = audiences.find((a) => a.key === selectedKey) ?? null;
+  const isOpen = open || joinActive;
 
   const handleOpenChange = (next: boolean) => {
     setOpen(next);
-    if (!next) setSelectedKey(null);
+    if (!next) {
+      setChoice(undefined);
+      setJoinDismissed(true);
+    }
   };
 
   return (
     <FormModalShell
       presentation={{ mode: "dialog", placement: "center" }}
-      open={open}
+      open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
         <Button type="button" variant="cta-primary" className={`touch-target ${className}`.trim()}>
@@ -57,7 +80,7 @@ export function NewsletterAudiencePicker({
         <div className="flex flex-col gap-3">
           <button
             type="button"
-            onClick={() => setSelectedKey(null)}
+            onClick={() => setChoice(null)}
             className="inline-flex w-fit items-center gap-1 text-sm font-medium text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
@@ -85,7 +108,7 @@ export function NewsletterAudiencePicker({
             <li key={a.key}>
               <button
                 type="button"
-                onClick={() => setSelectedKey(a.key)}
+                onClick={() => setChoice(a.key)}
                 className="group flex w-full items-center justify-between gap-4 rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-[color:var(--color-2,#ff7900)] hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-2,#ff7900)]"
               >
                 <span>
