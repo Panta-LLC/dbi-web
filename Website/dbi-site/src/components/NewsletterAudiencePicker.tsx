@@ -62,6 +62,7 @@ export function NewsletterAudiencePicker({
   return (
     <FormModalShell
       presentation={{ mode: "dialog", placement: "center" }}
+      tone="brand"
       open={isOpen}
       onOpenChange={handleOpenChange}
       trigger={
@@ -81,7 +82,7 @@ export function NewsletterAudiencePicker({
           <button
             type="button"
             onClick={() => setChoice(null)}
-            className="inline-flex w-fit items-center gap-1 text-sm font-medium text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+            className="inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Choose a different option
@@ -90,13 +91,13 @@ export function NewsletterAudiencePicker({
             key={selected.key}
             src={selected.formUrl}
             title={`Newsletter signup — ${selected.label}`}
-            className="h-[min(60vh,420px)] w-full rounded-lg border border-slate-200"
+            className="h-[min(50vh,340px)] w-full border-l-4 border-[color:var(--color-2,#ff7900)] bg-white"
           />
           <a
             href={selected.formUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-slate-500 underline-offset-4 hover:text-slate-800 hover:underline"
+            className="inline-flex items-center gap-1 text-xs text-[color:var(--color-5,#435963)] underline-offset-4 hover:text-primary hover:underline"
           >
             Form not loading? Open it in a new tab
             <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -109,16 +110,16 @@ export function NewsletterAudiencePicker({
               <button
                 type="button"
                 onClick={() => setChoice(a.key)}
-                className="group flex w-full items-center justify-between gap-4 rounded-lg border border-slate-200 px-4 py-3 text-left transition hover:border-[color:var(--color-2,#ff7900)] hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-2,#ff7900)]"
+                className="group flex w-full items-center justify-between gap-4 border border-l-4 border-[color:var(--color-7,#b9d9f7)] border-l-primary bg-white px-4 py-3.5 text-left transition hover:border-[color:var(--color-2,#ff7900)] hover:border-l-[color:var(--color-2,#ff7900)] hover:bg-[color:var(--color-8,#f7ecd7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-2,#ff7900)] focus-visible:ring-offset-2"
               >
                 <span>
-                  <span className="block font-semibold text-slate-900">{a.label}</span>
+                  <span className="block font-semibold text-[color:var(--color-4,#25405a)]">{a.label}</span>
                   {a.description ? (
-                    <span className="mt-0.5 block text-sm text-slate-600">{a.description}</span>
+                    <span className="mt-0.5 block text-sm text-[color:var(--color-5,#435963)]">{a.description}</span>
                   ) : null}
                 </span>
                 <ChevronRight
-                  className="h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700"
+                  className="h-5 w-5 shrink-0 text-primary transition group-hover:translate-x-1 group-hover:text-[color:var(--color-2,#ff7900)]"
                   aria-hidden
                 />
               </button>

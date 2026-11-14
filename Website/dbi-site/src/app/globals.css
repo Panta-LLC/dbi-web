@@ -124,6 +124,12 @@ body {
   display: none;
 }
 
+/* Branded modal header: orange band with the site's diagonal bottom edge */
+.modal-brand-header {
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+}
+
 /* Newsletter signup: no slant on small screens, slanted on lg+ */
 .newsletter-panel-left {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
