@@ -14,6 +14,11 @@ type FormModalShellProps = {
   title?: string;
   description?: string;
   children: ReactNode;
+  /**
+   * `brand`: DBI look for dialog mode — orange slanted header with a serif title,
+   * navy backdrop, square corners. Default keeps the neutral look used by contact forms.
+   */
+  tone?: "default" | "brand";
 };
 
 const overlayClass = "fixed inset-0 z-[100] bg-black/50";
@@ -51,6 +56,7 @@ export function FormModalShell({
   title,
   description,
   children,
+  tone = "default",
 }: FormModalShellProps) {
   const heading = title ?? "Contact";
   const lead = description;
@@ -80,6 +86,36 @@ export function FormModalShell({
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>
+    );
+  }
+
+  if (tone === "brand" && presentation.mode === "dialog") {
+    return (
+      <Dialog.Root open={open} onOpenChange={onOpenChange}>
+        <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-[100] bg-[color:var(--color-4,#25405a)]/75 backdrop-blur-[2px]" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-[101] flex max-h-[min(92vh,720px)] w-[min(100vw-2rem,34rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden bg-white shadow-2xl outline-none focus:outline-none">
+            <div className="modal-brand-header relative shrink-0 bg-[color:var(--color-2,#ff7900)] px-6 pb-9 pt-6 pr-14 text-white sm:px-8 sm:pr-16">
+              <Dialog.Title className="display-s text-white">{heading}</Dialog.Title>
+              {lead ? (
+                <Dialog.Description className="mt-2 text-sm text-white/95 sm:text-base">{lead}</Dialog.Description>
+              ) : (
+                <Dialog.Description className="sr-only">
+                  Fill out the fields and submit to send your message.
+                </Dialog.Description>
+              )}
+              <Dialog.Close
+                className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center text-white/90 transition hover:bg-white/15 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" aria-hidden />
+              </Dialog.Close>
+            </div>
+            <div className="overflow-y-auto px-6 pb-6 pt-3 sm:px-8 sm:pb-8">{children}</div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     );
   }
 

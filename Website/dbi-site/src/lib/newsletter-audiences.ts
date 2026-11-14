@@ -16,7 +16,8 @@ const NFG_FORMS_BASE = "https://deltabayimpact.dm.networkforgood.com/forms";
 
 /**
  * Used when Sanity has no audiences. Each form lives in Network for Good Donor Management
- * (Communication → Forms) and adds submitters to its "Newsletter – …" contact group.
+ * (Communication → Forms) and adds submitters to an existing contact group:
+ * Parent → Family and Friends, Community and Partner → Community Leaders, Donor → Individual Donors.
  */
 export const DEFAULT_NEWSLETTER_AUDIENCES: NewsletterAudience[] = [
   {
@@ -76,4 +77,32 @@ export function normalizeNewsletterAudiences(raw: unknown): NewsletterAudience[]
 /** The picker is used only once every audience has a working form URL. */
 export function audiencesReady(audiences: NewsletterAudience[]): boolean {
   return audiences.length > 0 && audiences.every((a) => Boolean(a.formUrl));
+}
+
+/** Query param for invite links, e.g. `/?join=parent` opens the signup with that audience chosen. */
+export const NEWSLETTER_JOIN_PARAM = "join";
+
+function slug(text: string): string {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Resolves a `?join=` value to an audience. Matches the audience key, its label slug
+ * ("parent-or-guardian"), or any word of the label ("parent", "guardian", "volunteer"), case-insensitively.
+ */
+export function findAudienceForJoinParam(
+  audiences: NewsletterAudience[],
+  raw: string | null | undefined,
+): NewsletterAudience | undefined {
+  const want = slug(raw ?? "");
+  if (!want) return undefined;
+  return (
+    audiences.find((a) => slug(a.key) === want) ??
+    audiences.find((a) => slug(a.label) === want) ??
+    audiences.find((a) => want !== "or" && slug(a.label).split("-").includes(want))
+  );
 }
