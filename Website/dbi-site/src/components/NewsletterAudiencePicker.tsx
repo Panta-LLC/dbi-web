@@ -6,6 +6,7 @@ import { Button } from "@/components/Button";
 import { FormModalShell } from "@/components/cta-modal-form";
 import {
   findAudienceForJoinParam,
+  INVITE_ONLY_NEWSLETTER_AUDIENCES,
   NEWSLETTER_JOIN_PARAM,
   type NewsletterAudience,
 } from "@/lib/newsletter-audiences";
@@ -46,9 +47,11 @@ export function NewsletterAudiencePicker({
 
   // Invite links: `?join=parent` opens the dialog on that audience's form; a bare `?join` opens the picker.
   const joinActive = join !== null && !joinDismissed;
-  const joinMatch = joinActive ? findAudienceForJoinParam(audiences, join) : undefined;
+  // Picker audiences win over invite-only ones when a `?join` value matches both.
+  const joinable = [...audiences, ...INVITE_ONLY_NEWSLETTER_AUDIENCES];
+  const joinMatch = joinActive ? findAudienceForJoinParam(joinable, join) : undefined;
   const selectedKey = choice !== undefined ? choice : joinMatch?.formUrl ? joinMatch.key : null;
-  const selected = audiences.find((a) => a.key === selectedKey) ?? null;
+  const selected = joinable.find((a) => a.key === selectedKey) ?? null;
   const isOpen = open || joinActive;
 
   const handleOpenChange = (next: boolean) => {
