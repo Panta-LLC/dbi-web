@@ -46,6 +46,20 @@ export const DEFAULT_NEWSLETTER_AUDIENCES: NewsletterAudience[] = [
   },
 ];
 
+/**
+ * Reachable only through invite links (e.g. `/?join=friends`); never listed in the picker.
+ * Family & Friends shares the Parent form, which adds signups to the Family and Friends group,
+ * but shows its own label so friends aren't asked to sign up as a parent.
+ */
+export const INVITE_ONLY_NEWSLETTER_AUDIENCES: NewsletterAudience[] = [
+  {
+    key: "friends",
+    label: "Family & Friends",
+    description: "Stories, events, and ways to help.",
+    formUrl: `${NFG_FORMS_BASE}/319212?iframe=1`,
+  },
+];
+
 /** Accept only absolute https URLs so editors can't embed arbitrary schemes. */
 export function safeFormUrl(raw: unknown): string | undefined {
   if (typeof raw !== "string") return undefined;
