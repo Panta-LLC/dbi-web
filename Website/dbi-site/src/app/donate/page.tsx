@@ -18,15 +18,15 @@ export default async function DonatePage() {
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
   ]);
 
-  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
+  const donateUrl = await resolveDonateHref(siteSettings?.donateUrl);
   const hasGivingOptions = cmsPage?.content?.some(
     (block: ContentBlock) =>
       block._type === "givingOptionsSection" && Boolean(block.givingOptions?.length),
   );
 
-  const campaignUrls = resolveCampaignUrls();
+  const campaignUrls = await resolveCampaignUrls();
   const tracker = campaignUrls ? (
-    <YearEndCampaignTracker ctaHref="#give" ctaLabel="Choose how to give" />
+    <YearEndCampaignTracker ctaHref="#give" />
   ) : null;
 
   if (hasGivingOptions) {

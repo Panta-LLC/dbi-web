@@ -1,4 +1,4 @@
-import { Backpack, School, Users } from "lucide-react";
+import { GraduationCap, School, Users } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { CampaignCtaBand } from "@/components/CampaignCtaBand";
 import { CampaignGiveSection } from "@/components/CampaignGiveSection";
@@ -25,19 +25,22 @@ export const campaignStatProps: ComponentProps<typeof CampaignStat> = {
 
 const giftImpactItems: ComponentProps<typeof GiftImpactList>["items"] = [
   {
-    icon: Backpack,
-    title: "$50–75",
-    description: "Gives one student the supplies and curriculum materials they need for the year.",
-  },
-  {
-    icon: School,
-    title: "$500–750",
-    description: "Funds a full day of DBI programming on a school campus.",
+    icon: GraduationCap,
+    title: "Awards ceremony",
+    description:
+      "An org-wide celebration of the growth and achievements of students from all three of our schools.",
   },
   {
     icon: Users,
-    title: "$10,000",
-    description: "Could bring up to 20 more mentoring days to our schools.",
+    title: "Field trips",
+    description:
+      "More trips that take students beyond the classroom and show them what's possible for college, career, and the future.",
+  },
+  {
+    icon: School,
+    title: "In-school programs & events",
+    description:
+      "More programming and events on campus, like Black History Month, that connect students to their history and their community.",
   },
 ];
 
@@ -68,9 +71,9 @@ export function CampaignPage({ eoyCampaignUrl, monthlyUrl, tracker }: CampaignPa
       <CampaignStat {...campaignStatProps} />
 
       <CampaignGiveSection
-        title="Your gift keeps DBI on campus"
+        title="Your gift helps our programs grow"
         paragraphs={[
-          "This year-end, we're raising $10,000 to bring more DBI days to campus and grow our school supply giveaway, so every student we serve has a mentor in their corner and the tools to succeed.",
+          "This year-end, we're raising $10,000 to grow our programs: an org-wide awards ceremony that celebrates our students, more field trips beyond the classroom, and more in-school programming and events like Black History Month.",
           "Your gift today carries that support into 2027. Give once, or make it monthly to help students all year long.",
         ]}
         options={buildGivingOptions({ eoyCampaignUrl, monthlyUrl })}

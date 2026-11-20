@@ -5,32 +5,35 @@ import { getYearEndCampaignProgress } from "@/lib/campaign-progress";
 type YearEndCampaignTrackerProps = {
   variant?: "full" | "compact";
   ctaHref?: string;
-  ctaLabel?: string;
 };
 
 /**
- * Year-end campaign tracker with the live Network for Good total. Renders nothing when
- * no campaign is configured or the total can't be read.
+ * Campaign tracker with the live Network for Good total. Text and dates come from the
+ * Sanity Fundraising Campaign. Renders nothing when no campaign is live, the homepage
+ * tracker is turned off, or the total can't be read.
  */
-export async function YearEndCampaignTracker({
-  variant = "full",
-  ctaHref,
-  ctaLabel = "Give now",
-}: YearEndCampaignTrackerProps) {
+export async function YearEndCampaignTracker({ variant = "full", ctaHref }: YearEndCampaignTrackerProps) {
   const progress = await getYearEndCampaignProgress();
   if (!progress) return null;
 
+  const { campaign, ...meter } = progress;
   const full = variant === "full";
+  if (!full && !campaign.showOnHomepage) return null;
+
   return (
     <div className={full ? "bg-white py-10 md:py-14" : "bg-white py-6 md:py-8"}>
       <Container maxWidth={full ? "site" : "narrow"}>
         <CampaignPaceMeter
-          {...progress}
+          {...meter}
           variant={variant}
-          eyebrow="Bigger impact in 2027"
-          milestones={full ? [{ date: "2026-12-01T00:00:00-08:00", label: "Giving Tuesday" }] : []}
+          eyebrow={campaign.eyebrow || undefined}
+          milestones={
+            full
+              ? campaign.milestones.map((m) => ({ label: m.label, date: `${m.date}T00:00:00-08:00` }))
+              : []
+          }
           ctaHref={ctaHref}
-          ctaLabel={ctaLabel}
+          ctaLabel={full ? campaign.donateCtaLabel : campaign.homepageCtaLabel}
         />
       </Container>
     </div>

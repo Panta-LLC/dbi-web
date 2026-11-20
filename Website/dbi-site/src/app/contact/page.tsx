@@ -17,7 +17,7 @@ export default async function ContactPage() {
   if (!cmsPage?.content?.length) {
     notFound();
   }
-  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
+  const donateUrl = await resolveDonateHref(siteSettings?.donateUrl);
 
   if (cmsPage.layout === "site") {
     return (

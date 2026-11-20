@@ -7,7 +7,7 @@ export function buildGivingOptions({ eoyCampaignUrl, monthlyUrl }: CampaignUrls)
       eyebrow: "Year-end campaign",
       title: "Help us raise $10,000 by year's end",
       description:
-        "Give once to bring more DBI days to campus and carry that support into 2027.",
+        "Give once to help build new programs for our students in 2027.",
       ctaLabel: "Give to the year-end campaign",
       href: eoyCampaignUrl,
     },
