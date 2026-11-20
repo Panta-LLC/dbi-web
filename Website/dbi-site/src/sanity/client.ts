@@ -14,6 +14,8 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  // Disable CDN in development to avoid stale reads while editing Studio content.
-  useCdn: process.env.NODE_ENV === "production",
+  // Read the live API, not the CDN. Pages are cached by Next and rebuilt by the Sanity
+  // webhook (/api/revalidate) seconds after a publish, often before the CDN has caught
+  // up, which left pages showing the old content. Only server code uses this client.
+  useCdn: false,
 });
