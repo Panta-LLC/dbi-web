@@ -238,6 +238,19 @@ export const siteStructuredDataQuery = groq`
   }
 `;
 
+/** Fundraising Campaign documents, newest edit first; the first live one is used. */
+export const activeCampaignQuery = groq`
+  *[_type == "campaign"] | order(_updatedAt desc){
+    title,
+    active,
+    campaignUrl,
+    monthlyUrl,
+    startDate,
+    endDate,
+    tracker{ eyebrow, showOnHomepage, homepageCtaLabel, donateCtaLabel, milestones[]{ label, date } }
+  }
+`;
+
 export const siteSettingsQuery = groq`
   *[_type == "site"][0]{ donateUrl }
 `;

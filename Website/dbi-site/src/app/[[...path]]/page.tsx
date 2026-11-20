@@ -30,7 +30,7 @@ export default async function CmsCatchAllPage({
     sanityClient.fetch(pageByPathQuery, { path: requestedPath }).catch(() => null),
     sanityClient.fetch(siteSettingsQuery).catch(() => null),
   ]);
-  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
+  const donateUrl = await resolveDonateHref(siteSettings?.donateUrl);
 
   if (!cmsPage?.content?.length) {
     // Transitional support: old `/programs` links should work even if Sanity is migrated.

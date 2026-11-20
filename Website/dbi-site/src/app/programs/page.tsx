@@ -22,7 +22,7 @@ export default async function ProgramsPage() {
     }
     notFound();
   }
-  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
+  const donateUrl = await resolveDonateHref(siteSettings?.donateUrl);
 
   if (cmsPage.layout === "site") {
     return (

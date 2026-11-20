@@ -11,7 +11,7 @@ type SiteLayoutProps = {
 
 export async function SiteLayout({ children }: SiteLayoutProps) {
   const siteSettings = await sanityClient.fetch(siteSettingsQuery).catch(() => null);
-  const donateHref = resolveDonateHref(siteSettings?.donateUrl);
+  const donateHref = await resolveDonateHref(siteSettings?.donateUrl);
 
   return (
     <div className="flex min-h-screen flex-col text-foreground mx-auto max-w-7xl bg-white">

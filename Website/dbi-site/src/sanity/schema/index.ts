@@ -1,3 +1,4 @@
+import { campaign } from "./documents/campaign";
 import { contactFormCta } from "./documents/contactFormCta";
 import { contactFormDefinition } from "./documents/contactFormDefinition";
 import { page } from "./documents/page";
@@ -47,6 +48,7 @@ export const schemaTypes = [
   ctaActionOptional,
   page,
   site,
+  campaign,
   heroSection,
   heroSplitSection,
   textHighlightSection,

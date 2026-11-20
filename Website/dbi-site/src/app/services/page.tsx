@@ -19,7 +19,7 @@ export default async function ServicesPage() {
   if (!cmsPage?.content?.length) {
     notFound();
   }
-  const donateUrl = resolveDonateHref(siteSettings?.donateUrl);
+  const donateUrl = await resolveDonateHref(siteSettings?.donateUrl);
 
   if (cmsPage.layout === "site") {
     return (

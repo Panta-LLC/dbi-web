@@ -65,7 +65,7 @@ const SOCIAL_ICONS: Record<string, IconComponent> = {
 export async function Footer() {
   const siteData = await sanityClient.fetch(siteQuery).catch(() => null);
   const data = siteData?.footer ?? defaultContent;
-  const donateHref = resolveDonateHref(siteData?.donateUrl);
+  const donateHref = await resolveDonateHref(siteData?.donateUrl);
   const rawSiteLinks = (
     data.siteLinks?.length ? data.siteLinks : defaultContent.siteLinks
   ) as LinkItem[];

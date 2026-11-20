@@ -1,23 +1,13 @@
-import { resolveCampaignUrls } from "@/lib/donate-url";
+import { getCampaign, type Campaign } from "@/lib/campaign";
 
 export type CampaignProgress = {
   title: string;
+  campaign: Campaign;
   goal: number;
   raised: number;
   /** ISO date-times; the campaign runs from start up to (not including) end. */
   start: string;
   end: string;
-};
-
-/**
- * Network for Good doesn't publish a start date on the campaign page, so it lives here.
- * The year-end campaign starts Tuesday, November 17, 2026 (Pacific).
- */
-const YEAR_END_CAMPAIGN = {
-  title: "Year-End Campaign",
-  start: "2026-11-17T00:00:00-08:00",
-  /** Used only if the campaign page stops showing its end date. */
-  fallbackEnd: "2027-01-01T00:00:00-08:00",
 };
 
 /** Re-read the Network for Good total at most every 10 minutes. */
@@ -44,6 +34,9 @@ export function parseNfgCampaignPage(html: string) {
   return { raised, goal, endDate };
 }
 
+/** Midnight Pacific at the start of a YYYY-MM-DD day. */
+const startOfDayPacific = (isoDate: string) => `${isoDate}T00:00:00-08:00`;
+
 /** The day after the last campaign day, at midnight Pacific. */
 function endOfDayPacific(isoDate: string): string {
   const next = new Date(`${isoDate}T00:00:00Z`);
@@ -52,24 +45,26 @@ function endOfDayPacific(isoDate: string): string {
 }
 
 /**
- * Live year-end campaign progress for the tracker, or null when no campaign is running
- * or Network for Good can't be read (better to hide the tracker than show a wrong total).
+ * Live campaign progress for the tracker, or null when no campaign is live or Network for
+ * Good can't be read (better to hide the tracker than show a wrong total).
  */
 export async function getYearEndCampaignProgress(): Promise<CampaignProgress | null> {
-  const urls = resolveCampaignUrls();
-  if (!urls) return null;
+  const campaign = await getCampaign();
+  if (!campaign) return null;
 
   try {
-    const res = await fetch(urls.eoyCampaignUrl, { next: { revalidate: REVALIDATE_SECONDS } });
+    const res = await fetch(campaign.eoyCampaignUrl, { next: { revalidate: REVALIDATE_SECONDS } });
     if (!res.ok) return null;
     const { raised, goal, endDate } = parseNfgCampaignPage(await res.text());
-    if (raised == null || !goal) return null;
+    const lastDay = campaign.endDate ?? endDate;
+    if (raised == null || !goal || !lastDay) return null;
     return {
-      title: YEAR_END_CAMPAIGN.title,
+      title: campaign.title,
+      campaign,
       goal,
       raised,
-      start: YEAR_END_CAMPAIGN.start,
-      end: endDate ? endOfDayPacific(endDate) : YEAR_END_CAMPAIGN.fallbackEnd,
+      start: startOfDayPacific(campaign.startDate),
+      end: endOfDayPacific(lastDay),
     };
   } catch {
     return null;
