@@ -3,7 +3,6 @@ import { redirect, notFound } from "next/navigation";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
-import { YearEndCampaignTracker } from "@/components/YearEndCampaignTracker";
 import { resolveDonateHref } from "@/lib/donate-url";
 import { buildMetadataForPath, normalizePathSegments } from "@/lib/page-metadata";
 import { sanityClient } from "@/sanity/client";
@@ -53,9 +52,6 @@ export default async function CmsCatchAllPage({
         <PageContentRenderer
           content={cmsPage.content}
           donateUrl={donateUrl}
-          afterFirstBlock={
-            requestedPath === "/" ? <YearEndCampaignTracker variant="compact" ctaHref={donateUrl} /> : null
-          }
         />
       </SiteLayout>
     );

@@ -244,10 +244,7 @@ export const activeCampaignQuery = groq`
     title,
     active,
     campaignUrl,
-    monthlyUrl,
-    startDate,
-    endDate,
-    tracker{ eyebrow, showOnHomepage, homepageCtaLabel, donateCtaLabel, milestones[]{ label, date } }
+    monthlyUrl
   }
 `;
 
