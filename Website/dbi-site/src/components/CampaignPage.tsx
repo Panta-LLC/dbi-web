@@ -1,5 +1,5 @@
 import { GraduationCap, School, Users } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { CampaignCtaBand } from "@/components/CampaignCtaBand";
 import { CampaignGiveSection } from "@/components/CampaignGiveSection";
 import { CampaignStat } from "@/components/CampaignStat";
@@ -44,16 +44,13 @@ const giftImpactItems: ComponentProps<typeof GiftImpactList>["items"] = [
   },
 ];
 
-type CampaignPageProps = CampaignUrls & {
-  /** Campaign progress tracker, shown under the hero. */
-  tracker?: ReactNode;
-};
+type CampaignPageProps = CampaignUrls;
 
 /**
  * "Ready for What's Next" campaign: an entry point to the Network for Good campaign pages.
  * /donate uses this until the Sanity `/donate` page has a published Giving Options block.
  */
-export function CampaignPage({ eoyCampaignUrl, monthlyUrl, tracker }: CampaignPageProps) {
+export function CampaignPage({ eoyCampaignUrl, monthlyUrl }: CampaignPageProps) {
   return (
     <>
       <HeroSplitStatic
@@ -65,8 +62,6 @@ export function CampaignPage({ eoyCampaignUrl, monthlyUrl, tracker }: CampaignPa
         description="Delta Bay Impact mentors students at Wren Elementary, Riverview Middle School, and Liberty High School, helping them build the confidence and skills they need for college, career, and the future."
         ctas={[{ href: "#give", label: "Choose how to give" }]}
       />
-
-      {tracker}
 
       <CampaignStat {...campaignStatProps} />
 

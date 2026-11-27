@@ -2,21 +2,11 @@ import { cache } from "react";
 import { sanityClient } from "@/sanity/client";
 import { activeCampaignQuery } from "@/sanity/queries";
 
-export type CampaignMilestoneConfig = { label: string; date: string };
-
 /** The live fundraising campaign, as edited in Sanity (Fundraising Campaign). */
 export type Campaign = {
   title: string;
   eoyCampaignUrl: string;
   monthlyUrl: string;
-  /** First and last campaign days, YYYY-MM-DD (Pacific). endDate null = use Network for Good's. */
-  startDate: string;
-  endDate: string | null;
-  eyebrow: string;
-  showOnHomepage: boolean;
-  homepageCtaLabel: string;
-  donateCtaLabel: string;
-  milestones: CampaignMilestoneConfig[];
 };
 
 type SanityCampaign = {
@@ -24,15 +14,6 @@ type SanityCampaign = {
   active?: boolean;
   campaignUrl?: string;
   monthlyUrl?: string;
-  startDate?: string;
-  endDate?: string;
-  tracker?: {
-    eyebrow?: string;
-    showOnHomepage?: boolean;
-    homepageCtaLabel?: string;
-    donateCtaLabel?: string;
-    milestones?: { label?: string; date?: string }[];
-  };
 };
 
 /**
@@ -43,33 +24,14 @@ const FALLBACK_CAMPAIGN: Campaign = {
   title: "Year-End Campaign",
   eoyCampaignUrl: "https://deltabayimpact.networkforgood.com/projects/309021-year-end-2026",
   monthlyUrl: "https://deltabayimpact.networkforgood.com/projects/309025-monthly-giving",
-  startDate: "2026-11-17",
-  endDate: null,
-  eyebrow: "Bigger impact in 2027",
-  showOnHomepage: true,
-  homepageCtaLabel: "Give now",
-  donateCtaLabel: "Choose how to give",
-  milestones: [{ label: "Giving Tuesday", date: "2026-12-01" }],
 };
 
-const text = (value: string | undefined, fallback: string) => value?.trim() || fallback;
-
 function fromSanity(doc: SanityCampaign): Campaign | null {
-  if (!doc.campaignUrl || !doc.monthlyUrl || !doc.startDate) return null;
-  const tracker = doc.tracker ?? {};
+  if (!doc.campaignUrl || !doc.monthlyUrl) return null;
   return {
-    title: text(doc.title, FALLBACK_CAMPAIGN.title),
+    title: doc.title?.trim() || FALLBACK_CAMPAIGN.title,
     eoyCampaignUrl: doc.campaignUrl,
     monthlyUrl: doc.monthlyUrl,
-    startDate: doc.startDate,
-    endDate: doc.endDate ?? null,
-    eyebrow: tracker.eyebrow?.trim() ?? "",
-    showOnHomepage: tracker.showOnHomepage ?? true,
-    homepageCtaLabel: text(tracker.homepageCtaLabel, FALLBACK_CAMPAIGN.homepageCtaLabel),
-    donateCtaLabel: text(tracker.donateCtaLabel, FALLBACK_CAMPAIGN.donateCtaLabel),
-    milestones: (tracker.milestones ?? []).filter(
-      (m): m is CampaignMilestoneConfig => Boolean(m.label && m.date),
-    ),
   };
 }
 

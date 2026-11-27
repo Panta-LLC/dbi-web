@@ -4,7 +4,6 @@ import { createMetadataForPath } from "@/lib/page-metadata";
 import { CampaignPage } from "@/components/CampaignPage";
 import { ContentPageLayout } from "@/components/ContentPageLayout";
 import { SiteLayout } from "@/components/SiteLayout";
-import { YearEndCampaignTracker } from "@/components/YearEndCampaignTracker";
 import { PageContentRenderer } from "@/components/sanity/PageContentRenderer";
 import type { ContentBlock } from "@/components/sanity/pageContent/pageContentTypes";
 import { sanityClient } from "@/sanity/client";
@@ -25,14 +24,11 @@ export default async function DonatePage() {
   );
 
   const campaignUrls = await resolveCampaignUrls();
-  const tracker = campaignUrls ? (
-    <YearEndCampaignTracker ctaHref="#give" />
-  ) : null;
 
   if (hasGivingOptions) {
     return (
       <SiteLayout>
-        <PageContentRenderer content={cmsPage.content} donateUrl={donateUrl} afterFirstBlock={tracker} />
+        <PageContentRenderer content={cmsPage.content} donateUrl={donateUrl} />
       </SiteLayout>
     );
   }
@@ -40,10 +36,7 @@ export default async function DonatePage() {
   if (campaignUrls) {
     return (
       <SiteLayout>
-        <CampaignPage
-          {...campaignUrls}
-          tracker={tracker}
-        />
+        <CampaignPage {...campaignUrls} />
       </SiteLayout>
     );
   }
